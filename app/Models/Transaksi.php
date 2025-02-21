@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Transaksi extends Model
+{
+    protected $table = 'transaksi';
+
+    protected $fillable = ['id_user', 'id_produk', 'jumlah', 'status', 'harga' ];
+
+    public function produk() {
+        return $this->belongsTo(Produk::class, 'id_produk');
+    }
+
+}
