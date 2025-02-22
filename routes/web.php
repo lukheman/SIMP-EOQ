@@ -16,6 +16,7 @@ Route::controller(AdminTokoController::class)->group(function() {
     Route::get('admintoko', 'index')->name('admintoko.index');
     Route::get('admintoko/dashboard', 'index')->name('admintoko.dashboard');
     Route::get('admintoko/pesanan', 'pesanan')->name('admintoko.pesanan');
+    Route::post('admintoko/nota', 'nota')->name('admintoko.nota');
 });
 
 Route::controller(AdminGudangController::class)->group(function() {
