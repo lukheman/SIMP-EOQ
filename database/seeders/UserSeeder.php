@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
                 'email' => $role . '@example.com',
                 'password' => Hash::make('password123'), // Gunakan hashing untuk keamanan
                 'role' => $role,
+                'name' => 'Akmal ' . $role,
                 'phone' => '081234567890',
                 'created_at' => now(),
                 'updated_at' => now(),
