@@ -8,7 +8,15 @@ class AdminTokoController extends Controller
 {
 
 
-    public function pesananReseller() {
-        return view('admin_toko.pesanan-reseller', ['page' => 'Pesanan Reseller']);
+    public function pesanan() {
+        $pesanan = Transaksi::with('produk')->with('user')->get();
+
+        // dd($pesanan);
+
+        return view('admin_toko.pesanan', [
+            'page' => 'Pesanan',
+            'pesanan' => $pesanan
+        ]);
     }
+
 }
