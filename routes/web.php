@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 Route::controller(AdminTokoController::class)->group(function() {
     Route::get('admintoko', 'index')->name('admintoko.index');
     Route::get('admintoko/dashboard', 'index')->name('admintoko.dashboard');
-    Route::get('admintoko/pesanan-reseller', 'pesananReseller')->name('admintoko.pesanan-reseller');
+    Route::get('admintoko/pesanan', 'pesanan')->name('admintoko.pesanan');
 });
 
 Route::controller(AdminGudangController::class)->group(function() {
