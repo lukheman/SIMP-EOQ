@@ -12,7 +12,7 @@ class TransaksiController extends Controller
 {
     public function store(Request $request) {
 
-        // TODO: perbaiki kode
+        // TODO:refactoring
 
         $data = $request->validate([
             'id_produk' => 'required|exists:produk,id',
