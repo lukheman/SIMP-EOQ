@@ -45,4 +45,21 @@ class TransaksiController extends Controller
 
     }
 
+    public function update(Request $request, $id) {
+        $data  = $request->validate([
+            'status' => 'required|in:pending,diproses,ditolak,dikirim,selesai,batal,dibayar',
+        ]);
+
+        $transaksi = Transaksi::findOrFail($id);
+        $transaksi->status = $request->status;
+        $transaksi->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Transaksi berhasil ' . $request->status,
+            'data' => $transaksi
+        ], 200);
+
+    }
+
 }
