@@ -63,13 +63,5 @@ class AdminGudangController extends Controller
 
     }
 
-    public function pesanan() {
-        $pesanan = Transaksi::with('produk')->get();
-
-        return view('admin_gudang.pesanan', [
-            'page' => 'Pesanan',
-            'pesanan' => $pesanan
-        ]);
-    }
 
 }
