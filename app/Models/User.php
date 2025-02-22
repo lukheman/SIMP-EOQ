@@ -10,5 +10,8 @@ class User extends Authenticatable
     protected $table = 'users';
     public $timestamps = false;
 
+    public function transaksi() { 
+        return $this->hasMany('transaksi', 'id_user');
+    }
 
 }
