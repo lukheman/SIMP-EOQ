@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->foreignId('id_produk')->constrained('produk')->onDelete('cascade');
             $table->integer('jumlah')->default(1);
-            $table->enum('status', ['pending', 'diproses', 'dikirim', 'selesai', 'batal', 'dibayar'])->default('pending'); // Status pesanan
+            $table->enum('status', ['pending', 'diproses', 'dikirim', 'ditolak', 'selesai', 'batal', 'dibayar'])->default('pending'); // Status pesanan
             $table->decimal('harga', 10, 2); // total harga produk yang dipesan (jumlah * produk->harga)
             $table->date('tanggal')->default(DB::raw('CURRENT_DATE'));
             $table->timestamps();
