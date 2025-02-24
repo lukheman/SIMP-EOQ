@@ -82,4 +82,27 @@ class TransaksiController extends Controller
 
     }
 
+    public function detail(Request $request) {
+
+        $request->validate([
+            'id_transaksi' => 'required|exists:transaksi,id'
+        ]);
+
+        $pesanan = Pesanan::with(['produk'])->where('id_transaksi', $request->id_transaksi)->get();
+
+        if($pesanan) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Berhasil mendapatkan detail transaksi',
+                'data' => $pesanan
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal mendapatkan detail transaksi'
+        ], 500);
+
+    }
+
 }
