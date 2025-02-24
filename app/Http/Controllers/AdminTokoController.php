@@ -6,14 +6,16 @@ use Illuminate\Http\Request;
 use App\Models\Transaksi;
 use App\Helpers\QrcodeHelper;
 
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\Produk;
+
 class AdminTokoController extends Controller
 {
 
 
     public function pesanan() {
-        $pesanan = Transaksi::with('produk')->with('user')->get();
-
-        // dd($pesanan);
+        $pesanan = Transaksi::with('user')->get();
 
         return view('admin_toko.pesanan', [
             'page' => 'Pesanan',
