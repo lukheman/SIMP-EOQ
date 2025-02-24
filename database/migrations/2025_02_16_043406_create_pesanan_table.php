@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pesanan', function (Blueprint $table) {
-            $table->id(); // Primary Key (Auto-increment)
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Foreign key ke users
-            $table->foreignId('barang_id')->constrained('barang')->onDelete('cascade');
-            $table->decimal('total_harga', 10, 2); // Total harga pesanan
-            $table->integer('jumlah')->default(1); // pemesanan minimal 1
-            $table->enum('status', ['pending', 'diproses', 'dikirim', 'selesai', 'dibatalkan'])->default('pending'); // Status pesanan
-            $table->timestamps(); // created_at & updated_at otomatis
+            $table->id();
+            $table->foreignId('id_produk')->constrained('produk')->onDelete('cascade');
+            $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
+            $table->foreignId('id_transaksi')->nullable()->constrained('transaksi')->onDelete('cascade');
+            $table->foreignId('id_keranjang')->nullable()->constrained('keranjang')->onDelete('cascade');
+            $table->decimal('total_harga', 10, 2);
+            $table->integer('jumlah')->default(1);
+            $table->timestamps();
         });
 
     }
