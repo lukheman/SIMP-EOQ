@@ -13,8 +13,8 @@ class Produk extends Model
         return $this->hasOne(Persediaan::class, 'id_produk');
     }
 
-    public function transaksi() {
-        return $this->hasMany(Transaksi::class, 'id_produk');
+    public function pesanan() {
+        return $this->hasOne(Pesanan::class, 'id_produk');
     }
 
 }
