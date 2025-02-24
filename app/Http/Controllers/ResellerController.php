@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Produk;
 use App\Models\Transaksi;
+use Illuminate\Support\Facades\Auth;
 
 class ResellerController extends Controller
 {
@@ -40,7 +41,7 @@ class ResellerController extends Controller
 
 
     public function pesanan() {
-        $pesanan = Transaksi::with('produk')->get();
+        $pesanan = Transaksi::where('id_user', Auth::id())->get();
 
         return view('reseller.pesanan', [
             'page' => 'Pesanan',
