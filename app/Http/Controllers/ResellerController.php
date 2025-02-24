@@ -19,6 +19,26 @@ class ResellerController extends Controller
         ]);
     }
 
+    public function keranjang() {
+        $keranjang = Keranjang::where('id_user', Auth::id())->first();
+
+        if($keranjang) {
+            $pesanan = Pesanan::with(['produk'])->where('id_keranjang', $keranjang->id)->get();
+
+            return view('reseller.keranjang', [
+                'page' => 'Keranjang',
+                'pesanan' => $pesanan
+            ]);
+        }
+
+            return view('reseller.keranjang', [
+                'page' => 'Keranjang',
+                'pesanan' => []
+            ]);
+
+    }
+
+
     public function pesanan() {
         $pesanan = Transaksi::with('produk')->get();
 
