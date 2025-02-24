@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Keranjang;
+use App\Models\Pesanan;
 use Illuminate\Http\Request;
 
 use App\Models\Produk;
