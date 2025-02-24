@@ -10,8 +10,16 @@ class User extends Authenticatable
     protected $table = 'users';
     public $timestamps = false;
 
-    public function transaksi() { 
-        return $this->hasMany('transaksi', 'id_user');
+    public function transaksi() {
+        return $this->hasMany(Transaksi::class, 'id_user');
+    }
+
+    public function reseller_detail() {
+        return $this->hasOne(ResellerDetail::class, 'id_user');
+    }
+
+    public function keranjang() {
+        return $this->hasOne(Keranjang::class);
     }
 
 }
