@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,6 +11,7 @@ use App\Models\Produk;
 
 class TransaksiController extends Controller
 {
+
     public function store(Request $request) {
 
         // TODO:refactoring
@@ -50,9 +52,20 @@ class TransaksiController extends Controller
             'status' => 'required|in:pending,diproses,ditolak,dikirim,selesai,batal,dibayar',
         ]);
 
+
         $transaksi = Transaksi::findOrFail($id);
         $transaksi->status = $request->status;
         $transaksi->save();
+
+        if($request->status === 'dikirim') {
+            $pesanan = Pesanan::with('produk')->where('id_transaksi', $transaksi->id)->get();
+
+            foreach ($pesanan as $item) {
+                $produk = Produk::find($item->produk->id);
+                $produk->persediaan = $produk->persediaan - $item->jumlah;
+                $produk->save();
+            }
+        }
 
         return response()->json([
             'success' => true,
