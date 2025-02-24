@@ -14,7 +14,7 @@ class QrcodeHelper {
             data: (string)$id,
             encoding: new Encoding('UTF-8'),
             errorCorrectionLevel:ErrorCorrectionLevel::Low,
-            size: 100,
+            size: 130,
             margin: 10
         );
 
