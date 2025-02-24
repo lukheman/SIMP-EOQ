@@ -28,5 +28,11 @@ class UserSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        DB::table('reseller_detail')->insert([
+            'id_user' => 1,
+            'alamat' => 'Depan gerbang utama kampus USN'
+        ]);
+
     }
 }
