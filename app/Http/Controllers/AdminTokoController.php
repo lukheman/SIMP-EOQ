@@ -21,6 +21,15 @@ class AdminTokoController extends Controller
         ]);
     }
 
+    public function persediaan() {
+        $produk = Produk::all();
+
+        return view('admin_toko.persediaan', [
+            'page' => 'Persediaan',
+            'produk' => $produk
+        ]);
+    }
+
     public function nota(Request $request) {
 
         $request->validate([
