@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Penjualan;
+use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
 use App\Helpers\QrcodeHelper;
@@ -38,10 +40,18 @@ class AdminTokoController extends Controller
             'id_transaksi' => 'required|exists:transaksi,id'
         ]);
 
+        $pesanan = Pesanan::with(['produk'])->where('id_transaksi', $request->id_transaksi)->get();
+        $pengirim = Auth::user();
+        $penerima = Transaksi::with('user', 'user.reseller_detail')->first()->user;
+
         $qrcode = QrcodeHelper::getQrcodeString($request->id_transaksi);
 
-        return view('invoices.nota', [ 
-            'qrcode' => $qrcode
+        return view('invoices.nota', [
+            'qrcode' => $qrcode,
+            'pesanan' => $pesanan,
+            'pengirim' => $pengirim,
+            'penerima' => $penerima,
         ]);
     }
+
 }
