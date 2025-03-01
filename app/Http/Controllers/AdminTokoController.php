@@ -54,4 +54,13 @@ class AdminTokoController extends Controller
         ]);
     }
 
+    public function penjualan() {
+        $penjualan = Penjualan::all();
+
+        return view('admin_toko.penjualan', [
+            'page' => 'Penjualan',
+            'penjualan' => $penjualan
+        ]);
+    }
+
 }
