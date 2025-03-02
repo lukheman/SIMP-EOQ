@@ -234,19 +234,17 @@
 
 @section('custom-script')
 <script>
-    $(function () {
 
-        $('#table_produk').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-        });
-
+    $('#table_produk').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
     });
+
 </script>
 
 <script>
