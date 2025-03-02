@@ -8,12 +8,13 @@ class Pesanan extends Model
 {
     protected $table = 'pesanan';
     protected $guarded = [];
+    protected $appends = ['cukup'];
 
     public function transaksi() {
         return $this->belongsTo(Transaksi::class, 'id_transaksi');
     }
 
-    public function keranjang() { 
+    public function keranjang() {
         return $this->belongsTo(Keranjang::class);
     }
 
@@ -21,5 +22,9 @@ class Pesanan extends Model
         return $this->belongsTo(Produk::class, 'id_produk');
     }
 
+    public function getCukupAttribute()
+    {
+        return Produk::cekPersediaanProduk($this->jumlah, $this->id_produk);
+    }
 
 }
