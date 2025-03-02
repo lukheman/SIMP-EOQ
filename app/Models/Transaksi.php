@@ -18,4 +18,18 @@ class Transaksi extends Model
         return $this->belongsTo(User::class, 'id_user');
     }
 
+    public function totalHarga() {
+
+        $total_harga = 0;
+
+        $pesanan = Pesanan::where('id_transaksi', $this->id)->get();
+
+        foreach ($pesanan as $item) {
+            $total_harga += $item->total_harga;
+        }
+
+        return $total_harga;
+
+    }
+
 }
