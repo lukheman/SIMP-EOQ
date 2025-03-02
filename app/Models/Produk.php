@@ -14,7 +14,18 @@ class Produk extends Model
     }
 
     public function pesanan() {
-        return $this->hasOne(Pesanan::class, 'id_produk');
+        return $this->hasMany(Pesanan::class, 'id_produk');
+    }
+
+    public function penjualan() {
+        return $this->hasMany(Penjualan::class, 'id_produk');
+    }
+
+    public static function cekPersediaanProduk(int $permintaan, int $id_produk): bool
+    {
+        $produk = Produk::find($id_produk);
+
+        return $produk ? $produk->persediaan >= $permintaan : false;
     }
 
 }
