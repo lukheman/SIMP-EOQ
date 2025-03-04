@@ -17,8 +17,8 @@ class Produk extends Model
         return $this->hasMany(Pesanan::class, 'id_produk');
     }
 
-    public function penjualan() {
-        return $this->hasMany(Penjualan::class, 'id_produk');
+    public function mutasi() {
+        return $this->hasMany(Mutasi::class, 'id_produk');
     }
 
     public static function cekPersediaanProduk(int $permintaan, int $id_produk): bool
