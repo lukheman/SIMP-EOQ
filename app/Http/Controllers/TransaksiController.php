@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\Role;
 use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Transaksi;
 use App\Models\Produk;
+use App\Models\Penjualan;
+
+use App\Constants\Status;
 
 class TransaksiController extends Controller
 {
@@ -47,30 +51,132 @@ class TransaksiController extends Controller
 
     }
 
+
     public function update(Request $request, $id) {
-        $data  = $request->validate([
+        $data = $request->validate([
             'status' => 'required|in:pending,diproses,ditolak,dikirim,selesai,batal,dibayar',
         ]);
 
-
         $transaksi = Transaksi::findOrFail($id);
-        $transaksi->status = $request->status;
+
+        if (Auth::user()->role === Role::ROLE['admin_toko']) {
+            return $this->handleAdminTokoActions($request, $transaksi);
+        } elseif (Auth::user()->role === Role::ROLE['kurir']) {
+            return $this->handleKurirActions($request, $transaksi);
+        } elseif (Auth::user()->role === Role::ROLE['reseller']) {
+            return $this->handleResellerActions($request, $transaksi);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Aksi tidak valid untuk peran Anda.',
+        ], 403);
+    }
+
+    private function handleAdminTokoActions(Request $request , Transaksi $transaksi) {
+        if ($request->status === Status::STATUS['diproses']) {
+            return $this->prosesPesanan($transaksi);
+        } elseif ($request->status === Status::STATUS['dikirim']) {
+            return $this->kirimPesanan($transaksi);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Status tidak valid untuk admin toko.',
+        ], 400);
+
+    }
+
+    private function prosesPesanan(Transaksi $transaksi) {
+        $pesanan = Pesanan::with('produk')->where('id_transaksi', $transaksi->id)->get();
+
+        foreach ($pesanan as $item) {
+            if (!Produk::cekPersediaanProduk($item->jumlah, $item->id_produk)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Persediaan {$item->produk->nama_produk} tidak mencukupi",
+                ], 200);
+            }
+
+            // buat log penjualan ketika persediaan mencukup
+            Penjualan::create([
+                'id_produk' => $item->id_produk,
+                'jumlah' => $item->jumlah,
+                'total_harga' =>  $item->total_harga
+            ]);
+
+        }
+
+        $transaksi->status = Status::STATUS['diproses'];
         $transaksi->save();
 
-        if($request->status === 'dikirim') {
-            $pesanan = Pesanan::with('produk')->where('id_transaksi', $transaksi->id)->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesanan berhasil diterima',
+        ], 200);
+    }
 
-            foreach ($pesanan as $item) {
-                $produk = Produk::find($item->produk->id);
-                $produk->persediaan = $produk->persediaan - $item->jumlah;
-                $produk->save();
-            }
+    private function kirimPesanan(Transaksi $transaksi) {
+        if ($transaksi->status !== Status::STATUS['diproses']) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Pesanan belum diproses',
+            ], 200);
+        }
+
+        $pesanan = Pesanan::with('produk')->where('id_transaksi', $transaksi->id)->get();
+
+        foreach ($pesanan as $item) {
+            $produk = Produk::find($item->produk->id);
+            $produk->persediaan -= $item->jumlah;
+            $produk->save();
+        }
+
+        $transaksi->status = Status::STATUS['dikirim'];
+        $transaksi->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesanan berhasil dikirim',
+        ], 200);
+    }
+
+    private function handleKurirActions(Request $request, Transaksi $transaksi) {
+        $transaksi = Transaksi::with(['user', 'user.reseller_detail'])->findOrFail($transaksi->id);
+
+        if ($transaksi->status === Status::STATUS['dikirim'] && $request->status === Status::STATUS['dibayar']  ) {
+
+
+            $transaksi->status = Status::STATUS['dibayar'];
+            $transaksi->save();
+
+        }
+
+        $transaksi['total_harga'] = $transaksi->totalHarga();
+
+        $message = $transaksi->status === Status::STATUS['dibayar'] ?
+            'Pembayaran telah dibayar pada ' . $transaksi->updated_at :
+            'Transaksi selesai dibayar';
+
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'data' => $transaksi,
+        ], 200);
+
+    }
+    private function handleResellerActions(Request $request, Transaksi $transaksi) {
+
+        if ($transaksi->status === Status::STATUS['dibayar'] && $request->status === Status::STATUS['selesai']) {
+            $transaksi->status = Status::STATUS['selesai'];
+            $transaksi->save();
+
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Transaksi berhasil ' . $request->status,
-            'data' => $transaksi
+            'message' => 'Pesanan berhasil diterima',
+            'data' => $transaksi,
         ], 200);
 
     }
@@ -103,7 +209,7 @@ class TransaksiController extends Controller
 
         $pesanan = Pesanan::with(['produk'])->where('id_transaksi', $request->id_transaksi)->get();
 
-        if($pesanan) {
+        if($pesanan->isNotEmpty()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Berhasil mendapatkan detail transaksi',
