@@ -37,6 +37,14 @@
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                 @yield('sidebar-menu')
+
+                <li class="nav-header">PENGGUNA</li>
+                <li class="nav-item">
+                    <a href="{{ route('logout') }}" class="nav-link">
+                        <i class="nav-icon fas fa-sign-out-alt text-danger"></i>
+                        <p class="text">Logout</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
