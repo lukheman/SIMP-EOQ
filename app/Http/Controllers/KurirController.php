@@ -9,9 +9,7 @@ class KurirController extends Controller
 {
 
     public function pesanan() {
-        $pesanan = Transaksi::with('produk')->with('user')->get();
-
-        // dd($pesanan);
+        $pesanan = Transaksi::with(['user', 'user.reseller_detail'])->where('status', 'dikirim')->get();
 
         return view('kurir.pesanan', [
             'page' => 'Pesanan',
@@ -30,9 +28,10 @@ class KurirController extends Controller
             'id_transaksi' => 'required|exists:transaksi,id'
         ]);
 
-        $transaksi = Transaksi::with(['produk', 'user', 'user.reseller_detail'])->findOrFail($request->id_transaksi);
+        $transaksi = Transaksi::with(['user', 'user.reseller_detail'])->findOrFail($request->id_transaksi);
 
         if($transaksi->status === 'dibayar') {
+            $transaksi['total_harga'] = Transaksi::totalHarga($request->id_transaksi);
             return response()->json([
                 'success' => true,
                 'message' => 'Pembayaran telah dikonfirmasi pada ' . $transaksi->updated_at,
@@ -43,6 +42,7 @@ class KurirController extends Controller
         $transaksi->status = 'dibayar';
         $transaksi->save();
 
+        $transaksi['total_harga'] = Transaksi::totalHarga($request->id_transaksi);
         return response()->json([
             'success' => true,
             'message' => 'Pembayaran berhasil dikonfimasi',
