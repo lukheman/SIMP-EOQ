@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Models\Produk;
 use App\Models\Persediaan;
-use App\Models\Transaksi;
 use App\Models\Mutasi;
 
 class AdminGudangController extends Controller
@@ -59,6 +58,35 @@ class AdminGudangController extends Controller
 
     }
 
+
+    public function laporanPenjualan() {
+        $penjualan = Mutasi::where('jenis', 'keluar')->get();
+
+        return view('admin_gudang.laporan-penjualan', [
+            'page' => 'Laporan Penjualan',
+            'penjualan' => $penjualan
+        ]);
+    }
+
+    public function cetakLaporanPenjualan(Request $request) {
+        $request->validate([
+            'periode' => 'required'
+        ]);
+
+        list($tahun, $bulan) = explode('-', $request->periode);
+
+        $penjualan = Mutasi::with('produk')
+            ->whereYear('tanggal', $tahun)
+            ->whereMonth('tanggal', $bulan)
+            ->where('jenis', 'keluar')
+            ->get();
+
+        return view('invoices.laporan-penjualan', [
+            'penjualan' => $penjualan,
+            'periode' => $request->periode,
+            'ttd' => 'Kepala Gudang'
+        ]);
+    }
 
     public function laporanBarangMasuk() {
         $barang_masuk = Mutasi::with('produk')->where('jenis', 'masuk')->get();
