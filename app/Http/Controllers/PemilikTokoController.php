@@ -4,20 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Mutasi;
+use App\Models\Produk;
 
 class PemilikTokoController extends Controller
 {
 
-    public function penjualan() {
+    public function laporanPenjualan() {
         $penjualan = Mutasi::where('jenis', 'keluar')->get();
 
-        return view('pemilik_toko.penjualan', [
+        return view('pemilik_toko.laporan-penjualan', [
             'page' => 'Penjualan',
             'penjualan' => $penjualan
         ]);
     }
 
-    public function laporanPenjualan(Request $request) {
+    public function cetakLaporanPenjualan(Request $request) {
         $request->validate([
             'periode' => 'required'
         ]);
