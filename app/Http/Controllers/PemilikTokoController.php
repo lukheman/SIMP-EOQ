@@ -57,4 +57,34 @@ class PemilikTokoController extends Controller
             'ttd' => 'Manager Toko'
         ]);
     }
+
+    public function laporanBarangMasuk() {
+        $barang_masuk = Mutasi::with('produk')->where('jenis', 'masuk')->get();
+
+        return view('pemilik_toko.laporan-barang-masuk', [
+            'page' => 'Laporan Barang Masuk',
+            'barang_masuk' => $barang_masuk
+        ]);
+    }
+
+    public function cetakLaporanBarangMasuk(Request $request) {
+
+        $request->validate([
+            'periode' => 'required'
+        ]);
+
+        list($tahun, $bulan) = explode('-', $request->periode);
+
+        $barang_masuk = Mutasi::with('produk')
+            ->whereYear('tanggal', $tahun)
+            ->whereMonth('tanggal', $bulan)
+            ->where('jenis', 'masuk')
+            ->get();
+
+        return view('invoices.laporan-barang-masuk', [
+            'barang_masuk' => $barang_masuk,
+            'periode' => $request->periode,
+            'ttd' => 'Manager Toko'
+        ]);
+    }
 }

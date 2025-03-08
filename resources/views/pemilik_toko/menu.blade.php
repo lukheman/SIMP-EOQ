@@ -20,3 +20,11 @@
         <p>Persediaan Produk</p>
     </a>
 </li>
+
+<li class="nav-item">
+    <a href="{{ route('pemiliktoko.laporan-barang-masuk') }}"
+        class="nav-link  {{ $page === 'Laporan Barang Masuk' ? 'active' : '' }}">
+        <i class="far fa-circle nav-icon"></i>
+        <p>Barang Masuk</p>
+    </a>
+</li>
