@@ -37,4 +37,23 @@ class PemilikTokoController extends Controller
         ]);
 
     }
+
+    public function laporanPersediaanProduk() {
+        $produk = Produk::all();
+
+        return view('pemilik_toko.laporan-persediaan-produk', [
+            'page' => 'Laporan Persediaan Produk',
+            'produk' => $produk,
+        ]);
+    }
+
+    public function cetakLaporanPersediaanProduk() {
+
+        $produk = Produk::all();
+
+        return view('invoices.laporan-persediaan-produk', [
+            'produk' => $produk,
+            'ttd' => 'Manager Toko'
+        ]);
+    }
 }
