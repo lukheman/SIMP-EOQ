@@ -7,16 +7,17 @@ use Illuminate\Http\Request;
 use App\Models\Produk;
 use App\Models\Persediaan;
 use App\Models\Transaksi;
+use App\Models\Mutasi;
 
 class AdminGudangController extends Controller
 {
 
-    public function logPersediaan() {
-        $persediaan = Persediaan::with('produk')->get();
+    public function barangMasuk() {
+        $barang_masuk = Mutasi::with('produk')->where('jenis', 'masuk')->get();
 
-        return view('admin_gudang.log-persediaan', [
-            'page' => 'Log Persediaan',
-            'persediaan' => $persediaan
+        return view('admin_gudang.barang-masuk', [
+            'page' => 'Barang Masuk',
+            'barang_masuk' => $barang_masuk
         ]);
     }
 
@@ -49,18 +50,44 @@ class AdminGudangController extends Controller
 
     public function hitungEOQ(Request $request) {
         $persediaan = Persediaan::all();
-        // Persediaan::hitungEOQ();
 
-        /* foreach ($persediaan as $item) { */
-        /*     $item->hitungEOQ($item->id); */
-        /* } */
-        /**/
         return response()->json([
             'success' => true,
             'message' => 'berhasil menghitung eoq',
             // 'data' => $persediaan
         ], 200);
 
+    }
+
+
+    public function laporanBarangMasuk() {
+        $barang_masuk = Mutasi::with('produk')->where('jenis', 'masuk')->get();
+
+        return view('admin_gudang.laporan-barang-masuk', [
+            'page' => 'Laporan Barang Masuk',
+            'barang_masuk' => $barang_masuk
+        ]);
+    }
+
+    public function cetakLaporanBarangMasuk(Request $request) {
+
+        $request->validate([
+            'periode' => 'required'
+        ]);
+
+        list($tahun, $bulan) = explode('-', $request->periode);
+
+        $barang_masuk = Mutasi::with('produk')
+            ->whereYear('tanggal', $tahun)
+            ->whereMonth('tanggal', $bulan)
+            ->where('jenis', 'masuk')
+            ->get();
+
+        return view('invoices.laporan-barang-masuk', [
+            'barang_masuk' => $barang_masuk,
+            'periode' => $request->periode,
+            'ttd' => 'Kepala Gudang'
+        ]);
     }
 
 
