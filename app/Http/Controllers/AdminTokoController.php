@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Penjualan;
+use App\Models\Mutasi;
 use App\Models\Pesanan;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
@@ -54,30 +54,32 @@ class AdminTokoController extends Controller
         ]);
     }
 
-    public function penjualan() {
-        $penjualan = Penjualan::all();
+    public function laporanPenjualan() {
+        $penjualan = Mutasi::where('jenis', 'keluar')->get();
 
-        return view('admin_toko.penjualan', [
+        return view('admin_toko.laporan-penjualan', [
             'page' => 'Penjualan',
             'penjualan' => $penjualan
         ]);
     }
 
-    public function laporanPenjualan(Request $request) { 
+    public function cetakLaporanPenjualan(Request $request) {
         $request->validate([
             'periode' => 'required'
         ]);
 
         list($tahun, $bulan) = explode('-', $request->periode);
 
-        $penjualan = Penjualan::with('produk')
+        $penjualan = Mutasi::with('produk')
             ->whereYear('tanggal', $tahun)
             ->whereMonth('tanggal', $bulan)
+            ->where('jenis', 'keluar')
             ->get();
 
         return view('invoices.laporan-penjualan', [
             'penjualan' => $penjualan,
             'periode' => $request->periode,
+            'ttd' => 'Kepala Toko'
         ]);
 
     }
