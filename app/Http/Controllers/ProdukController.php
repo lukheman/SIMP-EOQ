@@ -101,7 +101,7 @@ class ProdukController extends Controller
                 'success' => true,
                 'message' => 'Produk berhasil didapatkan',
                 'data' => $produk
-            ], 201);
+            ], 200);
         }
 
         return response()->json([
