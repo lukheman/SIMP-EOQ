@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Produk extends Model
 {
     protected $table = 'produk';
-    protected $fillable = ['nama_produk', 'kode_produk', 'harga_beli', 'harga_jual', 'biaya_penyimpanan', 'biaya_pemesanan', 'deskripsi'];
+    protected $guarded = [];
 
     public function persediaan() {
         return $this->hasOne(Persediaan::class, 'id_produk');
