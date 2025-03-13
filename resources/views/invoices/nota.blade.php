@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-<!--
-This is a starter template page. Use this page to start your new project from
-scratch. This page gets rid of all links and provides the needed markup only.
--->
 <html lang="en">
 
 <head>
@@ -71,49 +67,56 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <tr>
                 <td>Pengirim</td>
                 <td>:</td>
-                <td>Akmal</td>
+                <td>{{ $pengirim->name }}</td>
             </tr>
             <tr>
                 <td>Penerima</td>
                 <td>:</td>
-                <td>cici</td>
+                <td>{{ $penerima->name }}</td>
             </tr>
             <tr>
                 <td>Alamat</td>
                 <td>:</td>
-                <td>jakarta</td>
+                <td>{{ $penerima->reseller_detail->alamat}}</td>
             </tr>
         </table>
 
         <table id="pesanan">
 
             <thead>
+
                 <tr>
                     <th>No</th>
                     <th>Jenis Produk</th>
                     <th>Jumlah</th>
                     <th>Harga(Rp)</th>
                 </tr>
+
             </thead>
 
             <tbody>
 
+                @php
+                $total = 0;
+                $i = 0;
+                @endphp
+
+                @foreach ($pesanan as $item)
                 <tr>
-                    <td>1</td>
-                    <td>indomie</td>
-                    <td>10</td>
-                    <td>50</td>
+                    <td style="text-align: center;">{{ ++$i}}</td>
+                    <td>{{ $item->produk->nama_produk }}</td>
+                    <td style="text-align: center;">{{ $item->jumlah }}</td>
+                    <td style="text-align: right;">{{ number_format( $item->total_harga, 2, ',', '.') }}</td>
+                    @php
+                    $total += $item->total_harga
+                    @endphp
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>indomie</td>
-                    <td>10</td>
-                    <td>50</td>
-                </tr>
+                @endforeach
+
 
                 <tr>
-                    <td colspan="3">total</td>
-                    <td>100</td>
+                    <td style="text-align: center;" colspan="3">Total</td>
+                    <td style="text-align: right;">{{ number_format($total, 2, ',', '.')}}</td>
                 </tr>
 
             </tbody>
@@ -122,7 +125,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         <div class="row">
             <div class="col">
-            <img src="{{ $qrcode }}" alt="qrcode">
+                <img src="{{ $qrcode }}" alt="qrcode">
             </div>
             <div class="col" style="text-align: center;">
                 <p style="margin-bottom: 100px;"><b>UD Toko Diva Mowewe</b></p>
