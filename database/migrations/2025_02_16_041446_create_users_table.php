@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id(); // id (primary key)
             $table->string('username', 100)->unique();
             $table->string('email', 100)->unique();
+            $table->string('name', 100);
             $table->string('password');
             $table->string('role', ['reseller', 'admin_toko', 'admin_gudang', 'pemilik_toko', 'kurir']);
             $table->string('phone', 15)->nullable();
