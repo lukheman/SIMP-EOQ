@@ -12,6 +12,18 @@ use Illuminate\Support\Facades\Auth;
 
 class ResellerController extends Controller
 {
+    public function index() {
+        $keranjang = Keranjang::where('id_user', Auth::id())->first();
+        $keranjang = Pesanan::where('id_keranjang', $keranjang->id)->count();
+
+        $pesanan = Transaksi::where('id_user', Auth::id())->where('status', '!=', 'selesai')->count();
+
+        return view('reseller.index', [
+            'page' => 'Dashboard',
+            'keranjang' => $keranjang,
+            'pesanan' => $pesanan
+        ]);
+    }
 
     public function katalog() {
         $produk = Produk::all();
