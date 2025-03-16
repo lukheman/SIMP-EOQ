@@ -8,6 +8,17 @@ use App\Models\Transaksi;
 class KurirController extends Controller
 {
 
+    public function index() {
+        $dikirim = Transaksi::where('status', 'dikirim')->count();
+        $diproses = Transaksi::where('status', 'diproses')->count();
+
+        return view('kurir.index', [
+            'page' => 'Dashboard',
+            'dikirim' => $dikirim,
+            'diproses' => $diproses
+        ]);
+    }
+
     public function pesanan() {
         $pesanan = Transaksi::with(['user', 'user.reseller_detail'])->where('status', 'dikirim')->get();
 
