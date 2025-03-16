@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\KurirController;
-use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\MutasiController;
 use App\Http\Controllers\PersediaanController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminTokoController;
@@ -33,8 +33,9 @@ Route::middleware(['role:admin_toko'])->group(function() {
         Route::get('admintoko/pesanan', 'pesanan')->name('admintoko.pesanan');
         Route::get('admintoko/persediaan', 'persediaan')->name('admintoko.persediaan');
         Route::post('admintoko/nota', 'nota')->name('admintoko.nota');
-        Route::post('admintoko/laporan-penjualan', 'laporanPenjualan')->name('admintoko.laporan-penjualan');
-        Route::get('admintoko/penjualan', 'penjualan')->name('admintoko.penjualan');
+
+        Route::get('admintoko/laporan-penjualan', 'laporanPenjualan')->name('admintoko.laporan-penjualan');
+        Route::post('admintoko/cetak-laporan-penjualan', 'cetakLaporanPenjualan')->name('admintoko.cetak-laporan-penjualan');
     });
 });
 
@@ -42,14 +43,21 @@ Route::middleware(['role:admin_gudang'])->group(function() {
     Route::controller(AdminGudangController::class)->group(function() {
         Route::get('admingudang', 'index')->name('admingudang.index');
         Route::get('admingudang/dashboard', 'index')->name('admingudang.dashboard');
-        Route::get('admingudang/log-persediaan', 'logPersediaan')->name('admingudang.log-persediaan');
         Route::get('admingudang/persediaan', 'persediaan')->name('admingudang.persediaan');
-        Route::get('admingudang/data-produk', 'dataProduk')->name('admingudang.data-produk');
+        Route::get('admingudang/produk', 'produk')->name('admingudang.produk');
+
         Route::get('admingudang/eoq', 'eoq')->name('admingudang.eoq');
-        Route::get('admingudang/hitung-eoq', 'hitungEOQ')->name('admingudang.hitung-eoq');
+        Route::post('admingudang/hitung-eoq', 'hitung')->name('admingudang.hitung-eoq');
+
         Route::get('admingudang/pesanan', 'pesanan')->name('admingudang.pesanan');
-        Route::post('admingudang/laporan-penjualan', 'laporanPenjualan')->name('admingudang.laporan-penjualan');
-        Route::get('admingudang/penjualan', 'penjualan')->name('admingudang.penjualan');
+
+        Route::get('admingudang/barang-masuk', 'barangMasuk')->name('admingudang.barang-masuk');
+
+        Route::get('admingudang/laporan-barang-masuk', 'laporanBarangMasuk')->name('admingudang.laporan-barang-masuk');
+        Route::post('admingudang/cetak-laporan-barang-masuk', 'cetakLaporanBarangMasuk')->name('admingudang.cetak-laporan-barang-masuk');
+
+        Route::get('admingudang/laporan-penjualan', 'laporanPenjualan')->name('admingudang.laporan-penjualan');
+        Route::post('admingudang/cetak-laporan-penjualan', 'cetakLaporanPenjualan')->name('admingudang.cetak-laporan-penjualan');
     });
 });
 
@@ -58,8 +66,15 @@ Route::middleware(['role:pemilik_toko'])->group(function() {
     Route::controller(PemilikTokoController::class)->group(function() {
         Route::get('pemiliktoko', 'index')->name('pemiliktoko.index');
         Route::get('pemiliktoko/dashboard', 'index')->name('pemiliktoko.dashboard');
-        Route::post('pemiliktoko/laporan-penjualan', 'laporanPenjualan')->name('pemiliktoko.laporan-penjualan');
-        Route::get('pemiliktoko/penjualan', 'penjualan')->name('pemiliktoko.penjualan');
+
+        Route::get('pemiliktoko/laporan-penjualan', 'laporanPenjualan')->name('pemiliktoko.laporan-penjualan');
+        Route::post('pemiliktoko/cetak-laporan-penjualan', 'cetakLaporanPenjualan')->name('pemiliktoko.cetak-laporan-penjualan');
+
+        Route::get('pemiliktoko/laporan-persediaan-produk', 'laporanPersediaanProduk')->name('pemiliktoko.laporan-persediaan-produk');
+        Route::get('pemiliktoko/cetak-laporan-persediaan-produk', 'cetakLaporanPersediaanProduk')->name('pemiliktoko.cetak-laporan-persediaan-produk');
+
+        Route::get('pemiliktoko/laporan-barang-masuk', 'laporanBarangMasuk')->name('pemiliktoko.laporan-barang-masuk');
+        Route::post('pemiliktoko/cetak-laporan-barang-masuk', 'cetakLaporanBarangMasuk')->name('pemiliktoko.cetak-laporan-barang-masuk');
     });
 });
 
@@ -91,7 +106,8 @@ Route::controller(TransaksiController::class)->group(function() {
     Route::post('transaksi/detail', 'detail')->name('transaksi.detail');
 });
 
-Route::resource('penjualan', PenjualanController::class)->only(['store', 'destroy', 'show']);
+// Route::resource('penjualan', PenjualanController::class)->only(['store', 'destroy', 'show']);
+Route::resource('mutasi', MutasiController::class)->only(['store', 'update', 'destroy', 'show',]);
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
