@@ -27,7 +27,43 @@ class MutasiSeeder extends Seeder
                 'tanggal' => date("Y-m-d"),
                 'jumlah' => 20,
                 'jenis' => 'keluar'
-            ]
+            ],
+            [
+                'id_produk' => 3,
+                'tanggal' => date("Y-m-d"),
+                'jumlah' => 30,
+                'jenis' => 'masuk'
+            ],
+            [
+                'id_produk' => 4,
+                'tanggal' => date("Y-m-d"),
+                'jumlah' => 5,
+                'jenis' => 'masuk'
+            ],
+            [
+                'id_produk' => 6,
+                'tanggal' => "2024-10-01",
+                'jumlah' => 140,
+                'jenis' => 'masuk'
+            ],
+            [
+                'id_produk' => 6,
+                'tanggal' => "2024-10-01",
+                'jumlah' => 120,
+                'jenis' => 'keluar'
+            ],
+            [
+                'id_produk' => 6,
+                'tanggal' => "2024-11-01",
+                'jumlah' => 140,
+                'jenis' => 'masuk'
+            ],
+            [
+                'id_produk' => 6,
+                'tanggal' => "2024-11-01",
+                'jumlah' => 130,
+                'jenis' => 'keluar'
+            ],
         ]);
     }
 }
