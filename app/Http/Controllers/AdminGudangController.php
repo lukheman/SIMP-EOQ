@@ -40,12 +40,14 @@ class AdminGudangController extends Controller
         ]);
     }
 
-    public function dataProduk() {
+    public function produk() {
         $produk = Produk::all();
-        return view('admin_gudang.produk.show', [
-            'page' => 'Data Produk',
+        return view('admin_gudang.produk', [
+            'page' => 'Produk',
             'produk' => $produk
         ]);
+    }
+
 
     }
 
