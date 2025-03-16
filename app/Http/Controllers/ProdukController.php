@@ -22,16 +22,24 @@ class ProdukController extends Controller
 
     public function store(Request $request) {
 
-        // validasi data
-        $data = $request->validate([
-            'nama_produk' => 'required|unique:produk,nama_produk',
+        $request->validate([
+            'nama_produk' => 'required',
             'kode_produk' => 'required|unique:produk,kode_produk',
             'harga_beli' => 'required|numeric|min:0',
             'harga_jual' => 'required|numeric|min:0',
-            // 'biaya_penyimpanan' => 'required|numeric|min:0',
-            // 'biaya_pemesanan' => 'required|numeric|min:0',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'biaya_penyimpanan' => 'required|numeric|min:0',
+            'biaya_pemesanan' => 'required|numeric|min:0',
+            'lead_time' => 'required|numeric|min:0',
+            'penggunaan_rata_rata' => 'required|numeric|min:0',
             'deskripsi' => 'nullable|string'
         ]);
+
+        $data = $request->all();
+
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')->store('images', 'public');
+        }
 
         $produk = Produk::create($data);
 
@@ -65,8 +73,10 @@ class ProdukController extends Controller
             ],
             'harga_beli' => 'required|numeric:min:0',
             'harga_jual' => 'required|numeric:min:0',
-            // 'biaya_penyimpanan' => 'required|numeric:min:0',
-            // 'biaya_pemesanan' => 'required|numeric:min:0',
+            'biaya_penyimpanan' => 'required|numeric:min:0',
+            'biaya_pemesanan' => 'required|numeric:min:0',
+            'lead_time' => 'required|numeric:min:0',
+            'penggunaan_rata_rata' => 'required|numeric:min:0',
             'deskripsi' => 'nullable|string'
         ]);
 
