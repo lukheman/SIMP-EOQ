@@ -12,8 +12,10 @@
 <div class="card">
     <div class="card-header">
 
-        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-add-mutasi"
-            id="btn-add-mutasi">Tambah Barang Masuk</button>
+        <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#modal-add-mutasi"
+            id="btn-add-mutasi"> 
+            <i class="fas fa-plus"></i>
+            Tambah Barang Masuk</button>
     </div>
     <div class="card-body">
         <div id="table_persediaan_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -54,11 +56,15 @@
                                 <td> {{ $item->jumlah }}</td>
                                 <td> {{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary btn-update-mutasi"
+                                    <button class="btn btn-sm btn-warning text-white btn-update-mutasi"
                                         data-id-mutasi="{{ $item->id }}" data-toggle="modal"
-                                        data-target="#modal-update-mutasi">Edit</button>
+                                        data-target="#modal-update-mutasi"> 
+                                        <i class="fas fa-edit"> </i>
+                                        Edit</button>
                                     <button class="btn btn-sm btn-danger btn-delete-mutasi"
-                                        data-id-mutasi="{{ $item->id }}">Hapus</button>
+                                        data-id-mutasi="{{ $item->id }}"> 
+                                        <i class="fas fa-trash"> </i>
+                                        Hapus</button>
                                 </td>
                             </tr>
                             @endforeach
@@ -119,7 +125,9 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary"> 
+                    <i class="fas fa-save"> </i>
+                    Tambah</button>
                 </div>
             </form>
         </div>
@@ -165,7 +173,9 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    <button type="submit" class="text-white btn btn-warning"> 
+                    <i class="fas fa-save"> </i>
+                    Simpan Perubahan</button>
                 </div>
             </form>
         </div>
