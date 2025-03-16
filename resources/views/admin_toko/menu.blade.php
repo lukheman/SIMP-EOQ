@@ -1,39 +1,30 @@
 <li class="nav-item">
     <a href="{{ route('admintoko.index' )}}" class="nav-link {{ $page === 'Dashboard' ? 'active' : '' }}">
         <i class="nav-icon fas fa-tachometer-alt"></i>
-        Dashboard
+        <p>Dashboard</p>
     </a>
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('admintoko.pesanan-reseller') }}"
-        class="nav-link {{ $page === 'Pesanan Reseller' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-th"></i>
-        Pesanan Reseller
+    <a href="{{ route('admintoko.persediaan')}}" class="nav-link {{ $page === 'Persediaan' ? 'active' : '' }}">
+        <i class="nav-icon fas fa-boxes"></i>
+        <p>Persediaan Barang</p>
     </a>
 </li>
 
 <li class="nav-item">
-    <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-table"></i>
-        <p>
-            Laporan
-            <i class="fas fa-angle-left right"></i>
-        </p>
+    <a href="{{ route('admintoko.pesanan') }}" class="nav-link {{ $page === 'Pesanan' ? 'active' : '' }}">
+        <i class="nav-icon fas fa-clipboard"></i>
+        <p>Pesanan</p>
     </a>
-    <ul class="nav nav-treeview" style="display: block;">
-        <li class="nav-item">
-            <a href="tables/simple.html" class="nav-link  {{ $page === 'Laporan Penjualan' ? 'active' : '' }}">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Data Penjualan</p>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="tables/data.html" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Data Persediaan Produk</p>
-            </a>
-        </li>
+</li>
 
-    </ul>
+<li class="nav-header">LAPORAN</li>
+
+<li class="nav-item">
+    <a href="{{ route('admintoko.laporan-penjualan') }}"
+        class="nav-link  {{ $page === 'Laporan Penjualan' ? 'active' : '' }}">
+        <i class="fas fa-chart-bar nav-icon"></i>
+        <p>Penjualan</p>
+    </a>
 </li>
