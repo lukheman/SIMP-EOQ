@@ -1,10 +1,10 @@
 @extends('layouts.main')
 
-@section('title', 'Admin Gudang')
+@section('title', 'Admin Toko')
 
 @section('sidebar-menu')
 
-@include('admin_gudang.menu')
+@include('admin_toko.menu')
 
 @endsection
 
@@ -17,7 +17,7 @@
 
     </div>
     <div class="card-body">
-        <div id="table_persediaan_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div id="table_pesanan_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="row">
                 <div class="col-sm-12 col-md-6">
 
@@ -33,25 +33,19 @@
                         <thead>
                             <tr>
                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Tanggal Pesan
+                                    colspan="1" aria-sort="ascending">Tanggal
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Nama
+                                <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
+                                    colspan="1" aria-sort="ascending">Pemesan
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Alamat
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Nama Produk</th>
-                                <!-- <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1"> -->
-                                <!--     Total Harga (Rp.) -->
-                                <!-- </th> -->
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Nota</th>
                                 <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
                                     Status</th>
                                 <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Aksi</th>
+                                    Info</th>
+                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
+                                    Nota</th>
+                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
+                                    Ubah Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -60,36 +54,50 @@
                             <tr>
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->user->name }}</td>
-                                <td></td>
-                                <td> {{ $item->produk->nama_produk }}</td>
-                                <td>
-                                    <form action="{{ route('admintoko.nota') }}" method="post">
-                                        @csrf
-                                        <input type="hidden" value="{{ $item->id }}" name="id_transaksi">
-                                        <button class="btn btn-sm btn-primary {{ $item->status == 'pending' ||
-                                        $item->status == 'ditolak' ? 'disabled' : '' }}">Cetak</button>
-                                    </form>
-                                </td>
                                 <td>
                                     @if ($item->status === 'pending')
-                                    <span class="badge bg-primary">{{ $item->status }}</span>
+                                    <span class="badge bg-secondary">{{ $item->status }}</span>
                                     @elseif($item->status === 'diproses')
                                     <span class="badge bg-success">{{ $item->status }}</span>
                                     @elseif($item->status === 'dikirim')
                                     <span class="badge bg-warning">{{ $item->status }}</span>
                                     @elseif($item->status === 'ditolak')
                                     <span class="badge bg-danger">{{ $item->status }}</span>
+                                    @elseif($item->status === 'dibayar')
+                                    <span class="badge bg-orange">{{ $item->status }}</span>
+                                    @elseif($item->status === 'selesai')
+                                    <span class="badge bg-green">{{ $item->status }}</span>
                                     @endif
                                 </td>
                                 <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-success btn-setujui-pesanan" data-toggle="modal"
-                                            data-target="#" data-id-transaksi="{{ $item->id }}">Setujui</button>
-                                        <button class="btn btn-sm btn-warning btn-kirim-pesanan"
-                                            data-id-transaksi="{{ $item->id }}">Dikirim</button>
-                                        <button class="btn btn-sm btn-danger btn-tolak-pesanan"
-                                            data-id-transaksi="{{ $item->id }}">Tolak</button>
-                                    </div>
+                                    <button type="button" class="btn btn-sm btn-secondary btn-detail-transaksi"
+                                        data-id-transaksi="{{ $item->id }}" data-toggle="modal"
+                                        data-target="#modal-detail-transaksi">
+                                        <i class="nav-icon fas fa-info"></i>
+                                        Info</button>
+                                </td>
+                                <td>
+
+                                    <form action="{{ route('admintoko.nota') }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="id_transaksi" value="{{ $item->id }}">
+                                        <button type="submit" class="btn btn-sm btn-danger"> 
+                                        <i class="nav-icon fas fa-print"></i>
+                                        Cetak</button>
+                                    </form>
+
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-success btn-setujui-pesanan"
+                                        data-id-transaksi="{{ $item->id }}" {{ $item->status !== 'pending' ? 'disabled'
+                                        : ''}} > 
+                                        <i class="nav-icon fas fa-check"></i>
+                                        Terima</button>
+                                    <button class="btn btn-sm btn-warning btn-kirim-pesanan"
+                                        data-id-transaksi="{{ $item->id }}" {{ $item->status !== 'diproses' ? 'disabled'
+                                        : ''}}> 
+                                        <i class="nav-icon fas fa-truck"></i>
+                                        Dikirim</button>
                                 </td>
                             </tr>
                             @endforeach
@@ -105,7 +113,7 @@
                 <div class="col-sm-12 col-md-5">
                 </div>
                 <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate paging_simple_numbers" id="table_persediaan_paginate">
+                    <div class="dataTables_paginate paging_simple_numbers" id="table_pesanan_paginate">
                         <ul class="pagination">
                         </ul>
                     </div>
@@ -115,159 +123,42 @@
     </div>
 </div>
 
-<!-- modal-add-persediaan - modal untuk menampilkan form tambah data produk -->
-<div class="modal fade show" id="modal-add-persediaan" style="display: none;" aria-modal="true" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Tambah Persediaan</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <form id="form-add-persediaan">
-                @csrf
-                <div class="modal-body">
-
-                    <div class="form-group">
-                        <label for="nama-produk">Nama Produk</label>
-                        <select name="id_produk" id="nama-produk" class="form-control">
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="periode">Periode</label>
-                        <input type="month" name="periode" id="periode" class="form-control" min="0"
-                            placeholder="Periode">
-                    </div>
-
-                    <!-- <div class="form-group"> -->
-                    <!--     <label for="stock">Stok</label> -->
-                    <!--     <input type="number" name="stock" id="stock" class="form-control" min="0" -->
-                    <!--         placeholder="Stok Produk"> -->
-                    <!-- </div> -->
-
-                    <!-- <div class="form-group"> -->
-                    <!--     <label for="stock-min">Stok Minimal</label> -->
-                    <!--     <input type="number" name="stock_min" id="stock-min" class="form-control" min="0" -->
-                    <!--         placeholder="Stok Minimal"> -->
-                    <!-- </div> -->
-
-                    <!-- <div class="form-group"> -->
-                    <!--     <label for="stock-max">Stok Maksimal</label> -->
-                    <!--     <input type="number" name="stock_max" id="stock-max" class="form-control" min="0" -->
-                    <!--         placeholder="Stok Minimal"> -->
-                    <!-- </div> -->
-
-                    <div class="form-group">
-                        <label for="lead-time">Waktu Tunggu</label>
-                        <input type="number" name="lead_time" id="lead-time" class="form-control" min="0"
-                            placeholder="Waktu Tunggu">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="rata-rata-penggunaan">Rata-rata penggunaan</label>
-                        <input type="number" class="form-control" name="rata_rata_penggunaan" id="rata-rata-penggunaan"
-                            placeholder="Rata-rata penggunaan" min="0">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="biaya-penyimpanan">Biaya Penyimpanan</label>
-                        <input type="number" class="form-control" name="biaya_penyimpanan" id="biaya-penyimpanan"
-                            placeholder="Biaya Penyimpanan" min="0">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="biaya-pemesanan">Biaya Pemesanan</label>
-                        <input type="number" class="form-control" name="biaya_pemesanan" id="biaya-pemesanan"
-                            placeholder="Biaya Pemesanan" min="0">
-                    </div>
-
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- end modal-add-persediaan -->
 
 <!-- modal-update-persediaan - modal untuk menampilkan form tambah data produk -->
-<div class="modal fade show" id="modal-update-persediaan" style="display: none;" aria-modal="true" role="dialog">
-    <div class="modal-dialog">
+<div class="modal fade show" id="modal-detail-transaksi" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Update Persediaan</h4>
+                <h4 class="modal-title">Detail Pesanan</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form id="form-update-persediaan">
-                @csrf
-                <div class="modal-body">
-
-                    <input type="hidden" id="id-persediaan" disabled>
-
-                    <div class="form-group">
-                        <label for="nama-produk">Nama Produk</label>
-
-                        <!-- <select name="id_produk" id="nama-produk" class="form-control"> -->
-                        <!-- </select> -->
-                        <input type="text" name="id_produk" id="nama-produk" class="form-control" readonly>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="stock">Stok</label>
-                        <input type="number" name="stock" id="stock" class="form-control" min="0"
-                            placeholder="Stok Produk" readonly>
-                    </div>
-
-                    <!-- <div class="form-group"> -->
-                    <!--     <label for="stock-min">Stok Minimal</label> -->
-                    <!--     <input type="number" name="stock_min" id="stock-min" class="form-control" min="0" -->
-                    <!--         placeholder="Stok Minimal"> -->
-                    <!-- </div> -->
-
-                    <!-- <div class="form-group"> -->
-                    <!--     <label for="stock-max">Stok Maksimal</label> -->
-                    <!--     <input type="number" name="stock_max" id="stock-max" class="form-control" min="0" -->
-                    <!--         placeholder="Stok Minimal"> -->
-                    <!-- </div> -->
-
-                    <div class="form-group">
-                        <label for="lead-time">Waktu Tunggu</label>
-                        <input type="number" name="lead_time" id="lead-time" class="form-control" min="0"
-                            placeholder="Waktu Tunggu">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="rata-rata-penggunaan">Rata-rata penggunaan</label>
-                        <input type="number" class="form-control" name="rata_rata_penggunaan" id="rata-rata-penggunaan"
-                            placeholder="Rata-rata penggunaan" min="0">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="biaya-penyimpanan">Biaya Penyimpanan</label>
-                        <input type="number" class="form-control" name="biaya_penyimpanan" id="biaya-penyimpanan"
-                            placeholder="Biaya Penyimpanan" min="0">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="biaya-pemesanan">Biaya Pemesanan</label>
-                        <input type="number" class="form-control" name="biaya_pemesanan" id="biaya-pemesanan"
-                            placeholder="Biaya Pemesanan" min="0">
-                    </div>
-
+            <div class="modal-body">
+                <div class="callout callout-info">
+                    <h5><i class="fas fa-info"></i> Note:</h5>
+                    Produk dengan stok tidak mencukupi akan ditandai dengan warna merah.
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                </div>
-            </form>
+                <table class="table table-bordered" id="table-detail-transaksi">
+                    <thead>
+                        <tr>
+                            <th style="width: 10px">No</th>
+                            <th>Nama Produk</th>
+                            <th>Jumlah</th>
+                            <th>Harga Satuan</th>
+                            <th>Total Harga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer justify-content-between">
+            </div>
         </div>
+        <!-- /.modal-content -->
     </div>
+    <!-- /.modal-dialog -->
 </div>
 <!-- end modal-update-persediaan -->
 @endsection
@@ -277,106 +168,118 @@
 <script>
 
     $(document).ready(() => {
-
-        $('.btn-setujui-pesanan').click(function () {
-            // TODO: jika telah disetujui maka disabled tombol Setujui
-
-            let idTransaksi = $(this).data('id-transaksi');
-
+        function updateTransactionStatus(idTransaksi, status, successMessage) {
             $.ajax({
                 url: `{{ route('transaksi.update', '')}}/${idTransaksi}`,
                 method: 'PUT',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                data: {
-                    'status': 'diproses'
-                },
+                data: {'status': status},
                 success: function (data) {
                     Swal.fire({
-                        title: data.message,
-                        icon: 'success'
+                        title: data.success ? successMessage : 'Gagal memproses pesanan',
+                        icon: data.success ? 'success' : 'error',
+                        text: data.message,
                     }).then(() => window.location.reload());
                 },
                 error: function (error) {
-                    console.log(error)
+                    console.log(error);
+                    Swal.fire({
+                        title: 'Terjadi kesalahan',
+                        icon: 'error',
+                        text: 'Silakan coba lagi atau hubungi administrator.',
+                    });
                 }
-
             });
+        }
+
+
+
+        $('.btn-setujui-pesanan').click(function () {
+            let idTransaksi = $(this).data('id-transaksi');
+
+            // if (!checkStockBeforeApproval(idTransaksi)) {
+            //     Swal.fire({
+            //         title: 'Stok Barang Kurang',
+            //         icon: 'warning',
+            //         text: 'Tidak dapat menyetujui pesanan karena stok barang tidak mencukupi.',
+            //     });
+            //     return;
+            // }
+
+            updateTransactionStatus(idTransaksi, 'diproses', 'Pesanan berhasil disetujui');
         });
 
         $('.btn-kirim-pesanan').click(function () {
             let idTransaksi = $(this).data('id-transaksi');
-
-            $.ajax({
-                url: `{{ route('transaksi.update', '')}}/${idTransaksi}`,
-                method: 'PUT',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {
-                    'status': 'dikirim'
-                },
-                success: function (data) {
-                    Swal.fire({
-                        title: data.message,
-                        icon: 'success'
-                    }).then(() => window.location.reload());
-                },
-                error: function (error) {
-                    console.log(error)
-                }
-
-            });
+            updateTransactionStatus(idTransaksi, 'dikirim', 'Pesanan berhasil dikirim');
         });
 
         $('.btn-tolak-pesanan').click(function () {
             let idTransaksi = $(this).data('id-transaksi');
+            updateTransactionStatus(idTransaksi, 'ditolak', 'Pesanan berhasil ditolak');
+        });
+
+        $('.btn-detail-transaksi').click(function () {
+
+            let idTransaksi = $(this).data('id-transaksi');
 
             $.ajax({
-                url: `{{ route('transaksi.update', '')}}/${idTransaksi}`,
-                method: 'PUT',
+                url: '{{route('transaksi.detail')}}',
+                method: 'POST',
+                data: {
+                    'id_transaksi': idTransaksi
+                },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                data: {
-                    'status': 'ditolak'
-                },
                 success: function (data) {
-                    Swal.fire({
-                        title: data.message,
-                        icon: 'success'
-                    }).then(() => window.location.reload());
+                    if (data.success) {
+
+                        $("#table-detail-transaksi tbody").empty();
+                        data.data.forEach((item, index) => {
+                            let newRow = `
+                                <tr class="${item.cukup ? '' : 'text-danger'}">
+                                    <td>${index + 1}</td>
+                                    <td>${item.produk.nama_produk}</td>
+                                    <td>${item.jumlah}</td>
+                                    <td>${formatRupiah(item.produk.harga_jual)}</td>
+                                    <td>${formatRupiah(item.total_harga)}</td>
+                                </tr>`;
+                            $("#table-detail-transaksi tbody").append(newRow);
+                        });
+                    }
                 },
                 error: function (error) {
-                    console.log(error)
-                }
-
+                    console.log(error);
+                },
             });
+
         });
 
-        // $('.btn-cetak-nota').click(function () {
-        //     let idTransaksi = $(this).data('id-transaksi');
-        //
-        //     $.ajax({
-        //         url: '{{ route('admintoko.nota')}}',
-        //         method: 'POST',
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         data: {
-        //             'id_transaksi': idTransaksi,
-        //         },
-        //         success: function (data) {
-        //             console.log('success');
-        //             window.location.reload();
-        //         },
-        //         error: function (error) {
-        //             console.log(error)
-        //
-        //         }
-        //     })
-        // });
+        $('.btn-cetak-nota').click(function () {
+            let idTransaksi = $(this).data('id-transaksi');
+
+            $.ajax({
+                url: '{{route('admintoko.nota')}}',
+                method: 'POST',
+                data: {
+                    'id_transaksi': idTransaksi
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+            });
+
+        });
+
 
     });
 </script>
