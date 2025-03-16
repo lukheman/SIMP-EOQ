@@ -94,7 +94,7 @@ class ProdukController extends Controller
     }
 
     public function show($id) {
-        $produk = Produk::findOrFail($id);
+        $produk = Produk::find($id);
 
         if($produk) {
             return response()->json([
