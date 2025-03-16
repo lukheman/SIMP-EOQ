@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Manager Toko')
+@section('title', 'Pemilik Toko')
 
 @section('sidebar-menu')
 
@@ -12,16 +12,17 @@
 <div class="card">
     <div class="card-header">
 
-        <button class="btn btn-outline-danger" id="btn-cetak-laporan-penjualan" data-toggle="modal"
-            data-target="#modal-cetak-laporan-penjualan"> 
+        <button class="btn btn-outline-danger" id="btn-cetak-laporan-barang-masuk" data-toggle="modal"
+            data-target="#modal-cetak-laporan-barang-masuk"> 
             <i class="fas fa-print"></i>
-            Cetak Laporan Penjualan</button>
+            Cetak Laporan</button>
 
     </div>
     <div class="card-body">
-        <div id="table_pesanan_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div id="table_persediaan_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="row">
                 <div class="col-sm-12 col-md-6">
+
                 </div>
                 <div class="col-sm-12 col-md-6">
 
@@ -29,8 +30,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <table id="table_pesanan" class="table table-bordered table-striped dataTable dtr-inline"
-                        aria-describedby="table_pesanan_info">
+                    <table id="table_persediaan" class="table table-bordered table-striped dataTable dtr-inline"
+                        aria-describedby="table_persediaan_info">
                         <thead>
                             <tr>
                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
@@ -40,27 +41,19 @@
                                     colspan="1" aria-sort="ascending">Jenis Produk
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Jumlah Terjual</th>
+                                    Jumlah</th>
                                 <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
                                     Total Harga (Rp.)</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            @foreach ($penjualan as $item)
+                            @foreach ($barang_masuk as $item)
                             <tr>
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->produk->nama_produk }}</td>
                                 <td> {{ $item->jumlah }}</td>
-                                <td> {{ number_format($item->total_harga, 2, ',', '.') }}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-danger btn-delete-penjualan"
-                                        data-id-penjualan="{{ $item->id }}"> 
-                                        <i class="fas fa-trash"></i>
-                                        Hapus</button>
-                                </td>
+                                <td> {{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
                             </tr>
                             @endforeach
 
@@ -75,7 +68,7 @@
                 <div class="col-sm-12 col-md-5">
                 </div>
                 <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate paging_simple_numbers" id="table_pesanan_paginate">
+                    <div class="dataTables_paginate paging_simple_numbers" id="table_persediaan_paginate">
                         <ul class="pagination">
                         </ul>
                     </div>
@@ -86,8 +79,8 @@
 </div>
 
 
-<!-- modal-cetak-laporan-penjualan - modal untuk menampilkan form tambah data produk -->
-<div class="modal fade show" id="modal-cetak-laporan-penjualan" style="display: none;" aria-modal="true" role="dialog">
+<!-- modal-cetak-laporan-barang-masuk - modal untuk menampilkan form tambah data produk -->
+<div class="modal fade show" id="modal-cetak-laporan-barang-masuk" style="display: none;" aria-modal="true" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -96,7 +89,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="{{ route('pemiliktoko.cetak-laporan-penjualan') }}" method="post">
+            <form action="{{ route('pemiliktoko.cetak-laporan-barang-masuk') }}" method="post">
                 @csrf
                 <div class="modal-body">
 
@@ -108,7 +101,9 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary">Cetak</button>
+                    <button type="submit" class="btn btn-outline-danger"> 
+                    <i class="fas fa-print"></i>
+                    Cetak</button>
                 </div>
             </form>
         </div>
@@ -116,37 +111,39 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-<!-- end modal-cetak-laporan-penjualan -->
+<!-- end modal-cetak-laporan-barang-masuk -->
 @endsection
 
 @section('custom-script')
-
 <script>
+    $(function () {
 
-    $('#table_pesanan').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
+        $('#table_persediaan').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
     });
-
 </script>
 
 <script>
 
-    $(document).ready(() => {
+    $(document).ready(function () {
 
-        $('.btn-delete-penjualan').click(function () {
+        // handler untuk menghapus data
+        $('.btn-delete-persediaan').click(function () {
 
-            let idPenjualan = $(this).data('id-penjualan');
+            let idPersediaan = $(this).data('id-persediaan');
 
             // Confirm deletion with SweetAlert
             Swal.fire({
                 title: 'Apakah Anda yakin?',
-                text: "Log penjualan akan dihapus secara permanen!",
+                text: "Persediaan akan dihapus secara permanen!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -157,7 +154,7 @@
 
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: `{{ route('mutasi.destroy', '') }}/${idPenjualan}`,
+                        url: `{{ route('persediaan.destroy', '') }}/${idPersediaan}`,
                         method: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -170,18 +167,20 @@
                         },
                         error: function (error) {
                             Swal.fire({
-                                title: 'Log penjualan gagal dihapus',
+                                title: 'Persediaan gagal dihapus',
                                 icon: "error",
                             }).then(() => window.location.reload());
                         }
-
                     });
                 }
             });
 
         });
 
+
     });
+
+
 
 </script>
 @endsection

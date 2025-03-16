@@ -14,8 +14,10 @@
 
 
 
-        <a href="{{ route('pemiliktoko.cetak-laporan-persediaan-produk') }}" class="btn btn-primary"
-            id="btn-cetak-laporan-persediaan-produk">Cetak Laporan Persediaan Produk</a>
+        <a href="{{ route('pemiliktoko.cetak-laporan-persediaan-produk') }}" class="btn btn-outline-danger"
+            id="btn-cetak-laporan-persediaan-produk"> 
+            <i class="fas fa-print"></i>
+            Cetak Laporan Persediaan Produk</a>
 
 
     </div>
