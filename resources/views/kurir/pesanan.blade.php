@@ -54,7 +54,6 @@
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->user->name }}</td>
                                 <td> {{ $item->user->reseller_detail->alamat }}</td>
-                                <!-- <td> <span class="badge bg-secondary">{{ $item->status }}</span></td> -->
                                 <td>
                                     @if ($item->status === 'pending')
                                     <span class="badge bg-secondary">{{ $item->status }}</span>
@@ -69,15 +68,10 @@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-secondary btn-detail-transaksi"
                                         data-id-transaksi="{{ $item->id }}" data-toggle="modal"
-                                        data-target="#modal-detail-transaksi">Detail</button>
+                                        data-target="#modal-detail-transaksi"> 
+                                        <i class="fas fa-eye"></i>
+                                        Detail</button>
                                 </td>
-
-                                <!-- <td> -->
-                                    <!-- <button class="btn btn-sm btn-success btn-selesai-pesanan" -->
-                                    <!--     data-id-transaksi="{{ $item->id }}">Selesai</button> -->
-                                    <!-- <button class="btn btn-sm btn-warning btn-kirim-pesanan" -->
-                                    <!--     data-id-transaksi="{{ $item->id }}">Dikirim</button> -->
-                                <!-- </td> -->
 
                             </tr>
                             @endforeach
