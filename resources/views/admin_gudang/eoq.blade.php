@@ -12,12 +12,14 @@
 <div class="card">
     <div class="card-header">
 
-        <button class="btn btn-primary" type="button" id="btn-hitung-eoq" data-toggle="modal"
-            data-target="#modal-hitung-eoq">Hitung EOQ</button>
+        <button class="btn btn-outline-primary" type="button" id="btn-hitung-eoq" data-toggle="modal"
+            data-target="#modal-hitung-eoq"> 
+            <i class="fas fa-calculator"></i>
+            Hitung EOQ</button>
 
     </div>
     <div class="card-body">
-        <div id="table_persediaan_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div id="table_eoq_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="row">
                 <div class="col-sm-12 col-md-6">
 
@@ -28,46 +30,46 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <table id="table_persediaan" class="table table-bordered table-striped dataTable dtr-inline"
-                        aria-describedby="table_persediaan_info">
+                    <table id="table_eoq" class="table table-bordered table-striped dataTable dtr-inline"
+                        aria-describedby="table_eoq_info">
                         <thead>
                             <tr>
-                                <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1"
-                                    colspan="1">Nama Produk</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1"
-                                    colspan="1">EOQ
+                                <th class="sorting" tabindex="0" aria-controls="table_eoq" rowspan="1" colspan="1">Nama
+                                    Produk</th>
+                                <th class="sorting" tabindex="0" aria-controls="table_eoq" rowspan="1" colspan="1">EOQ
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1"
-                                    colspan="1">Safety Stock
+                                <th class="sorting" tabindex="0" aria-controls="table_eoq" rowspan="1" colspan="1">
+                                    Safety Stock
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1"
-                                    colspan="1">ROP
+                                <th class="sorting" tabindex="0" aria-controls="table_eoq" rowspan="1" colspan="1">ROP
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1"
-                                    colspan="1">Aksi
+                                <th class="sorting" tabindex="0" aria-controls="table_eoq" rowspan="1" colspan="1">Aksi
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            @foreach ($persediaan as $item)
-                            <tr>
-                                <td> {{ $item->produk->nama_produk }}</td>
-                                <td> {{ $item->eoq }}</td>
-                                <td> {{ $item->safety_stock }}</td>
-                                <td> {{ $item->reorder_point }}</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-primary btn-update-persediaan" data-toggle="modal"
-                                            data-target="#modal-update-persediaan"
-                                            data-id-persediaan="{{ $item->id }}">Edit</button>
-                                        <button class="btn btn-sm btn-danger btn-delete-persediaan"
-                                            data-id-persediaan="{{ $item->id }}">Hapus</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-
+                            @if(isset($produk))
+                                @foreach($produk as $item)
+                                    @if ($item->eoq > 0)
+                                        <tr>
+                                            <td>{{ $item->nama_produk }}</td>
+                                            <td>{{ $item->eoq }}</td>
+                                            <td>{{ $item->ss }}</td>
+                                            <td>{{ $item->rop }}</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button class="btn btn-sm btn-primary btn-update-persediaan" data-toggle="modal"
+                                                        data-target="#modal-update-persediaan"
+                                                        data-id-persediaan="{{ $item->id }}">Edit</button>
+                                                    <button class="btn btn-sm btn-danger btn-delete-persediaan"
+                                                        data-id-persediaan="{{ $item->id }}">Hapus</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            @endif
                         </tbody>
                         <tfoot>
 
@@ -79,7 +81,7 @@
                 <div class="col-sm-12 col-md-5">
                 </div>
                 <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate paging_simple_numbers" id="table_persediaan_paginate">
+                    <div class="dataTables_paginate paging_simple_numbers" id="table_eoq_paginate">
                         <ul class="pagination">
                         </ul>
                     </div>
@@ -99,38 +101,21 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form id="form-hitung-eoq">
+            <form id="form-hitung-eoq" method="post" action={{ route('admingudang.hitung-eoq') }}>
                 @csrf
                 <div class="modal-body">
 
-                    <!-- <input type="hidden" id="id-persediaan" disabled> -->
-
                     <div class="form-group">
-                        <label for="produk">Produk</label>
-                        <select name="id_produk" id="nama-produk" class="form-control">
-
-                        </select>
-                    </div>
-
-                    <!-- <div class="form-group"> -->
-                        <!-- <label for="nama-produk">Nama Produk</label> -->
-
-                        <!-- <select name="id_produk" id="nama-produk" class="form-control"> -->
-                        <!-- </select> -->
-                        <!-- <input type="text" name="id_produk" id="nama-produk" class="form-control" readonly> -->
-                    <!-- </div> -->
-
-                    <div class="form-gro">
                         <label for="periode">Periode</label>
-
                         <input type="month" name="periode" id="periode" class="form-control">
-
                     </div>
 
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary">Hitung EOQ</button>
+                    <button type="submit" class="btn btn-primary"> 
+                    <i class="fas fa-calculator"></i>
+                    Hitung</button>
                 </div>
             </form>
         </div>
@@ -144,7 +129,7 @@
 <script>
     $(function () {
 
-        $('#table_persediaan').DataTable({
+        $('#table_eoq').DataTable({
             "paging": true,
             "lengthChange": false,
             "searching": false,
@@ -176,38 +161,8 @@
                 },
             })
 
-        };);
-
-        $('#form-hitung-eoq').on('submit', function(e) { 
-            e.preventDefault();
-
-            $.ajax({ 
-                url: '{{ route('admingudang.hitung-eoq') }}',
-                method: 'POST',
-            });
-
         });
 
-        // $('#btn-hitung-eoq').click(() => {
-        //
-        //     $.ajax({
-        //         url: '{{ route('admingudang.hitung-eoq') }}',
-        //         method: 'GET',
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         success: function(data) {
-        //             Swal.fire({
-        //                 title: 'Berhasil menghitung EOQ',
-        //                 icon: "success",
-        //             }).then(() => window.location.reload());
-        //         },
-        //         error: function(error) {
-        //             console.log(error);
-        //         },
-        //     });
-        //
-        // });
 
     });
 
