@@ -15,6 +15,18 @@ use App\Models\Produk;
 class AdminTokoController extends Controller
 {
 
+    public function index() { 
+        $pesanan = Transaksi::where('status', 'pending')->count();
+        $total_penjualan = Transaksi::where('status', 'selesai')->count();
+        $persediaan_barang = Produk::sum('persediaan');
+
+        return view('admin_toko.index', [
+            'page' => 'Dashboard',
+            'pesanan' => $pesanan,
+            'total_penjualan' => $total_penjualan,
+            'persediaan_barang' => $persediaan_barang
+        ]);
+    }
 
     public function pesanan() {
         $pesanan = Transaksi::with('user')->get();
