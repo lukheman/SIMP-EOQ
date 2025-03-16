@@ -11,6 +11,17 @@ use App\Models\Mutasi;
 class AdminGudangController extends Controller
 {
 
+    public function index() {
+        $total_produk = Produk::count();
+        $total_persediaan = Produk::sum('persediaan');
+
+        return view('admin_gudang.index', [
+            'page' => 'Dashboard',
+            'total_produk' => $total_produk,
+            'total_persediaan' => $total_persediaan
+        ]);
+    }
+    
     public function barangMasuk() {
         $barang_masuk = Mutasi::with('produk')->where('jenis', 'masuk')->get();
 
