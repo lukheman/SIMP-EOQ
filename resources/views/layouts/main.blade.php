@@ -8,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | Starter</title>
+    <title>{{ Auth::user()->role }} | {{ Auth::user()->name }}</title>
 
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -24,8 +24,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css')}}">
+    <!-- ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css')}}">
+
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+
 
 </head>
 
@@ -95,6 +100,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
+
+    <script>
+
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR'}).format(angka);
+        }
+
+    </script>
 
     <!-- Sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
