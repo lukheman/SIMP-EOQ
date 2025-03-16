@@ -27,7 +27,6 @@
 
         <div class="form-group">
             <label for="alamat">Alamat</label>
-            <!-- <input type="text" id="alamat" class="form-control" readonly> -->
             <textarea name="" id="alamat" class="form-control" readonly></textarea>
         </div>
 
@@ -38,7 +37,9 @@
 
         <div class="form-group">
             <button class="btn btn-sm btn-secondary w-100" id="btn-detail-transaksi" data-toggle="modal"
-                data-target="#modal-detail-transaksi">Detail Pesanan</button>
+                data-target="#modal-detail-transaksi"> 
+                <i class="fas fa-info-circle"></i>
+                Detail Pesanan</button>
         </div>
 
     </div>
