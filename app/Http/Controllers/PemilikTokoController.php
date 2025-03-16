@@ -5,9 +5,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Mutasi;
 use App\Models\Produk;
+use App\Models\Transaksi;
 
 class PemilikTokoController extends Controller
 {
+
+    public function index() {
+        $transaksi = Transaksi::where('status', 'selesai')->count();
+        $persediaan_barang = PROduk::sum('persediaan');
+
+        return view('pemilik_toko.index', [
+            'page' => 'Dashboard',
+            'transaksi' => $transaksi,
+            'persediaan_barang' => $persediaan_barang
+        ]);
+    }
 
     public function laporanPenjualan() {
         $penjualan = Mutasi::where('jenis', 'keluar')->get();
