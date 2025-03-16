@@ -9,59 +9,43 @@
 @section('content')
 <div class="row">
     <div class="col-md-4">
-        <div class="info-box bg-primary shadow">
-            <span class="info-box-icon"><i class="far fa-calendar-alt"></i></span>
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>{{ $pesanan }}</h3>
 
-            <div class="info-box-content">
-                <span class="info-box-text">Pesanan</span>
-                <span class="info-box-number">41,410</span>
-
-                <div class="progress">
-                    <div class="progress-bar" style="width: 70%"></div>
-                </div>
-                <span class="progress-description">
-                    <!-- 70% Increase in 30 Days -->
-                </span>
+                <p>Pesanan</p>
             </div>
-            <!-- /.info-box-content -->
+            <div class="icon">
+                <i class="ion ion-clipboard"></i>
+            </div>
+
         </div>
     </div>
     <div class="col-md-4">
-        <div class="info-box bg-warning shadow">
-            <span class="info-box-icon"><i class="far fa-calendar-alt"></i></span>
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>{{ $total_penjualan }}</h3>
 
-            <div class="info-box-content">
-                <span class="info-box-text">Total Penjualan</span>
-                <span class="info-box-number">41,410</span>
-
-                <div class="progress">
-                    <div class="progress-bar" style="width: 70%"></div>
-                </div>
-                <span class="progress-description">
-                    <!-- 70% Increase in 30 Days -->
-                </span>
+                <p>Total Penjualan</p>
             </div>
-            <!-- /.info-box-content -->
+            <div class="icon">
+                <i class="ion ion-ios-cart"></i>
+            </div>
+
         </div>
     </div>
     <div class="col-md-4">
-        <div class="info-box bg-warning">
-            <span class="info-box-icon"><i class="far fa-calendar-alt"></i></span>
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>{{ $persediaan_barang }}</h3>
 
-            <div class="info-box-content">
-                <span class="info-box-text">Stok Baran</span>
-                <span class="info-box-number">41,410</span>
-
-                <div class="progress">
-                    <div class="progress-bar" style="width: 70%"></div>
-                </div>
-                <span class="progress-description">
-                    <!-- 70% Increase in 30 Days -->
-                </span>
+                <p>Persediaan Barang</p>
             </div>
-            <!-- /.info-box-content -->
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+
         </div>
     </div>
-
 </div>
 @endsection
