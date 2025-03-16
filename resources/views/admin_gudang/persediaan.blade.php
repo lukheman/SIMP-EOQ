@@ -32,20 +32,12 @@
                         aria-describedby="table_persediaan_info">
                         <thead>
                             <tr>
-                                <!-- <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1" -->
-                                <!--     colspan="1">Periode</th> -->
                                 <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1"
                                     colspan="1">Nama Produk</th>
 
                                 <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1"
                                     colspan="1">Persediaan</th>
 
-                                <!-- <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1" -->
-                                <!--     colspan="1">Persediaan -->
-                                <!-- </th> -->
-
-                                <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1"
-                                    colspan="1">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,21 +46,6 @@
                             <tr>
                                 <td> {{ $item->nama_produk }}</td>
                                 <td> {{ $item->persediaan }}</td>
-
-                                <!-- <td> {{ $item->penggunaan }}</td> -->
-                                <!-- <td> {{ $item->rata_rata_penggunaan }}</td> -->
-                                <!-- <td> {{ $item->biaya_penyimpanan }}</td> -->
-                                <!-- <td> {{ $item->biaya_pemesanan }}</td> -->
-
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-primary btn-update-persediaan" data-toggle="modal"
-                                            data-target="#modal-update-persediaan"
-                                            data-id-persediaan="{{ $item->id }}">Edit</button>
-                                        <button class="btn btn-sm btn-danger btn-delete-persediaan"
-                                            data-id-persediaan="{{ $item->id }}">Hapus</button>
-                                    </div>
-                                </td>
                             </tr>
                             @endforeach
 

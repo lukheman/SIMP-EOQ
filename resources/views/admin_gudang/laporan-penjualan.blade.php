@@ -31,8 +31,10 @@
 <div class="card">
     <div class="card-header">
 
-        <button class="btn btn-primary" id="btn-cetak-laporan-penjualan" data-toggle="modal"
-            data-target="#modal-cetak-laporan-penjualan">Cetak Laporan Penjualan</button>
+        <button class="btn btn-outline-danger" id="btn-cetak-laporan-penjualan" data-toggle="modal"
+            data-target="#modal-cetak-laporan-penjualan"> 
+            <i class="fas fa-print"></i>
+            Cetak Laporan Penjualan</button>
 
     </div>
     <div class="card-body">
@@ -74,7 +76,9 @@
                                 <td> {{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-danger btn-delete-penjualan"
-                                        data-id-penjualan="{{ $item->id }}">Hapus</button>
+                                        data-id-penjualan="{{ $item->id }}"> 
+                                        <i class="fas fa-trash"></i>
+                                        Hapus</button>
                                 </td>
                             </tr>
                             @endforeach
@@ -123,7 +127,9 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary">Cetak</button>
+                    <button type="submit" class="btn btn-danger"> 
+                    <i class="fas fa-print"></i>
+                    Cetak</button>
                 </div>
             </form>
         </div>
