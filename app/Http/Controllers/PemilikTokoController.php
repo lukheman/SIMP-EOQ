@@ -25,7 +25,7 @@ class PemilikTokoController extends Controller
         $penjualan = Mutasi::where('jenis', 'keluar')->get();
 
         return view('pemilik_toko.laporan-penjualan', [
-            'page' => 'Penjualan',
+            'page' => 'Laporan Penjualan',
             'penjualan' => $penjualan
         ]);
     }
