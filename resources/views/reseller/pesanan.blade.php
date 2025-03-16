@@ -61,12 +61,16 @@
                                 <td>
                                     <button type="button" class="btn btn-sm btn-outline-primary btn-pesanan-diterima"
                                         data-id-transaksi="{{ $item->id }}" {{ $item->status
-                                        === 'dibayar' ? '' : 'disabled' }}>Pesanan diterima</button>
+                                        === 'dibayar' ? '' : 'disabled' }}> 
+                                        <i class="fas fa-check"></i>
+                                        Pesanan diterima</button>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-outline-warning btn-detail-transaksi"
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-detail-transaksi"
                                         data-id-transaksi="{{ $item->id }}" data-toggle="modal"
-                                        data-target="#modal-detail-transaksi">Info</button>
+                                        data-target="#modal-detail-transaksi"> 
+                                        <i class="fas fa-info"></i>
+                                        Info</button>
                                 </td>
                             </tr>
                             @endforeach

@@ -9,7 +9,9 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <button type="button" class="btn btn-outline-primary" id="btn-checkout">Checkout</button>
+        <button type="button" class="btn btn-outline-primary" id="btn-checkout"> 
+        <i class="fas fa-cash-register"></i>
+        Checkout</button>
 
     </div>
     <div class="card-body">

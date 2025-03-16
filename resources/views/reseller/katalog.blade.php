@@ -14,21 +14,22 @@
         <div class="card">
             <div class="card-body">
                 <div class="image">
-                    <img src="{{ asset('dist/img/prod-1.jpg')}}" class="product-img elevation-2" alt="User Image"
-                        width="200">
+                    <img src="{{ asset('storage/' . $item->gambar )}}" class="product-img" alt="{{ $item->nama_produk}}"
+                        width="180">
                 </div>
                 <div class="row mt-2">
                     <div class="col-12">
                         <small>{{ $item->nama_produk }}</small>
                     </div>
                     <div class="col-12">
-                        <p>{{ $item->harga_jual }}</p>
+                        <p>Rp. {{ number_format($item->harga_jual, 2, ',', '.')}}</p>
                     </div>
                     <div class="col-12">
                         <p class="float-left">{{ $item->persediaan }}</p>
-                        <button type="button" class="btn btn-sm btn-primary float-right btn-checkout"
-                            data-toggle="modal" data-target="#modal-checkout"
-                            data-id-produk="{{ $item->id }}">Checkout</button>
+                        <button type="button" class="btn btn-sm btn-primary float-right btn-tambah-pesanan"
+                            data-toggle="modal" data-target="#modal-tambah-pesanan" data-id-produk="{{ $item->id }}">
+                            <i class="nav-icon fas fa-cart-plus"></i>
+                        </button>
                     </div>
 
                 </div>
@@ -40,7 +41,7 @@
     @endforeach
 </div>
 
-<div class="modal fade show" id="modal-checkout" style="display: none;" aria-modal="true" role="dialog">
+<div class="modal fade show" id="modal-tambah-pesanan" style="display: none;" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -49,7 +50,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form id="form-checkout">
+            <form id="form-tambah-pesanan">
                 @csrf
 
                 <input type="hidden" id="id-produk" name="id_produk">
@@ -95,7 +96,10 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Buat Pesanan</button>
+                    <button type="submit" class="btn btn-primary">
+
+                        <i class="nav-icon fas fa-cart-plus"></i>
+                        Tambah Ke Keranjang</button>
                 </div>
             </form>
         </div>
@@ -110,11 +114,11 @@
 
     $(document).ready(() => {
 
-        $('#form-checkout').on('submit', function (e) {
+        $('#form-tambah-pesanan').on('submit', function (e) {
             e.preventDefault();
 
             $.ajax({
-                url: "{{ route('transaksi.store') }}",
+                url: "{{ route('pesanan.store') }}",
                 method: "POST",
                 data: $(this).serialize(),
                 headers: {
@@ -136,9 +140,9 @@
             });
         });
 
-        $('.btn-checkout').click(function () {
+        $('.btn-tambah-pesanan').click(function () {
 
-            let modalCheckout = $('#modal-checkout');
+            let modalTambahPesanan = $('#modal-tambah-pesanan');
             let idProduk = $(this).data('id-produk');
 
             $.ajax({
@@ -150,14 +154,14 @@
                 success: function (data) {
                     let produk = data.data;
 
-                    let formatRupiah = produk.harga_jual.toLocaleString("id-ID", {style: "currency", currency: "IDR"});
+                    // let formatRupiah = produk.harga_jual.toLocaleString("id-ID", {style: "currency", currency: "IDR"});
 
                     // console.log(produk);
 
-                    modalCheckout.find('#id-produk').val(produk.id);
-                    modalCheckout.find('#nama-produk').text(produk.nama_produk);
-                    modalCheckout.find('#harga-jual').text(formatRupiah);
-                    modalCheckout.find('#deskripsi-produk').text(produk.deskripsi);
+                    modalTambahPesanan.find('#id-produk').val(produk.id);
+                    modalTambahPesanan.find('#nama-produk').text(produk.nama_produk);
+                    modalTambahPesanan.find('#harga-jual').text(formatRupiah(produk.harga_jual));
+                    modalTambahPesanan.find('#deskripsi-produk').text(produk.deskripsi);
 
                 },
                 error: function (error) {
