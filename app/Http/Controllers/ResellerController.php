@@ -14,6 +14,14 @@ class ResellerController extends Controller
 {
     public function index() {
         $keranjang = Keranjang::where('id_user', Auth::id())->first();
+
+        // buat keranjang ketika keranjang reseller belum ada
+        if($keranjang == null) {
+            $keranjang = Keranjang::create([
+                'id_user' => Auth::id()
+            ]);
+        }
+
         $keranjang = Pesanan::where('id_keranjang', $keranjang->id)->count();
 
         $pesanan = Transaksi::where('id_user', Auth::id())->where('status', '!=', 'selesai')->count();
