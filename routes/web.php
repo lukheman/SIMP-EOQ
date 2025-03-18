@@ -47,7 +47,7 @@ Route::middleware(['role:admin_gudang'])->group(function() {
         Route::get('admingudang/produk', 'produk')->name('admingudang.produk');
 
         Route::get('admingudang/eoq', 'eoq')->name('admingudang.eoq');
-        Route::post('admingudang/hitung-eoq', 'hitung')->name('admingudang.hitung-eoq');
+        Route::post('admingudang/hitung', 'hitung')->name('admingudang.hitung');
 
         Route::get('admingudang/pesanan', 'pesanan')->name('admingudang.pesanan');
 
