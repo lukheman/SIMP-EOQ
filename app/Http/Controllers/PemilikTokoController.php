@@ -12,7 +12,7 @@ class PemilikTokoController extends Controller
 
     public function index() {
         $transaksi = Transaksi::where('status', 'selesai')->count();
-        $persediaan_barang = PROduk::sum('persediaan');
+        $persediaan_barang = Produk::sum('persediaan');
 
         return view('pemilik_toko.index', [
             'page' => 'Dashboard',
