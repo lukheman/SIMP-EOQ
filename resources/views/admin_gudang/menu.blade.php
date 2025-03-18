@@ -6,11 +6,11 @@
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('admingudang.barang-masuk')}}" class="nav-link {{ $page === 'Barang Masuk' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-box-open"></i>
-        <p>
-        Barang Masuk
-</p>
+    <a href="{{ route('admingudang.produk')}}" class="nav-link {{ $page === 'Produk' ? 'active' : '' }}">
+        <i class="nav-icon fas fa-cubes"></i>
+        <p> 
+        Data Produk
+        </p>
     </a>
 </li>
 
@@ -24,13 +24,15 @@
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('admingudang.produk')}}" class="nav-link {{ $page === 'Produk' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-cubes"></i>
-        <p> 
-        Data Produk
-        </p>
+    <a href="{{ route('admingudang.barang-masuk')}}" class="nav-link {{ $page === 'Barang Masuk' ? 'active' : '' }}">
+        <i class="nav-icon fas fa-box-open"></i>
+        <p>
+        Barang Masuk
+</p>
     </a>
 </li>
+
+
 
 <li class="nav-item">
     <a href="{{ route('admingudang.eoq')}}" class="nav-link {{ $page === 'EOQ' ? 'active' : '' }}">

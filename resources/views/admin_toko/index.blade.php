@@ -9,7 +9,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-4">
-        <div class="small-box bg-info">
+        <div class="small-box bg-info shadow">
             <div class="inner">
                 <h3>{{ $pesanan }}</h3>
 
@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="small-box bg-warning">
+        <div class="small-box bg-warning shadow">
             <div class="inner">
                 <h3>{{ $total_penjualan }}</h3>
 
@@ -35,7 +35,7 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="small-box bg-success">
+        <div class="small-box bg-success shadow">
             <div class="inner">
                 <h3>{{ $persediaan_barang }}</h3>
 

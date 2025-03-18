@@ -12,7 +12,7 @@
 <div class="card">
     <div class="card-header">
 
-        <button class="btn btn-outline-primary" id="btn-cetak-laporan-penjualan" data-toggle="modal"
+        <button class="btn btn-outline-danger" id="btn-cetak-laporan-penjualan" data-toggle="modal"
             data-target="#modal-cetak-laporan-penjualan"> 
                 <i class="fas fa-print"></i>
             Cetak Laporan Penjualan</button>

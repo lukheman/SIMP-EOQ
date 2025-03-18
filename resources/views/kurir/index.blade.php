@@ -21,7 +21,7 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="info-box bg-warning">
+        <div class="info-box bg-warning shadow">
             <span class="info-box-icon"><i class="fas fa-truck"></i></span>
 
             <div class="info-box-content">

@@ -59,7 +59,7 @@
                     <div class="row">
                         <div class="col-12 col-sm-6">
                             <div class="image">
-                                <img src="{{ asset('dist/img/prod-1.jpg')}}" class="product-img elevation-2"
+                                <img src="{{ asset('dist/img/prod-1.jpg')}}" class="product-img"
                                     alt="User Image" width="200">
                             </div>
                         </div>

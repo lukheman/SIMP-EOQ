@@ -21,12 +21,12 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="info-box bg-warning">
+        <div class="info-box bg-warning shadow">
             <span class="info-box-icon"><i class="fas fa-boxes"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">Persediaan Barang</span>
-                <span class="info-box-number">41,410</span>
+                <span class="info-box-number">{{ $persediaan_barang }}</span>
 
             </div>
             <!-- /.info-box-content -->

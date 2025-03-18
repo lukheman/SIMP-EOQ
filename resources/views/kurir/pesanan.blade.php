@@ -12,9 +12,6 @@
 <div class="card">
     <div class="card-header">
 
-        <!-- <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-add-persediaan" -->
-        <!--     id="btn-add-persediaan"> Tambah Persediaan</button> -->
-
     </div>
     <div class="card-body">
         <div id="table_pesanan_wrapper" class="dataTables_wrapper dt-bootstrap4">
