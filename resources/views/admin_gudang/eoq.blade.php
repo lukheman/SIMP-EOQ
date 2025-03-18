@@ -13,7 +13,7 @@
     <div class="card-header">
 
         <button class="btn btn-outline-primary" type="button" id="btn-hitung-eoq" data-toggle="modal"
-            data-target="#modal-hitung-eoq"> 
+            data-target="#modal-hitung-eoq">
             <i class="fas fa-calculator"></i>
             Hitung EOQ</button>
 
@@ -50,25 +50,25 @@
                         <tbody>
 
                             @if(isset($produk))
-                                @foreach($produk as $item)
-                                    @if ($item->eoq > 0)
-                                        <tr>
-                                            <td>{{ $item->nama_produk }}</td>
-                                            <td>{{ $item->eoq }}</td>
-                                            <td>{{ $item->ss }}</td>
-                                            <td>{{ $item->rop }}</td>
-                                            <td>
-                                                <div class="btn-group">
-                                                    <button class="btn btn-sm btn-primary btn-update-persediaan" data-toggle="modal"
-                                                        data-target="#modal-update-persediaan"
-                                                        data-id-persediaan="{{ $item->id }}">Edit</button>
-                                                    <button class="btn btn-sm btn-danger btn-delete-persediaan"
-                                                        data-id-persediaan="{{ $item->id }}">Hapus</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endif
-                                @endforeach
+                            @foreach($produk as $item)
+                            @if ($item->eoq > 0)
+                            <tr>
+                                <td>{{ $item->nama_produk }}</td>
+                                <td>{{ $item->eoq }}</td>
+                                <td>{{ $item->ss }}</td>
+                                <td>{{ $item->rop }}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-primary btn-update-persediaan" data-toggle="modal"
+                                            data-target="#modal-update-persediaan"
+                                            data-id-persediaan="{{ $item->id }}">Edit</button>
+                                        <button class="btn btn-sm btn-danger btn-delete-persediaan"
+                                            data-id-persediaan="{{ $item->id }}">Hapus</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endif
+                            @endforeach
                             @endif
                         </tbody>
                         <tfoot>
@@ -101,21 +101,33 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form id="form-hitung-eoq" method="post" action={{ route('admingudang.hitung-eoq') }}>
+            <form id="form-hitungeoq" method="post" action={{ route('admingudang.hitung') }}>
                 @csrf
                 <div class="modal-body">
 
-                    <div class="form-group">
-                        <label for="periode">Periode</label>
-                        <input type="month" name="periode" id="periode" class="form-control">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="periode-awal">Periode Awal</label>
+                                <input type="month" name="periode_awal" id="periode-awal" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="periode-akhir">Periode Akhir</label>
+                                <input type="month" name="periode_akhir" id="periode-akhir" class="form-control"
+                                    readonly>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary"> 
-                    <i class="fas fa-calculator"></i>
-                    Hitung</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-calculator"></i>
+                        Hitung</button>
                 </div>
             </form>
         </div>
@@ -144,6 +156,16 @@
 
 <script>
 
+    function tambahSatuBulan(periode) {
+        let awal = new Date(periode + "-01");
+        awal.setMonth(awal.getMonth() + 1);
+
+        let tahun = awal.getFullYear();
+        let bulan = String(awal.getMonth() + 1).padStart(2, '0');
+
+        return `${tahun}-${bulan}`;
+    }
+
     $(document).ready(function () {
 
         $('#btn-hitung-eoq').click(() => {
@@ -162,6 +184,35 @@
             })
 
         });
+
+        let prevPeriodeAwal = $('#periode-awal').val();
+        $('#periode-awal').change(() => {
+            let periodeAkhir = tambahSatuBulan($('#periode-awal').val());
+
+            // cek apakah periode akhir sama dengan bulan ini
+            let today = new Date();
+            let currentMonth = String(today.getMonth() + 1).padStart(2, '0');
+            let currentYear = today.getFullYear();
+            let currentPeriod = `${currentYear}-${currentMonth}`;
+
+            if (periodeAkhir === currentPeriod) {
+                alert('Periode awal harus 2 bulan sebelum bulan ini');
+                $('#periode-awal').val(prevPeriodeAwal);
+                return; // Hentikan eksekusi jika validasi gagal
+            }
+
+            $('#periode-akhir').attr('min', periodeAkhir).val(periodeAkhir);
+            prevPeriodeAwal = $('#periode-awal').val();
+
+        });
+
+        let today = new Date();
+        today.setMonth(today.getMonth() - 1);
+        let month = String(today.getMonth() + 1).padStart(2, '0'); // Menambahkan nol di depan jika perlu
+        let year = today.getFullYear();
+        let maxDate = `${year}-${month}`;
+
+        $('#periode-awal').attr('max', maxDate);
 
 
     });
