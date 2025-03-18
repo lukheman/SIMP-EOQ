@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Transaksi;
 use App\Models\Produk;
 use App\Models\Penjualan;
+use App\Models\Mutasi;
 
 use App\Constants\Status;
 
@@ -128,8 +129,19 @@ class TransaksiController extends Controller
 
         foreach ($pesanan as $item) {
             $produk = Produk::find($item->produk->id);
+
+            // kurangi persediaan produk
             $produk->persediaan -= $item->jumlah;
             $produk->save();
+
+            // catat log mutasi
+            Mutasi::create([
+                'id_produk' => $item->id_produk,
+                'jumlah' => $item->jumlah,
+                'jenis' => 'keluar',
+                'keterangan' => 'Pengiriman pesanan'
+            ]);
+
         }
 
         $transaksi->status = Status::STATUS['dikirim'];
