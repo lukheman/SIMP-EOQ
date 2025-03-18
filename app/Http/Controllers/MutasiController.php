@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Mutasi;
+use App\Models\Produk;
 
 class MutasiController extends Controller
 {
@@ -18,7 +19,18 @@ class MutasiController extends Controller
             'jenis' => 'required',
         ]);
 
+        $produk = Produk::find($request->id_produk);
+
         $mutasi =  Mutasi::create($data);
+
+
+        if ($request->jenis === 'masuk') {
+            $produk->persediaan += $request->jumlah;
+            $produk->save();
+        } else {
+            $produk->persediaan -= $request->jumlah;
+            $produk->save();
+        }
 
         $message = $request->jenis == 'masuk' ? 'Berhasil menambahkan data barang masuk' : 'Berhasil menambahkan data barang keluar';
 
