@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Produk;
-use App\Models\Persediaan;
 use App\Models\Mutasi;
 
 class AdminGudangController extends Controller
@@ -23,7 +22,7 @@ class AdminGudangController extends Controller
             'total_persediaan' => $total_persediaan
         ]);
     }
-    
+
     public function barangMasuk() {
         $barang_masuk = Mutasi::with('produk')->where('jenis', 'masuk')->get();
 
@@ -83,11 +82,22 @@ class AdminGudangController extends Controller
         return sqrt((2 * $D * $S) / $H);
     }
 
+    private function cekLogPenjualan($periode, $id_produk) {
+        list($tahun, $bulan) = explode('-', $periode);
+
+        $penjualan = Mutasi::where('jenis', 'keluar')
+            ->whereYear($tahun)
+            ->whereMonth($bulan)
+            ->count();
+
+        return $penjualan > 0;
+
+    }
 
     public function hitung(Request $request) {
 
-        $periodeAwal = $request->periode;
-        $periodeAkhir = (new DateTime($periodeAwal))->modify('+1 month')->format('Y-m');
+        $periodeAwal = $request->periode_awal;
+        $periodeAkhir = $request->periode_akhir;
 
         $tanggalAwal = (new DateTime($periodeAwal))->modify('first day of this month')->format('Y-m-d');
         $tanggalAkhir = (new DateTime($periodeAkhir))->modify('last day of this month')->format('Y-m-d');
@@ -103,7 +113,7 @@ class AdminGudangController extends Controller
 
             if($D <= 0) {
                 continue;
-            } 
+            }
 
             $S = $item->biaya_pemesanan; // biaya pemesanan
             $H = $item->biaya_penyimpanan; // biaya penyimpanan
@@ -189,11 +199,17 @@ class AdminGudangController extends Controller
 
         list($tahun, $bulan) = explode('-', $request->periode);
 
-        $barang_masuk = Mutasi::with('produk')
-            ->whereYear('tanggal', $tahun)
-            ->whereMonth('tanggal', $bulan)
-            ->where('jenis', 'masuk')
-            ->get();
+        $barang_masuk = Mutasi::select(
+            'id_produk',
+            DB::raw('SUM(jumlah) as total_jumlah'),
+            DB::raw('SUM(jumlah * produk.harga_beli) as total_harga')
+        )
+        ->join('produk', 'mutasi.id_produk', '=', 'produk.id') // Gabungkan dengan tabel produk
+        ->whereYear('tanggal', $tahun)
+        ->whereMonth('tanggal', $bulan)
+        ->where('jenis', 'masuk')
+        ->groupBy('id_produk', 'produk.harga_beli') // Tambahkan harga_beli ke groupBy agar tidak error
+        ->get();
 
         return view('invoices.laporan-barang-masuk', [
             'barang_masuk' => $barang_masuk,
