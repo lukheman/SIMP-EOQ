@@ -1,44 +1,41 @@
-# reseller
-- data pesanan (melakukan pemesanan barang) (30k)
-- melihat data barang yang tersedia (f)
-- melakukan pembayaran ketika barang diterima (25k)
-- konfimasi status pemesanan (konfirmasi bahwa barang telah diterima) (25k)
+# **Fitur dan Biaya Pengembangan Sistem Reseller**
 
-# Role Admin Toko
-- Lihat data pesanan (30k)
-- Konfirmasi Pesanan (jika barang tersedia) (25k)
-- Cetak Nota Pesanan (30k)
-- Laporan Penjualan/cetak laporan penjualan (40k)
+## **Reseller**
+- [x] Melakukan pemesanan barang – Rp30.000
+- [x] Melihat data barang yang tersedia – Free
+- [x] Melakukan pembayaran ketika barang diterima – Rp25.000
+- [x] Konfirmasi status pemesanan (barang diterima) – Rp25.000
 
-# admin gudang
-- CRUD: Stok barang          --|
-- melihat stok barang          | 70k
-- menginput data barang      --|
+## **Admin Toko**
+- [x] Melihat data pesanan – Rp30.000
+- [x] Konfirmasi pesanan (jika barang tersedia) – Rp25.000
+- [x] Cetak nota pesanan – Rp30.000
+- [x] Laporan penjualan / cetak laporan penjualan – Rp40.000
 
-- hitung EOQ, safety stock, dan reorder point (250)
-- cetak laporan penjualan (40k)
-- menginput data biaya pemesanan dan biaya penyimpanan (30k)
-- waktu tunggu (f)
-- penggunaan rata-rata perhari (f)
-- laporan barang masuk
+## **Admin Gudang**
+- [x] CRUD stok barang – Rp70.000
+- [ ] Menginput data biaya pemesanan dan biaya penyimpanan – Rp30.000
+- [ ] Waktu tunggu – Free
+- [ ] Penggunaan rata-rata per hari – Free
+- [ ] Cetak laporan penjualan – Rp40.000
+- [ ] Hitung EOQ, safety stock, dan reorder point – Rp250.000
+- [x] Laporan barang masuk – Rp40.000
+- [ ] Kelola data penjualan – (Belum ditentukan)
 
-# kurir
-- merubah status pesanan (dikirim, selesai) (25k)
-- konfirmasi pembayaran (25k)
+## **Kurir**
+- [x] Mengubah status pesanan dengan scan QR Code (Dikirim, Selesai) – Rp25.000
+- [x] Konfirmasi pembayaran – Rp25.000
+- [x] Konfirmasi Pembayaran menggunakan QR Code – Rp200.000
+
+## **Pemilik Toko**
+- [x] Cetak laporan penjualan – (Sudah termasuk pada Admin Toko)
+- [x] Cetak laporan persediaan barang – Rp40.000
+- [x] Laporan barang masuk – (Sudah termasuk pada Admin Gudang)
 
 
-# pemilik Toko
-- cetak laporan penjualan (40k)
-- cetak laporan persediaan barang (40k)
-- laporan barang masuk
+### **Total Biaya Fitur:** Rp925.000
+### **Pengerjaan dan Revisi Lain:** Rp1.200.000
+### **Total Pembayaran:** Rp2.100.000
 
-
-## permintaan tambahan
-- pembayaran menggunakan qrcode (200)
-
-Total: Rp. 925.000
-Pengerjaan dan revisi lain: Rp.1200.000
-
-pembayaran: 2.1000.000
-
-* penambahan fitur lain dikenai biaya tambahan
+**Catatan:**
+- Penambahan fitur lain akan dikenai biaya tambahan.
