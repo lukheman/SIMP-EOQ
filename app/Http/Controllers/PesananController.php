@@ -67,7 +67,6 @@ class PesananController extends Controller
         // FIX: fix ketika keranjang belum ada
         $keranjang = Keranjang::where('id_user', Auth::id())->first();
 
-
         // buat transaksi
         $transaksi = Transaksi::create([
             'id_user' => Auth::id()
