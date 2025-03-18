@@ -78,7 +78,7 @@
                 <tr>
                     <th>No</th>
                     <th>Jenis Produk</th>
-                    <th>Terjual</th>
+                    <th>Jumlah</th>
                     <th>Total Harga (Rp.)</th>
                 </tr>
 
@@ -94,10 +94,10 @@
                 <tr>
                     <td>{{ ++$i }}</td>
                     <td>{{ $item->produk->nama_produk }}</td>
-                    <td style="text-align: center;">{{ $item->jumlah}}</td>
-                    <td style="text-align: right;">{{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
+                    <td style="text-align: center;">{{ $item->total_jumlah}}</td>
+                    <td style="text-align: right;">{{ number_format($item->total_harga, 2, ',', '.') }}</td>
                     @php
-                    $total += $item->total_harga_jual
+                    $total += $item->total_harga
                     @endphp
                 </tr>
 
@@ -109,7 +109,6 @@
                 </tr>
 
             </tbody>
-
         </table>
 
         <div class="row">
