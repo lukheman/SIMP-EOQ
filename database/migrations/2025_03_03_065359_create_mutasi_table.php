@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('mutasi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_produk')->constrained('produk')->nullOnDelete();
+            $table->foreignId('id_produk')->constrained('produk');
             $table->integer('jumlah');
             $table->date('tanggal')->default(DB::raw('CURRENT_DATE'));
             $table->enum('jenis', ['masuk', 'keluar']);
