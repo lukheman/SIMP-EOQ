@@ -106,10 +106,10 @@ Route::controller(TransaksiController::class)->group(function() {
     Route::post('transaksi/detail', 'detail')->name('transaksi.detail');
 });
 
-// Route::resource('penjualan', PenjualanController::class)->only(['store', 'destroy', 'show']);
 Route::resource('mutasi', MutasiController::class)->only(['store', 'update', 'destroy', 'show',]);
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('home');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
