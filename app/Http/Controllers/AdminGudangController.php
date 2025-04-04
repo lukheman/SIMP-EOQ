@@ -191,32 +191,5 @@ class AdminGudangController extends Controller
         ]);
     }
 
-    public function cetakLaporanBarangMasuk(Request $request) {
-
-        $request->validate([
-            'periode' => 'required'
-        ]);
-
-        list($tahun, $bulan) = explode('-', $request->periode);
-
-        $barang_masuk = Mutasi::select(
-            'id_produk',
-            DB::raw('SUM(jumlah) as total_jumlah'),
-            DB::raw('SUM(jumlah * produk.harga_beli) as total_harga')
-        )
-        ->join('produk', 'mutasi.id_produk', '=', 'produk.id') // Gabungkan dengan tabel produk
-        ->whereYear('tanggal', $tahun)
-        ->whereMonth('tanggal', $bulan)
-        ->where('jenis', 'masuk')
-        ->groupBy('id_produk', 'produk.harga_beli') // Tambahkan harga_beli ke groupBy agar tidak error
-        ->get();
-
-        return view('invoices.laporan-barang-masuk', [
-            'barang_masuk' => $barang_masuk,
-            'periode' => $request->periode,
-            'ttd' => 'Kepala Gudang'
-        ]);
-    }
-
 
 }

@@ -15,7 +15,7 @@ use App\Models\Produk;
 class AdminTokoController extends Controller
 {
 
-    public function index() { 
+    public function index() {
         $pesanan = Transaksi::where('status', 'pending')->count();
         $total_penjualan = Transaksi::where('status', 'selesai')->count();
         $persediaan_barang = Produk::sum('persediaan');
@@ -73,27 +73,6 @@ class AdminTokoController extends Controller
             'page' => 'Laporan Penjualan',
             'penjualan' => $penjualan
         ]);
-    }
-
-    public function cetakLaporanPenjualan(Request $request) {
-        $request->validate([
-            'periode' => 'required'
-        ]);
-
-        list($tahun, $bulan) = explode('-', $request->periode);
-
-        $penjualan = Mutasi::with('produk')
-            ->whereYear('tanggal', $tahun)
-            ->whereMonth('tanggal', $bulan)
-            ->where('jenis', 'keluar')
-            ->get();
-
-        return view('invoices.laporan-penjualan', [
-            'penjualan' => $penjualan,
-            'periode' => $request->periode,
-            'ttd' => 'Kepala Toko'
-        ]);
-
     }
 
 }
