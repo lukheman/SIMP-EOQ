@@ -89,8 +89,10 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="{{ route('pemiliktoko.cetak-laporan-barang-masuk') }}" method="post">
+            <form action="{{ route('laporan-barang-masuk') }}" method="post">
                 @csrf
+                
+                <input type="hidden" name="ttd" value="Pemilik Toko">
                 <div class="modal-body">
 
                     <div class="form-group">
