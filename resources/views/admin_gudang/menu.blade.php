@@ -48,7 +48,7 @@
 <li class="nav-item">
     <a href="{{ route('admingudang.laporan-barang-masuk') }}"
         class="nav-link  {{ $page === 'Laporan Barang Masuk' ? 'active' : '' }}">
-        <i class="fas fa-file-invoice nav-icon"></i>
+        <i class="fas fa-box-open nav-icon"></i>
         <p>Barang Masuk</p>
     </a>
 </li>

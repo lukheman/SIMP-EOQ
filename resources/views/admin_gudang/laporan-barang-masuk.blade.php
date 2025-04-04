@@ -13,7 +13,7 @@
     <div class="card-header">
 
         <button class="btn btn-outline-danger" id="btn-cetak-laporan-barang-masuk" data-toggle="modal"
-            data-target="#modal-cetak-laporan-barang-masuk"> 
+            data-target="#modal-cetak-laporan-barang-masuk">
             <i class="fas fa-print"></i>
             Cetak Laporan</button>
 
@@ -89,8 +89,9 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="{{ route('admingudang.cetak-laporan-barang-masuk') }}" method="post">
+            <form action="{{ route('laporan-barang-masuk') }}" method="post">
                 @csrf
+                <input type="hidden" name="ttd" value="Admin Gudang">
                 <div class="modal-body">
 
                     <div class="form-group">
@@ -101,7 +102,7 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-danger"> 
+                    <button type="submit" class="btn btn-danger">
                     <i class="fas fa-print"></i>
                     Cetak</button>
                 </div>

@@ -13,7 +13,7 @@
     <div class="card-header">
 
         <button class="btn btn-outline-danger" id="btn-cetak-laporan-penjualan" data-toggle="modal"
-            data-target="#modal-cetak-laporan-penjualan"> 
+            data-target="#modal-cetak-laporan-penjualan">
                 <i class="fas fa-print"></i>
             Cetak Laporan Penjualan</button>
 
@@ -57,7 +57,7 @@
                                 <td> {{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-danger btn-delete-penjualan"
-                                        data-id-penjualan="{{ $item->id }}"> 
+                                        data-id-penjualan="{{ $item->id }}">
 
                         <i class="fas fa-trash"></i>
                                         Hapus</button>
@@ -97,8 +97,9 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="{{ route('admintoko.cetak-laporan-penjualan') }}" method="post">
+            <form action="{{ route('laporan-penjualan') }}" method="post">
                 @csrf
+                <input type="hidden" name="ttd" value="Admin Toko">
                 <div class="modal-body">
 
                     <div class="form-group">
