@@ -94,14 +94,14 @@
 
         </table>
 
-        <!-- <div class="row"> -->
-        <!--     <div class="col"> -->
-        <!--     </div> -->
-        <!--     <div class="col" style="text-align: center;"> -->
-        <!--         <p style="margin-bottom: 100px;"><b>UD Toko Diva Mowewe</b></p> -->
-        <!--         <p><b><u>{{ $ttd }}</u></b></p> -->
-        <!--     </div> -->
-        <!-- </div> -->
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="col" style="text-align: center;">
+                <p style="margin-bottom: 100px;"><b>UD Toko Diva Mowewe</b></p>
+                <p><b><u>{{ $ttd }}</u></b></p>
+            </div>
+        </div>
 
     </div>
 
