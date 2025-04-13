@@ -73,15 +73,22 @@ class ProdukController extends Controller
             ],
             'harga_beli' => 'required|numeric:min:0',
             'harga_jual' => 'required|numeric:min:0',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'biaya_penyimpanan' => 'required|numeric:min:0',
             'biaya_pemesanan' => 'required|numeric:min:0',
             'lead_time' => 'required|numeric:min:0',
             'penggunaan_rata_rata' => 'required|numeric:min:0',
-            'deskripsi' => 'nullable|string'
+            'deskripsi' => 'nullable|string',
         ]);
 
-        $produk = Produk::findOrFail($id);
 
+        $data = $request->all();
+
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')->store('images', 'public');
+        }
+
+        $produk = Produk::findOrFail($id);
         $produk->update($data);
 
         return response()->json([
