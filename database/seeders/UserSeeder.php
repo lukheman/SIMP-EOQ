@@ -14,25 +14,33 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = ['reseller', 'admin_toko', 'admin_gudang', 'pemilik_toko', 'kurir'];
+        // Daftar role dengan nama berbeda untuk setiap role
+        $roles = [
+            'reseller' => 'Marcus',
+            'admin_toko' => 'Nuruddin',
+            'admin_gudang' => 'Madun',
+            'pemilik_toko' => 'Hendri',
+            'kurir' => 'Ihwan',
+        ];
 
-        foreach ($roles as $role) {
+        // Menyisipkan data ke tabel 'users'
+        foreach ($roles as $role => $name) {
             DB::table('users')->insert([
                 'username' => $role,
                 'email' => $role . '@example.com',
                 'password' => Hash::make('password123'), // Gunakan hashing untuk keamanan
                 'role' => $role,
-                'name' => 'Akmal ' . $role,
+                'name' => $name, // Nama sesuai dengan role
                 'phone' => '081234567890',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
 
+        // Menyisipkan data ke tabel 'reseller_detail' untuk id_user 1
         DB::table('reseller_detail')->insert([
             'id_user' => 1,
             'alamat' => 'Depan gerbang utama kampus USN'
         ]);
-
     }
 }
