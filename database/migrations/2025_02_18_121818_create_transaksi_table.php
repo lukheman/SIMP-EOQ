@@ -12,14 +12,15 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('transaksi', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->enum('status', ['pending', 'diproses', 'dikirim', 'ditolak', 'selesai', 'batal', 'dibayar'])->default('pending'); // Status pesanan
-            // $table->decimal('harga', 10, 2); // total harga produk yang dipesan (jumlah * produk->harga)
-            $table->date('tanggal')->default(DB::raw('CURRENT_DATE'));
+            $table->date('tanggal')->default(now()->toDateString());
             $table->timestamps();
         });
+
     }
 
     /**

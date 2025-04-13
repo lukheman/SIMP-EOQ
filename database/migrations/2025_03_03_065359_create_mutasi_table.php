@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_produk')->constrained('produk');
             $table->integer('jumlah');
-            $table->date('tanggal')->default(DB::raw('CURRENT_DATE'));
+            $table->date('tanggal')->default(now()->toDateString());
             $table->enum('jenis', ['masuk', 'keluar']);
             $table->string('keterangan')->nullable();
             $table->timestamps();
