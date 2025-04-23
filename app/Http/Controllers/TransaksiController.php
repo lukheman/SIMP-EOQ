@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Transaksi;
 use App\Models\Produk;
-use App\Models\Penjualan;
 use App\Models\Mutasi;
 
 use App\Constants\Status;
@@ -98,13 +97,6 @@ class TransaksiController extends Controller
                     'message' => "Persediaan {$item->produk->nama_produk} tidak mencukupi",
                 ], 200);
             }
-
-            // buat log penjualan ketika persediaan mencukup
-            Penjualan::create([
-                'id_produk' => $item->id_produk,
-                'jumlah' => $item->jumlah,
-                'total_harga' =>  $item->total_harga
-            ]);
 
         }
 
