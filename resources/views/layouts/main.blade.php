@@ -29,6 +29,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css')}}">
 
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+
 
 </head>
 
