@@ -12,10 +12,8 @@
 <div class="card">
     <div class="card-header">
 
-        <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#modal-add-mutasi"
-            id="btn-add-mutasi"> 
-            <i class="fas fa-plus"></i>
-            Tambah Barang Masuk</button>
+        <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#modal-scan-barcode"
+            id="btn-add-mutasi"> <i class="fas fa-plus"></i> Tambah Barang Masuk</button>
     </div>
     <div class="card-body">
         <div id="table_persediaan_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -58,11 +56,11 @@
                                 <td>
                                     <button class="btn btn-sm btn-warning text-white btn-update-mutasi"
                                         data-id-mutasi="{{ $item->id }}" data-toggle="modal"
-                                        data-target="#modal-update-mutasi"> 
+                                        data-target="#modal-update-mutasi">
                                         <i class="fas fa-edit"> </i>
                                         Edit</button>
                                     <button class="btn btn-sm btn-danger btn-delete-mutasi"
-                                        data-id-mutasi="{{ $item->id }}"> 
+                                        data-id-mutasi="{{ $item->id }}">
                                         <i class="fas fa-trash"> </i>
                                         Hapus</button>
                                 </td>
@@ -90,6 +88,22 @@
     </div>
 </div>
 
+<div class="modal fade show" id="modal-scan-barcode" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Scan Barcode</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="scanner"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- modal-add-mutasi - modal untuk menampilkan form tambah data produk -->
 <div class="modal fade show" id="modal-add-mutasi" style="display: none;" aria-modal="true" role="dialog">
     <div class="modal-dialog">
@@ -106,15 +120,22 @@
 
                     <input type="hidden" name="jenis" value="masuk">
 
+                    <input type="hidden" name="id_produk" id="id-produk">
+
                     <div class="form-group">
-                        <label for="tanggal">Tanggal</label>
-                        <input type="date" name="tanggal" id="tanggal" class="form-control" required>
+                        <label for="kode-produk">Barcode Produk</label>
+                        <input type="text" class="form-control" name="kode_produk" id="kode-produk">
                     </div>
+
+                    <!-- <div class="form-group"> -->
+                    <!--     <label for="tanggal">Tanggal</label> -->
+                    <!--     <input type="date" name="tanggal" id="tanggal" class="form-control" required> -->
+                    <!-- </div> -->
 
                     <div class="form-group">
                         <label for="nama-produk">Nama Produk</label>
-                        <select name="id_produk" id="nama-produk" class="form-control" required>
-                        </select>
+                        <input type="text" class="form-control" name="nama_produk" id="nama-produk"
+                            placeholder="Nama Produk" readonly>
                     </div>
 
                     <div class="form-group">
@@ -125,9 +146,9 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary"> 
-                    <i class="fas fa-save"> </i>
-                    Tambah</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"> </i>
+                        Tambah</button>
                 </div>
             </form>
         </div>
@@ -159,12 +180,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="nama-produk">Nama Produk</label>
-                        <select name="id_produk" id="nama-produk" class="form-control" required>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
                         <label for="jumlah">Jumlah</label>
                         <input type="number" name="jumlah" id="jumlah" class="form-control" min="1" required>
                     </div>
@@ -173,7 +188,7 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="text-white btn btn-warning"> 
+                    <button type="submit" class="text-white btn btn-warning">
                     <i class="fas fa-save"> </i>
                     Simpan Perubahan</button>
                 </div>
@@ -230,29 +245,29 @@
             })
         });
 
-        $('#btn-add-mutasi').click(() => {
-
-            let modalAddMutasi = $('#modal-add-mutasi');
-
-            $.ajax({
-                url: '{{ route('produk.all') }}',
-                method: 'GET',
-                success: function (data) {
-                    $('#nama-produk').empty();
-                    data.data.forEach((item) => {
-                        modalAddMutasi.find('#nama-produk').append(new Option(`${item.kode_produk} | ${item.nama_produk}`, item.id))
-                    });
-
-                    const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
-                    modalAddMutasi.find('#tanggal').val(today);
-
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-
-            });
-        });
+        // $('#btn-add-mutasi').click(() => {
+        //
+        //     let modalAddMutasi = $('#modal-add-mutasi');
+        //
+        //     $.ajax({
+        //         url: '{{ route('produk.all') }}',
+        //         method: 'GET',
+        //         success: function (data) {
+        //             $('#nama-produk').empty();
+        //             data.data.forEach((item) => {
+        //                 modalAddMutasi.find('#nama-produk').append(new Option(`${item.kode_produk} | ${item.nama_produk}`, item.id))
+        //             });
+        //
+        //             const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+        //             modalAddMutasi.find('#tanggal').val(today);
+        //
+        //         },
+        //         error: function (error) {
+        //             console.log(error);
+        //         }
+        //
+        //     });
+        // });
 
 
         // handler untuk mengupdate data
@@ -302,24 +317,6 @@
                     formUpdateMutasi.find('#id-mutasi').val(mutasi.id);
                     formUpdateMutasi.find('#tanggal').val(mutasi.tanggal);
                     formUpdateMutasi.find('#jumlah').val(mutasi.jumlah);
-
-                    $.ajax({
-                        url: '{{ route('produk.all') }}',
-                        method: 'GET',
-                        success: function (data) {
-                            formUpdateMutasi.find('#nama-produk').empty();
-                            data.data.forEach((item) => {
-                                const option = new Option(`${item.kode_produk} | ${item.nama_produk}`, item.id);
-                                if (item.id === mutasi.produk.id) {
-                                    option.setAttribute('selected', 'selected');
-                                }
-                                formUpdateMutasi.find('#nama-produk').append(option);
-                            });
-                        },
-                        error: function (error) {
-                            console.log(error);
-                        }
-                    });
 
                 },
                 error: function (error) {
@@ -380,5 +377,65 @@
 
 
 
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+
+<script>
+// Fungsi untuk mulai scan barcode
+function startScanner() {
+    Quagga.init({
+        inputStream: {
+            type: "LiveStream",
+            target: document.querySelector('#scanner'), // Menampilkan stream kamera di elemen ini
+            constraints: {
+                facingMode: "environment" // Menggunakan kamera belakang (untuk perangkat mobile)
+            }
+        },
+        decoder: {
+            readers: ["code_128_reader", "ean_reader", "upc_reader"]
+        }
+    }, function(err) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            Quagga.start(); // Memulai pemindaian
+        });
+
+    // Event listener untuk mendapatkan hasil pemindaian
+    Quagga.onDetected(function(result) {
+        const barcode = result.codeResult.code;
+
+        $.ajax({
+            url: `{{ route('produk.kode-produk', ':code') }}`.replace(':code', barcode), // Dynamically insert barcode
+            method: 'GET',
+            success: function(data) {
+                if (data.success) {
+                    data = data.data;
+
+
+                    $('#modal-scan-barcode').modal('hide');
+                    $('#modal-add-mutasi').modal('show');
+
+                    $('#kode-produk').val(data.kode_produk);
+                    $('#nama-produk').val(data.nama_produk);
+                    $('#id-produk').val(data.id);
+
+                } else {
+                    console.log('Error:', data.message);
+                }
+            },
+            error: function (xhr) {
+                console.log('Request failed:', xhr.responseJSON);
+            }
+        });
+
+
+    });
+}
+
+// Mulai scanner
+startScanner();
 </script>
 @endsection
