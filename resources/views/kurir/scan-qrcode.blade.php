@@ -102,7 +102,7 @@
                 }
 
                 setTimeout(() => {
-                    scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess);
+                    scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 450 }, onScanSuccess);
                 }, 3000);
             },
             error: function (error) {
