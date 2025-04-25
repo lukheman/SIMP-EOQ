@@ -12,7 +12,7 @@
 <div class="card">
     <div class="card-header">
 
-        <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#modal-add-produk">
+        <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#modal-scanner">
         <i class="fas fa-plus"></i>
             Tambah Produk</button>
 
@@ -35,8 +35,7 @@
                         <thead>
                             <tr>
                                 <th class="sorting sorting_asc" tabindex="0" aria-controls="table_produk" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Kode
-                                </th>
+                                    colspan="1" aria-sort="ascending">Kode Produk</th>
                                 <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1">
                                     Nama Produk</th>
                                 <!-- <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1"> -->
@@ -54,9 +53,9 @@
                                 <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1">
                                     Waktu Tunggu (Hari)
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1">
-                                    Penggunaan Rata-Rata (Hari)
-                                </th>
+                                <!-- <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1"> -->
+                                <!--     Penggunaan Rata-Rata (Hari) -->
+                                <!-- </th> -->
                                 <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1">
                                     Aksi</th>
                             </tr>
@@ -70,7 +69,7 @@
                                 <td> {{ number_format($item->biaya_penyimpanan, 0, ',', '.') }}</td>
                                 <td> {{ number_format($item->biaya_pemesanan, 0, ',', '.') }}</td>
                                 <td> {{ $item->lead_time }}</td>
-                                <td> {{ $item->penggunaan_rata_rata }}</td>
+                                <!-- <td> {{ $item->penggunaan_rata_rata }}</td> -->
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-sm btn-info btn-info-produk" data-toggle="modal"
@@ -111,6 +110,23 @@
     </div>
 </div>
 
+
+<div class="modal fade show" id="modal-scanner" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Scan Barcode</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="scanner"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- modal-add-produk - modal untuk menampilkan form tambah data produk -->
 <div class="modal fade show" id="modal-add-produk" style="display: none;" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-lg">
@@ -127,7 +143,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="kode-produk">Kode Produk</label>
+                                <label for="kode-produk">Barcode Produk</label>
                                 <input type="text" class="form-control" name="kode_produk" id="kode-produk">
                             </div>
 
@@ -173,11 +189,11 @@
                                     placeholder="Waktu Tunggu" min="0">
                             </div>
 
-                            <div class="form-group">
-                                <label for="penggunaan-rata-rata">Penggunaan Rata-Rata Harian</label>
-                                <input type="number" class="form-control" name="penggunaan_rata_rata"
-                                    id="penggunaan-rata-rata" placeholder="Penggunaan Rata-Rata Harian" min="0">
-                            </div>
+                            <!-- <div class="form-group"> -->
+                            <!--     <label for="penggunaan-rata-rata">Penggunaan Rata-Rata Harian</label> -->
+                            <!--     <input type="number" class="form-control" name="penggunaan_rata_rata" -->
+                            <!--         id="penggunaan-rata-rata" placeholder="Penggunaan Rata-Rata Harian" min="0"> -->
+                            <!-- </div> -->
 
                             <div class="form-group">
                                 <label for="deskripsi">Deskripsi</label>
@@ -268,11 +284,11 @@
                                     placeholder="Waktu Tunggu" min="0">
                             </div>
 
-                            <div class="form-group">
-                                <label for="penggunaan-rata-rata">Penggunaan Rata-Rata Harian</label>
-                                <input type="number" class="form-control" name="penggunaan_rata_rata"
-                                    id="penggunaan-rata-rata" placeholder="Penggunaan Rata-Rata Harian" min="0">
-                            </div>
+                            <!-- <div class="form-group"> -->
+                            <!--     <label for="penggunaan-rata-rata">Penggunaan Rata-Rata Harian</label> -->
+                            <!--     <input type="number" class="form-control" name="penggunaan_rata_rata" -->
+                            <!--         id="penggunaan-rata-rata" placeholder="Penggunaan Rata-Rata Harian" min="0"> -->
+                            <!-- </div> -->
 
                             <div class="form-group">
                                 <label for="deskripsi">Deskripsi</label>
@@ -356,11 +372,11 @@
                                 placeholder="Waktu Tunggu" min="0" readonly>
                         </div>
 
-                        <div class="form-group">
-                            <label for="penggunaan-rata-rata">Penggunaan Rata-Rata Harian</label>
-                            <input type="number" class="form-control" name="penggunaan_rata_rata"
-                                id="penggunaan-rata-rata" placeholder="Penggunaan Rata-Rata Harian" min="0" readonly>
-                        </div>
+                        <!-- <div class="form-group"> -->
+                        <!--     <label for="penggunaan-rata-rata">Penggunaan Rata-Rata Harian</label> -->
+                        <!--     <input type="number" class="form-control" name="penggunaan_rata_rata" -->
+                        <!--         id="penggunaan-rata-rata" placeholder="Penggunaan Rata-Rata Harian" min="0" readonly> -->
+                        <!-- </div> -->
 
                     </div>
                 </div>
@@ -534,7 +550,7 @@
                     formUpdateProduk.find('#biaya-penyimpanan').val(produk.biaya_penyimpanan);
                     formUpdateProduk.find('#biaya-pemesanan').val(produk.biaya_pemesanan);
                     formUpdateProduk.find('#lead-time').val(produk.lead_time);
-                    formUpdateProduk.find('#penggunaan-rata-rata').val(produk.penggunaan_rata_rata);
+                    // formUpdateProduk.find('#penggunaan-rata-rata').val(produk.penggunaan_rata_rata);
                     formUpdateProduk.find('#deskripsi').val(produk.deskripsi);
 
                 },
@@ -572,7 +588,7 @@
                     modalInfoProduk.find('#biaya-penyimpanan').val(produk.biaya_penyimpanan);
                     modalInfoProduk.find('#biaya-pemesanan').val(produk.biaya_pemesanan);
                     modalInfoProduk.find('#lead-time').val(produk.lead_time);
-                    modalInfoProduk.find('#penggunaan-rata-rata').val(produk.penggunaan_rata_rata);
+                    // modalInfoProduk.find('#penggunaan-rata-rata').val(produk.penggunaan_rata_rata);
                     modalInfoProduk.find('#deskripsi').val(produk.deskripsi);
 
                 },
@@ -589,5 +605,47 @@
 
     });
 
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
+<script>
+// Fungsi untuk mulai scan barcode
+function startScanner() {
+    Quagga.init({
+        inputStream: {
+            type: "LiveStream",
+            target: document.querySelector('#scanner'), // Menampilkan stream kamera di elemen ini
+            constraints: {
+                facingMode: "environment" // Menggunakan kamera belakang (untuk perangkat mobile)
+            }
+        },
+        decoder: {
+            readers: ["code_128_reader", "ean_reader", "upc_reader"]
+        }
+    }, function(err) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            Quagga.start(); // Memulai pemindaian
+        });
+
+    // Event listener untuk mendapatkan hasil pemindaian
+    Quagga.onDetected(function(result) {
+        const barcode = result.codeResult.code;
+
+        document.getElementById('kode-produk').value = barcode; // Menampilkan hasil scan
+
+        $('#modal-scanner').modal('hide');
+
+        $('#modal-add-produk').modal('show');
+
+
+
+    });
+}
+
+// Mulai scanner
+startScanner();
 </script>
 @endsection
