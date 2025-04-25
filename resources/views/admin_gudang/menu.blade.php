@@ -8,27 +8,21 @@
 <li class="nav-item">
     <a href="{{ route('admingudang.produk')}}" class="nav-link {{ $page === 'Produk' ? 'active' : '' }}">
         <i class="nav-icon fas fa-cubes"></i>
-        <p> 
-        Data Produk
-        </p>
+        <p> Data Produk </p>
     </a>
 </li>
 
 <li class="nav-item">
     <a href="{{ route('admingudang.persediaan')}}" class="nav-link {{ $page === 'Persediaan' ? 'active' : '' }}">
         <i class="nav-icon fas fa-boxes"></i>
-        <p> 
-        Persediaan Produk
-        </p>
+        <p> Persediaan Produk </p>
     </a>
 </li>
 
 <li class="nav-item">
     <a href="{{ route('admingudang.barang-masuk')}}" class="nav-link {{ $page === 'Barang Masuk' ? 'active' : '' }}">
         <i class="nav-icon fas fa-box-open"></i>
-        <p>
-        Barang Masuk
-</p>
+        <p> Barang Masuk </p>
     </a>
 </li>
 
@@ -37,9 +31,7 @@
 <li class="nav-item">
     <a href="{{ route('admingudang.eoq')}}" class="nav-link {{ $page === 'EOQ' ? 'active' : '' }}">
         <i class="nav-icon fas fa-calculator"></i>
-        <p> 
-        EOQ
-        </p>
+        <p> EOQ </p>
     </a>
 </li>
 
