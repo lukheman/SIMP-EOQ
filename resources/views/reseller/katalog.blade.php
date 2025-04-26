@@ -13,31 +13,34 @@
     <div class="col-3">
         <div class="card">
             <div class="card-body">
-                <div class="image">
-                    <img src="{{ asset('storage/' . $item->gambar )}}" class="product-img" alt="{{ $item->nama_produk}}"
-                        width="180">
+                <div class="position-relative" style="height: 180px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; overflow: hidden;">
+                    <img src="{{ asset('storage/' . $item->gambar) }}" class="img-fluid product-image" alt="{{ $item->nama_produk }}" style="max-height: 100%; object-fit: contain;">
+
+                    @if ($item->persediaan == 0)
+                    <div class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center" style="background: rgba(0,0,0,0.5);">
+                        <span class="text-white font-weight-bold" style="font-size: 1.5rem;">Kosong</span>
+                    </div>
+                    @endif
                 </div>
+
                 <div class="row mt-2">
                     <div class="col-12">
                         <small>{{ $item->nama_produk }}</small>
                     </div>
                     <div class="col-12">
-                        <p>Rp. {{ number_format($item->harga_jual, 2, ',', '.')}}</p>
+                        <p>Rp. {{ number_format($item->harga_jual, 2, ',', '.') }}</p>
                     </div>
                     <div class="col-12">
                         <p class="float-left">{{ $item->persediaan }}</p>
                         <button type="button" class="btn btn-sm btn-primary float-right btn-tambah-pesanan"
-                            data-toggle="modal" data-target="#modal-tambah-pesanan" data-id-produk="{{ $item->id }}">
+                            data-toggle="modal" data-target="#modal-tambah-pesanan" data-id-produk="{{ $item->id }}" data-gambar-produk="{{ $item->gambar }}" {{ $item->persediaan == 0 ? 'disabled' : '' }}>
                             <i class="nav-icon fas fa-cart-plus"></i>
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>
-
     </div>
-
     @endforeach
 </div>
 
@@ -57,11 +60,8 @@
 
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-12 col-sm-6">
-                            <div class="image">
-                                <img src="{{ asset('dist/img/prod-1.jpg')}}" class="product-img"
-                                    alt="User Image" width="200">
-                            </div>
+                        <div class="col-12 col-sm-6 text-center">
+                            <img class="img-fluid" width="200" height="10" id="img-gambar-produk">
                         </div>
                         <div class="col-12 col-sm-6">
                             <div class="row">
