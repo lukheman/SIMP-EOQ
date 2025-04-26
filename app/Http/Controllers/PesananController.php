@@ -63,6 +63,17 @@ class PesananController extends Controller
 
     }
 
+    public function destroy($id) {
+        $pesanan = Pesanan::findOrFail($id);
+
+        $pesanan->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesanan berhasil dihapus dari keranjang'
+        ]);
+    }
+
     public function checkout() {
         // FIX: fix ketika keranjang belum ada
         $keranjang = Keranjang::where('id_user', Auth::id())->first();
