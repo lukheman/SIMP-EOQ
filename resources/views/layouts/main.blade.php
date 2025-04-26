@@ -29,6 +29,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css')}}">
 
+        <style>
+        .product-image {
+            width: 180px; /* Set desired width */
+            height: 180px; /* Set desired height */
+            object-fit: cover; /* Ensures images scale and crop nicely */
+            display: block;
+            /* margin: 0 auto; /* Center the image */ */
+        }
+</style>
+
 </head>
 
 <body class="hold-transition sidebar-mini">
