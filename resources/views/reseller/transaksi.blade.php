@@ -27,20 +27,17 @@
                         aria-describedby="table_pesanan_info">
                         <thead>
                             <tr>
-                                <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Tanggal
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Status</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Konfirmasi</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Info</th>
+                                <th>Tanggal</th>
+                                <th>Status</th>
+                                <th>Metode Pembayaran</th>
+                                <th>Info</th>
+                                <th>Konfirmasi</th>
+                                <th>Bukti Pembayaran</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            @foreach ($pesanan as $item)
+                            @foreach ($transaksi as $item)
                             <tr>
                                 <td> {{ $item->tanggal }}</td>
                                 <td>
@@ -59,18 +56,40 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-outline-primary btn-pesanan-diterima"
-                                        data-id-transaksi="{{ $item->id }}" {{ $item->status
-                                        === 'dibayar' ? '' : 'disabled' }}> 
-                                        <i class="fas fa-check"></i>
-                                        Pesanan diterima</button>
+                                    <span class="badge bg-success">{{ $item->metode_pembayaran }}</span>
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-sm btn-outline-secondary btn-detail-transaksi"
                                         data-id-transaksi="{{ $item->id }}" data-toggle="modal"
-                                        data-target="#modal-detail-transaksi"> 
-                                        <i class="fas fa-info"></i>
-                                        Info</button>
+                                        data-target="#modal-detail-transaksi">
+                                        <i class="fas fa-info"></i>Detail Transaksi</button>
+                                </td>
+
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-success btn-pesanan-diterima"
+                                        data-id-transaksi="{{ $item->id }}" {{ $item->status
+                                        === 'dibayar' ? '' : 'disabled' }}>
+                                        <i class="fas fa-check"></i>
+                                        Pesanan diterima</button>
+                                </td>
+
+                                <td>
+                                    @if ($item->metode_pembayaran === 'transfer')
+
+                                        @if (isset($item->bukti_pembayaran))
+
+                                            <button type="button" class="btn btn-sm btn-outline-primary btn-lihat-bukti-pembayaran" data-id-transaksi="{{ $item->id }}" data-bukti-pembayaran="{{ $item->bukti_pembayaran }}" data-toggle="modal" data-target="#modal-lihat-bukti-pembayaran">
+                                                <i class="fa fa-eye"></i> Lihat Bukti Pembayaran
+                                            </button>
+
+                                        @else
+
+                                            <button type="button" class="btn btn-sm btn-outline-primary btn-kirim-bukti-pembayaran" data-id-transaksi="{{ $item->id }}" data-toggle="modal" data-target="#modal-kirim-bukti-pembayaran">
+                                            <i class="fa fa-paper-plane"></i> Kirim Bukti Pembayaran
+                                            </button>
+
+                                        @endif
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach
@@ -96,12 +115,67 @@
     </div>
 </div>
 
+<div class="modal fade show" id="modal-lihat-bukti-pembayaran" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Bukti Pembayaran</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+
+                <img src="" alt="" id="img-bukti-pembayaran" class="img-fluid">
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" id="btn-ubah-bukti-pembayara" data-toggle="modal" data-target="#modal-kirim-bukti-pembayaran"> <i class="fas fa-send"></i> Ubah </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<div class="modal fade show" id="modal-kirim-bukti-pembayaran" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Kirim Bukti Pembayaran</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form id="form-bukti-pembayaran">
+            <div class="modal-body">
+
+                <input type="hidden" id="id-transaksi" disabled>
+
+                <div class="form-group">
+                    <label for="bukti-pembayaran">Bukti Pembayaran</label>
+                    <input type="file" class="form-control" name="bukti_pembayaran" id="bukti-pembayaran">
+                </div>
+
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-primary"> <i class="fas fa-send"></i> Kirim </button> </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
 
 <div class="modal fade show" id="modal-detail-transaksi" style="display: none;" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Detail Pesanan</h4>
+                <h4 class="modal-title">Detail Transaksi</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -128,6 +202,7 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
 @endsection
 
 @section('custom-script')
@@ -135,6 +210,57 @@
 <script>
 
     $(document).ready(() => {
+
+        $('.btn-lihat-bukti-pembayaran').click(function() {
+
+            const idTransaksi = $(this).data('id-transaksi');
+            $('#id-transaksi').val(idTransaksi);
+
+            const buktiPembayaran = $(this).data('bukti-pembayaran');
+            const baseUrl = "{{ asset('storage') }}";
+            $('#img-bukti-pembayaran').attr('src', `${baseUrl}/${buktiPembayaran}`);
+
+        });
+
+        $('.btn-kirim-bukti-pembayaran').click(function() {
+            const idTransaksi = $(this).data('id-transaksi');
+
+            $('#id-transaksi').val(idTransaksi);
+
+        });
+
+        $('#form-bukti-pembayaran').on('submit', function(e) {
+
+            e.preventDefault();
+
+            let idProduk = $('#id-transaksi').val();
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: `{{ route('transaksi.bukti-pembayaran', ':id') }}`.replace(':id', idProduk),
+                method: 'POST',
+                data: formData,
+                processData: false,  // penting untuk FormData
+                contentType: false,  // penting untuk FormData
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(resp) {
+                    if(resp.success) {
+                        showToast('success', resp.message);
+                        $('#modal-kirim-bukti-pembayaran').modal('hide');
+                        $('#modal-lihat-bukti-pembayaran').modal('hide');
+                    }
+
+                },
+                error: function(xhr) {
+                    console.log(xhr);
+                }
+            })
+
+
+        });
+
 
         $('.btn-pesanan-diterima').click(function () {
             let idTransaksi = $(this).data('id-transaksi');
