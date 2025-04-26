@@ -3,12 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Constants\MetodePembayaran;
 
 class Transaksi extends Model
 {
     protected $table = 'transaksi';
 
-    protected $fillable = ['id_user', 'id_produk', 'jumlah', 'status', 'harga' ];
+    protected $guarded = [];
+
+    protected $casts =  [
+        'metod_pembayaran' => MetodePembayaran::class
+    ];
 
     public function pesanan() {
         return $this->hasMany(Pesanan::class, 'id_pesanan');
