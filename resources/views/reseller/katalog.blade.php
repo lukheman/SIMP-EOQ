@@ -112,81 +112,76 @@
 @section('custom-script')
 <script>
 
-    $(document).ready(() => {
+$(document).ready(() => {
 
-        $('#form-tambah-pesanan').on('submit', function (e) {
-            e.preventDefault();
+    $('#form-tambah-pesanan').on('submit', function (e) {
+        e.preventDefault();
 
-            $.ajax({
-                url: "{{ route('pesanan.store') }}",
-                method: "POST",
-                data: $(this).serialize(),
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (data) {
-                    // TODO: jangan gunakan swetalert, cukup tampilakn notifikasi di kanan atas menggunakan fitur admin lte
-                    Swal.fire({
-                        title: data.message,
-                        icon: "success",
-                    }).then(() => window.location.reload());
-                },
-                error: function (error) {
-                    Swal.fire({
-                        title: 'Gagal melakukan pembelian',
-                        icon: "error",
-                    }).then(() => window.location.reload());
-                }
-            });
+        $.ajax({
+            url: "{{ route('pesanan.store') }}",
+            method: "POST",
+            data: $(this).serialize(),
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (data) {
+                showToast('success', data.message);
+                $('#modal-tambah-pesanan').modal('hide');
+            },
+            error: function (error) {
+                showToast('error', 'Gagal melakukan pembelian');
+            }
         });
+    });
 
-        $('.btn-tambah-pesanan').click(function () {
+    $('.btn-tambah-pesanan').click(function () {
 
-            let modalTambahPesanan = $('#modal-tambah-pesanan');
-            let idProduk = $(this).data('id-produk');
+        let modalTambahPesanan = $('#modal-tambah-pesanan');
+        let idProduk = $(this).data('id-produk');
+        let gambarProduk = $(this).data('gambar-produk');
 
-            $.ajax({
-                url: `{{ route('produk.show', '') }}/${idProduk}`,
-                method: 'GET',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (data) {
-                    let produk = data.data;
+        const baseUrl = "{{ asset('storage') }}";
+        $('#img-gambar-produk').attr('src', `${baseUrl}/${gambarProduk}`);
 
-                    // let formatRupiah = produk.harga_jual.toLocaleString("id-ID", {style: "currency", currency: "IDR"});
+        $.ajax({
+            url: `{{ route('produk.show', '') }}/${idProduk}`,
+            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (data) {
+                let produk = data.data;
 
-                    // console.log(produk);
+                modalTambahPesanan.find('#id-produk').val(produk.id);
+                modalTambahPesanan.find('#nama-produk').text(produk.nama_produk);
+                modalTambahPesanan.find('#harga-jual').text(formatRupiah(produk.harga_jual));
+                modalTambahPesanan.find('#deskripsi-produk').text(produk.deskripsi);
 
-                    modalTambahPesanan.find('#id-produk').val(produk.id);
-                    modalTambahPesanan.find('#nama-produk').text(produk.nama_produk);
-                    modalTambahPesanan.find('#harga-jual').text(formatRupiah(produk.harga_jual));
-                    modalTambahPesanan.find('#deskripsi-produk').text(produk.deskripsi);
-
-                },
-                error: function (error) {
-                    Swal.fire({
-                        title: 'Produk gagal dihapus',
-                        icon: "error",
-                    }).then(() => window.location.reload());
-                }
-            });
-
-        });
-
-        $('#btn-tambah-jumlah').click(function () {
-            let jumlah = parseInt($('#jumlah').val())
-            $('#jumlah').val(jumlah + 1);
-        });
-
-        $('#btn-kurang-jumlah').click(function () {
-            let jumlah = parseInt($('#jumlah').val())
-            if (jumlah > 1) {
-                $('#jumlah').val(jumlah - 1);
+            },
+            error: function (error) {
+                Swal.fire({
+                    title: 'Produk gagal dihapus',
+                    icon: "error",
+                }).then(() => window.location.reload());
             }
         });
 
     });
+
+    $('#btn-tambah-jumlah').click(function () {
+        let jumlah = parseInt($('#jumlah').val())
+        $('#jumlah').val(jumlah + 1);
+    });
+
+    $('#btn-kurang-jumlah').click(function () {
+        let jumlah = parseInt($('#jumlah').val())
+        if (jumlah > 1) {
+            $('#jumlah').val(jumlah - 1);
+        }
+    });
+
+});
+
 
 </script>
 @endsection
