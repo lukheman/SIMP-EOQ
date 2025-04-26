@@ -47,8 +47,38 @@ class TransaksiController extends Controller
 
     }
 
+    public function buktiPembayaran(Request $request, $id) {
+        $request->validate([
+            'bukti_pembayaran' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $data = $request->all();
+
+        $transaksi = Transaksi::findOrFail($id);
+
+        if ($request->hasFile('bukti_pembayaran')) {
+            // hapus file lama
+            if($transaksi->bukti_pembayaran && Storage::disk('public')->exists($transaksi->bukti_pembayaran)) {
+                Storage::disk('public')->delete($transaksi->bukti_pembayaran);
+            }
+
+            // simpan file baru
+            $data['bukti_pembayaran'] = $request->file('bukti_pembayaran')->store('bukti_pembayaran', 'public');
+        }
+
+        $transaksi->update($data);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil mengirim bukti pembayaran',
+            'data' => $transaksi
+        ], 200);
+
+    }
+
 
     public function update(Request $request, $id) {
+        /* TODO: pakai constant status */
         $data = $request->validate([
             'status' => 'required|in:pending,diproses,ditolak,dikirim,selesai,batal,dibayar',
         ]);
