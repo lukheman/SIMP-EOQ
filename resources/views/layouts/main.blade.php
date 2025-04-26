@@ -141,6 +141,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
 
+
+    <script>
+
+        const showToast = (icon, title) => {
+            Swal.fire({
+                toast: true,
+                position: 'top-end', // Posisi toast
+                icon: icon, // Jenis ikon: success, error, warning, info, question
+                title: title,
+                showConfirmButton: false,
+                timer: 3000, // Durasi toast dalam milidetik
+                timerProgressBar: true,
+                // animation: false, // Nonaktifkan animasi
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+        };
+        </script>
+
     @yield('custom-script')
 
 </body>
