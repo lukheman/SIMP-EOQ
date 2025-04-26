@@ -3,51 +3,47 @@
 namespace App\Http\Controllers;
 
 use App\Constants\Role;
-use App\Models\Pesanan;
+use App\Constants\MetodePembayaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Transaksi;
 use App\Models\Produk;
 use App\Models\Mutasi;
+use App\Models\Keranjang;
+use App\Models\Pesanan;
 
 use App\Constants\Status;
+use Illuminate\Validation\Rule;
 
 class TransaksiController extends Controller
 {
 
     public function store(Request $request) {
-
-        // TODO:refactoring
-
-        $data = $request->validate([
-            'id_produk' => 'required|exists:produk,id',
-            'jumlah' => 'required|numeric|min:1',
+        $request->validate([
+            'metode_pembayaran' => ['required', Rule::enum(MetodePembayaran::class)]
         ]);
 
-        $produk = Produk::find($request->id_produk);
-        $total_harga = $produk->harga_jual * $request->jumlah;
 
-        $id_user = Auth::user()->id;
+        // FIX: fix ketika keranjang belum ada
+        $keranjang = Keranjang::where('id_user', Auth::id())->first();
+
+        // buat transaksi
         $transaksi = Transaksi::create([
-            'id_user' => $id_user,
-            'id_produk' => $request->id_produk,
-            'jumlah' => $request->jumlah,
-            'harga' => $total_harga
+            'id_user' => Auth::id(),
+            'metode_pembayaran' => $request->metode_pembayaran
         ]);
 
-        if($transaksi) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Berhasil melakukan pembelian ' . $produk->nama_produk,
-                'data' => $produk
-            ], 201);
-        }
+        Pesanan::where('id_keranjang', $keranjang->id)->update([
+            'id_transaksi' => $transaksi->id,
+            'id_keranjang' => null
+        ]);
 
         return response()->json([
-            'success' => false,
-            'message' => 'Gagal melakukan pembelian'
-        ], 500);
+            'success' => true,
+            'message' => 'Berhasil melakukan pemesanan barang',
+        ], 200);
+
 
     }
 
