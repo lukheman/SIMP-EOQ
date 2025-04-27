@@ -9,10 +9,12 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <button type="button" class="btn btn-outline-primary" id="btn-checkout"> 
+        <button type="button" class="btn btn-outline-primary" id="btn-show-modal-metode-pembayaran"  {{ $pesanan->count() == 0 ? 'disabled' : '' }}>
         <i class="fas fa-cash-register"></i>
         Checkout</button>
 
+        <button type="button" class="btn btn-outline-danger" id="btn-delete-pilihan-pesanan" style="display: none;">
+        <i class="fas fa-trash"></i>Hapus</button>
     </div>
     <div class="card-body">
         <div id="table_pesanan_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -31,28 +33,30 @@
                         aria-describedby="table_pesanan_info">
                         <thead>
                             <tr>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Nama Produk</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Jumlah
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Harga Satuan (Rp.)
-                                </th>
-
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Total Harga (Rp.)
-                                </th>
+                                <!-- TODO: ganti jadi select all -->
+                                <th><input type="checkbox" id="select-all" style="width: 25px; height: 25px;"></th>
+                                <th>Nama Produk</th>
+                                <th>Jumlah</th>
+                                <th>Harga Satuan (Rp.)</th>
+                                <th>Total Harga (Rp.)</th>
+                                <th class="column-aksi">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
 
                             @foreach ($pesanan as $item)
                             <tr>
+                                <td > <input type="checkbox" class="select-row" data-id-pesanan="{{ $item->id }}"  style="width: 25px; height: 25px;"> </td>
                                 <td> {{ $item->produk->nama_produk }}</td>
                                 <td> {{ $item->jumlah }}</td>
                                 <td> {{ number_format($item->produk->harga_jual, 0, ',', '.')}}</td>
                                 <td> {{ number_format($item->total_harga, 0, ',', '.')}}</td>
+                                <td class="column-aksi">
+                                    <button class="btn btn-outline-danger btn-sm btn-delete-pesanan" data-id-pesanan="{{ $item->id }}">
+                                        <i class="fas fa-trash"></i>
+                                        Hapus</button>
+                                </td>
+
                             </tr>
                             @endforeach
 
@@ -76,49 +80,175 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade show" id="modal-metode-pembayaran" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Pilih Metode Pembayaran</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form id="form-checkout">
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="metode_pembayaran" value="cod">
+                        <label class="form-check-label">Cash On Delivery (COD)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="metode_pembayaran" value="transfer">
+                        <label class="form-check-label">Transfer</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-primary" id="btn-checkout"></i>Checkout</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('custom-script')
 
 <script>
 
+    function getSelectedItem() {
+
+        let idPesananDipilih = [];
+
+        $('.select-row:checked').each(function() {
+            let idPesanan = $(this).data('id-pesanan');
+            idPesananDipilih.push(idPesanan);
+        });
+
+        return idPesananDipilih;
+
+    }
+
     $(document).ready(() => {
 
-        // TODO: beri peringatan bahwa pemesanan tidak bisa dibatalkan
-        $('#btn-checkout').click(function () {
+        $('#select-all').click(function() {
+            $('.select-row').prop('checked', this.checked);
+        });
 
-            Swal.fire({
-                title: "Checkout semua barang di keranjang?",
-                text: "Tindakan tidak dapat dibatalkan.",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, checkout"
-            }).then((result) => {
-                if (result.isConfirmed) {
+        $('.select-row, #select-all').click(function() {
 
-                    $.ajax({
-                        url: '{{ route('pesanan.checkout')}}',
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function (data) {
-                            Swal.fire({
-                                title: "Berhasil!",
-                                text: data.message,
-                                icon: "success"
-                            }).then(() => window.location.reload());
-                        },
-                        error: function (error) {
-                            console.log(error);
-                        }
-                    });
+            if (!this.checked) {
+                $('#select-all').prop('checked', false);
+            }
 
-
+            $('.select-row').each(function() {
+                if(this.checked) {
+                    $('.column-aksi').hide();
+                    $('#btn-delete-pilihan-pesanan').show();
+                    return false;
+                } else {
+                    $('.column-aksi').show();
+                    $('#btn-delete-pilihan-pesanan').hide();
                 }
             });
+
+        });
+
+        $('#btn-delete-pilihan-pesanan').click(function() {
+
+            const ids = [];
+            $('.select-row:checked').each(function() {
+                ids.push($(this).data('id-pesanan'));
+            });
+
+            $.ajax({
+                url: `{{ route('pesanan.destroy-many') }}`,
+                method: 'POST',
+                data: {
+                    ids
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (data) {
+                    showToast('success', data.message);
+                },
+                error: function (error) {
+                    showToast('error', 'Pesanan gagal dihapus');
+                }
+            });
+
+
+        });
+
+
+        $('#btn-checkout').click(function() {
+            $('#modal-metode-pembayaran').modal('hide');
+        });
+
+        $('#btn-show-modal-metode-pembayaran').click(function() {
+            const idPesananDipilih = getSelectedItem();
+            if(idPesananDipilih.length == 0) {
+
+                showToast('warning', 'Silakan pilih barang yang ingin Anda checkout.')
+
+            } else {
+                $('#modal-metode-pembayaran').modal('show');
+            }
+        });
+
+        $('#form-checkout').on('submit', function(e) {
+            e.preventDefault();
+
+            const data = $(this).serializeArray();
+            data.push({ name: 'pesanan_dipilih', value: getSelectedItem()});
+
+            $.ajax({
+                url: '{{ route('transaksi.store') }}',
+                method: 'POST',
+                data: $.param(data),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
+                    showToast('success', data.message);
+                },
+                error: function (error) {
+                    showToast('error', 'Gagal melakukan transaksi');
+                }
+
+            });
+        });
+
+        $('.btn-delete-pesanan').click(function() {
+            const idPesanan = $(this).data('id-pesanan');
+
+            $.ajax({
+                url: `{{ route('pesanan.destroy', ':id') }}`.replace(':id', idPesanan),
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (data) {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000)
+                    showToast('success', data.message);
+                },
+                error: function (error) {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000)
+                    showToast('error', 'Pesanan gagal dihapus');
+                }
+            });
+
         });
 
     });
@@ -126,11 +256,12 @@
 </script>
 
 <script>
-    $(function () {
+    $(document).ready(function() {
+
 
         $('#table_pesanan').DataTable({
             "paging": true,
-            "lengthChange": false,
+            "lengthChange": true,
             "searching": false,
             "ordering": true,
             "info": true,
@@ -139,6 +270,8 @@
         });
 
     });
+
+
 </script>
 
 @endsection
