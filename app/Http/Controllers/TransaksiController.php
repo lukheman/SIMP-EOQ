@@ -13,17 +13,25 @@ use App\Models\Mutasi;
 use App\Models\Keranjang;
 use App\Models\Pesanan;
 
-use App\Constants\Status;
+use App\Constants\StatusTransaksi;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class TransaksiController extends Controller
 {
 
+    public function get() {
+        Transaksi::get();
+    }
+
     public function store(Request $request) {
         $request->validate([
-            'metode_pembayaran' => ['required', Rule::enum(MetodePembayaran::class)]
+            'metode_pembayaran' => ['required', Rule::enum(MetodePembayaran::class)],
+            'pesanan_dipilih' => 'required'
         ]);
 
+        $pesanan_dipilih = $request->input('pesanan_dipilih');
+        $pesanan_dipilih = explode(',', $pesanan_dipilih);
 
         // FIX: fix ketika keranjang belum ada
         $keranjang = Keranjang::where('id_user', Auth::id())->first();
@@ -100,9 +108,9 @@ class TransaksiController extends Controller
     }
 
     private function handleAdminTokoActions(Request $request , Transaksi $transaksi) {
-        if ($request->status === Status::STATUS['diproses']) {
+        if ($request->status === StatusTransaksi::STATUS['diproses']) {
             return $this->prosesPesanan($transaksi);
-        } elseif ($request->status === Status::STATUS['dikirim']) {
+        } elseif ($request->status === StatusTransaksi::STATUS['dikirim']) {
             return $this->kirimPesanan($transaksi);
         }
 
@@ -126,7 +134,7 @@ class TransaksiController extends Controller
 
         }
 
-        $transaksi->status = Status::STATUS['diproses'];
+        $transaksi->status = StatusTransaksi::STATUS['diproses'];
         $transaksi->save();
 
         return response()->json([
@@ -136,7 +144,7 @@ class TransaksiController extends Controller
     }
 
     private function kirimPesanan(Transaksi $transaksi) {
-        if ($transaksi->status !== Status::STATUS['diproses']) {
+        if ($transaksi->status !== StatusTransaksi::STATUS['diproses']) {
             return response()->json([
                 'success' => false,
                 'message' => 'Pesanan belum diproses',
@@ -162,7 +170,7 @@ class TransaksiController extends Controller
 
         }
 
-        $transaksi->status = Status::STATUS['dikirim'];
+        $transaksi->status = StatusTransaksi::STATUS['dikirim'];
         $transaksi->save();
 
         return response()->json([
@@ -174,17 +182,17 @@ class TransaksiController extends Controller
     private function handleKurirActions(Request $request, Transaksi $transaksi) {
         $transaksi = Transaksi::with(['user', 'user.reseller_detail'])->findOrFail($transaksi->id);
 
-        if ($transaksi->status === Status::STATUS['dikirim'] && $request->status === Status::STATUS['dibayar']  ) {
+        if ($transaksi->status === StatusTransaksi::STATUS['dikirim'] && $request->status === StatusTransaksi::STATUS['dibayar']  ) {
 
 
-            $transaksi->status = Status::STATUS['dibayar'];
+            $transaksi->status = StatusTransaksi::STATUS['dibayar'];
             $transaksi->save();
 
         }
 
         $transaksi['total_harga'] = $transaksi->totalHarga();
 
-        $message = $transaksi->status === Status::STATUS['dibayar'] ?
+        $message = $transaksi->status === StatusTransaksi::STATUS['dibayar'] ?
             'Pembayaran telah dibayar pada ' . $transaksi->updated_at :
             'Transaksi selesai dibayar';
 
@@ -197,8 +205,8 @@ class TransaksiController extends Controller
     }
     private function handleResellerActions(Request $request, Transaksi $transaksi) {
 
-        if ($transaksi->status === Status::STATUS['dibayar'] && $request->status === Status::STATUS['selesai']) {
-            $transaksi->status = Status::STATUS['selesai'];
+        if ($transaksi->status === StatusTransaksi::STATUS['dibayar'] && $request->status === StatusTransaksi::STATUS['selesai']) {
+            $transaksi->status = StatusTransaksi::STATUS['selesai'];
             $transaksi->save();
 
         }
