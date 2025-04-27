@@ -74,25 +74,19 @@ class PesananController extends Controller
         ]);
     }
 
-    public function checkout() {
-        // FIX: fix ketika keranjang belum ada
-        $keranjang = Keranjang::where('id_user', Auth::id())->first();
+    public function destroyMany(Request $request) {
 
-        // buat transaksi
-        $transaksi = Transaksi::create([
-            'id_user' => Auth::id()
-        ]);
+        $ids = $request->ids;
 
-        Pesanan::where('id_keranjang', $keranjang->id)->update([
-            'id_transaksi' => $transaksi->id,
-            'id_keranjang' => null
-        ]);
+        Pesanan::whereIn('id', $ids)->delete();
+
+        $lenIds = count($ids);
 
         return response()->json([
             'success' => true,
-            'message' => 'Berhasil melakukan pemesanan',
-        ], 200);
-
+            'message' => "Berhasil menghapus $lenIds pesanan dari keranjang"
+        ]);
 
     }
+
 }
