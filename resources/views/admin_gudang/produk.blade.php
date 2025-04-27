@@ -12,9 +12,21 @@
 <div class="card">
     <div class="card-header">
 
-        <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#modal-scanner">
-        <i class="fas fa-plus"></i>
-            Tambah Produk</button>
+        <div class="row">
+            <div class="col-6">
+                <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#modal-scanner">
+                <i class="fas fa-plus"></i> Tambah Produk</button>
+            </div>
+
+            <div class="col-6 d-flex justify-content-end">
+                <button class="btn btn-outline-primary mr-2" type="button" id="btn-show-harga">
+                <i class="fas fa-money"></i>Harga Barang</button>
+                <button class="btn btn-outline-primary mr-2" type="button" id="btn-show-biaya-penyimpanan">
+                <i class="fas fa-money"></i>Biaya Penyimpanan</button>
+                <button class="btn btn-outline-primary" type="button" id="btn-show-biaya-pemesanan">
+                <i class="fas fa-money"></i>Biaya Pemesanan</button>
+            </div>
+        </div>
 
     </div>
     <div class="card-body">
@@ -34,30 +46,14 @@
                         aria-describedby="table_produk_info">
                         <thead>
                             <tr>
-                                <th class="sorting sorting_asc" tabindex="0" aria-controls="table_produk" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Kode Produk</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1">
-                                    Nama Produk</th>
-                                <!-- <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1"> -->
-                                <!--     Harga Beli (Rp) -->
-                                <!-- </th> -->
-                                <!-- <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1"> -->
-                                <!--     Harga Jual (Rp) -->
-                                <!-- </th> -->
-                                <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1">
-                                    Biaya Penyimpanan (Rp)
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1">
-                                    Biaya Pemesanan (Rp)
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1">
-                                    Waktu Tunggu (Hari)
-                                </th>
-                                <!-- <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1"> -->
-                                <!--     Penggunaan Rata-Rata (Hari) -->
-                                <!-- </th> -->
-                                <th class="sorting" tabindex="0" aria-controls="table_produk" rowspan="1" colspan="1">
-                                    Aksi</th>
+
+                                <th>Kode Produk</th>
+                                <th>Nama Produk</th>
+                                <th>Harga Beli (Rp)</th>
+                                <th>Harga Jual (Rp)</th>
+                                <th>Biaya Penyimpanan (Rp)</th>
+                                <th>Biaya Pemesanan (Rp)</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,10 +62,10 @@
                             <tr>
                                 <td> {{ $item->kode_produk }}</td>
                                 <td> {{ $item->nama_produk }}</td>
+                                <td> {{ number_format($item->harga_beli, 0, ',', '.') }}</td>
+                                <td> {{ number_format($item->harga_jual, 0, ',', '.') }}</td>
                                 <td> {{ number_format($item->biaya_penyimpanan, 0, ',', '.') }}</td>
                                 <td> {{ number_format($item->biaya_pemesanan, 0, ',', '.') }}</td>
-                                <td> {{ $item->lead_time }}</td>
-                                <!-- <td> {{ $item->penggunaan_rata_rata }}</td> -->
                                 <td>
                                     <div class="btn-group">
                                         <button class="btn btn-sm btn-info btn-info-produk" data-toggle="modal"
@@ -183,17 +179,7 @@
                                     placeholder="Biaya Pemesanan" min="0">
                             </div>
 
-                            <div class="form-group">
-                                <label for="lead-time">Waktu Tunggu (Hari)</label>
-                                <input type="number" class="form-control" name="lead_time" id="lead-time"
-                                    placeholder="Waktu Tunggu" min="0">
-                            </div>
 
-                            <!-- <div class="form-group"> -->
-                            <!--     <label for="penggunaan-rata-rata">Penggunaan Rata-Rata Harian</label> -->
-                            <!--     <input type="number" class="form-control" name="penggunaan_rata_rata" -->
-                            <!--         id="penggunaan-rata-rata" placeholder="Penggunaan Rata-Rata Harian" min="0"> -->
-                            <!-- </div> -->
 
                             <div class="form-group">
                                 <label for="deskripsi">Deskripsi</label>
@@ -237,7 +223,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="kode-produk">Kode Produk</label>
-                                <input type="text" class="form-control" name="kode_produk" id="kode-produk">
+                                <input type="text" class="form-control" name="kode_produk" id="kode-produk" readonly>
                             </div>
 
                             <div class="form-group">
@@ -246,10 +232,6 @@
                                     placeholder="Nama Produk">
                             </div>
 
-                            <div class="form-group">
-                                <label for="gambar">Gambar</label>
-                                <input type="file" class="form-control" name="gambar" id="gambar">
-                            </div>
 
                             <div class="form-group">
                                 <label for="harga-beli">Harga Beli</label>
@@ -258,10 +240,10 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="harga-jual">Harga Jual</label>
-                                <input type="number" class="form-control" name="harga_jual" id="harga-jual"
-                                    placeholder="Harga Jual" min="0">
+                                <label for="gambar">Gambar</label>
+                                <input type="file" class="form-control" name="gambar" id="gambar">
                             </div>
+
 
 
                         </div>
@@ -278,17 +260,12 @@
                                     placeholder="Biaya Pemesanan" min="0">
                             </div>
 
-                            <div class="form-group">
-                                <label for="lead-time">Waktu Tunggu (Hari)</label>
-                                <input type="number" class="form-control" name="lead_time" id="lead-time"
-                                    placeholder="Waktu Tunggu" min="0">
-                            </div>
 
-                            <!-- <div class="form-group"> -->
-                            <!--     <label for="penggunaan-rata-rata">Penggunaan Rata-Rata Harian</label> -->
-                            <!--     <input type="number" class="form-control" name="penggunaan_rata_rata" -->
-                            <!--         id="penggunaan-rata-rata" placeholder="Penggunaan Rata-Rata Harian" min="0"> -->
-                            <!-- </div> -->
+                            <div class="form-group">
+                                <label for="harga-jual">Harga Jual</label>
+                                <input type="number" class="form-control" name="harga_jual" id="harga-jual"
+                                    placeholder="Harga Jual" min="0">
+                            </div>
 
                             <div class="form-group">
                                 <label for="deskripsi">Deskripsi</label>
@@ -347,11 +324,6 @@
                                 placeholder="Harga Beli" min="0" readonly>
                         </div>
 
-                        <div class="form-group">
-                            <label for="harga-jual">Harga Jual</label>
-                            <input type="number" class="form-control" name="harga_jual" id="harga-jual"
-                                placeholder="Harga Jual" min="0" readonly>
-                        </div>
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
@@ -367,16 +339,11 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="lead-time">Waktu Tunggu (Hari)</label>
-                            <input type="number" class="form-control" name="lead_time" id="lead-time"
-                                placeholder="Waktu Tunggu" min="0" readonly>
+                            <label for="harga-jual">Harga Jual</label>
+                            <input type="number" class="form-control" name="harga_jual" id="harga-jual"
+                                placeholder="Harga Jual" min="0" readonly>
                         </div>
 
-                        <!-- <div class="form-group"> -->
-                        <!--     <label for="penggunaan-rata-rata">Penggunaan Rata-Rata Harian</label> -->
-                        <!--     <input type="number" class="form-control" name="penggunaan_rata_rata" -->
-                        <!--         id="penggunaan-rata-rata" placeholder="Penggunaan Rata-Rata Harian" min="0" readonly> -->
-                        <!-- </div> -->
 
                     </div>
                 </div>
@@ -405,14 +372,51 @@
 @section('custom-script')
 <script>
 
-    $('#table_produk').DataTable({
+    const tableProduk = $('#table_produk').DataTable({
         "paging": true,
-        "lengthChange": false,
+        "lengthChange": true,
         "searching": false,
         "ordering": true,
         "info": true,
         "autoWidth": false,
         "responsive": true,
+    });
+
+    // 4: harga_beli
+    // 5: harga_jual
+    // 4: biaya_penyimpanan
+    // 5: biaya_pemesanan
+
+    const columnsHarga = tableProduk.columns([2, 3]);
+    const columnBiayaPenyimpanan = tableProduk.column(4);
+    const columnBiayaPemesanan = tableProduk.column(5);
+
+    // default biaya_penyimpanan dan biaya_pemesanan hidden
+    columnBiayaPenyimpanan.visible(false);
+    columnBiayaPemesanan.visible(false);
+
+    $('#btn-show-biaya-penyimpanan').click(function() {
+
+        columnBiayaPenyimpanan.visible(true);
+        columnBiayaPemesanan.visible(false);
+        columnsHarga.visible(false);
+
+    });
+
+    $('#btn-show-biaya-pemesanan').click(function() {
+
+        columnBiayaPenyimpanan.visible(false);
+        columnBiayaPemesanan.visible(true);
+        columnsHarga.visible(false);
+
+    });
+
+    $('#btn-show-harga').click(function() {
+
+        columnBiayaPenyimpanan.visible(false);
+        columnBiayaPemesanan.visible(false);
+        columnsHarga.visible(true);
+
     });
 
 </script>
@@ -461,7 +465,7 @@
             formData.append('_method', 'PUT');
 
             $.ajax({
-                url: `{{ route('produk.update', '') }}/${idProduk}`,
+                url: `{{ route('produk.update', ':id') }}`.replace(':id', idProduk),
                 method: 'POST',
                 data: formData,
                 processData: false,
@@ -470,16 +474,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (data) {
-                    Swal.fire({
-                        title: data.message,
-                        icon: "success",
-                    }).then(() => window.location.reload());
+                    showToast(data.message);
                 },
                 error: function (error) {
-                    Swal.fire({
-                        title: 'Produk gagal diperbarui',
-                        icon: "error",
-                    }).then(() => window.location.reload());
+                    showToast('Produk gagal diperbarui', reload=false);
                 }
             });
         });
@@ -549,8 +547,6 @@
                     formUpdateProduk.find('#harga-beli').val(produk.harga_beli);
                     formUpdateProduk.find('#biaya-penyimpanan').val(produk.biaya_penyimpanan);
                     formUpdateProduk.find('#biaya-pemesanan').val(produk.biaya_pemesanan);
-                    formUpdateProduk.find('#lead-time').val(produk.lead_time);
-                    // formUpdateProduk.find('#penggunaan-rata-rata').val(produk.penggunaan_rata_rata);
                     formUpdateProduk.find('#deskripsi').val(produk.deskripsi);
 
                 },
@@ -587,8 +583,6 @@
                     modalInfoProduk.find('#harga-beli').val(produk.harga_beli);
                     modalInfoProduk.find('#biaya-penyimpanan').val(produk.biaya_penyimpanan);
                     modalInfoProduk.find('#biaya-pemesanan').val(produk.biaya_pemesanan);
-                    modalInfoProduk.find('#lead-time').val(produk.lead_time);
-                    // modalInfoProduk.find('#penggunaan-rata-rata').val(produk.penggunaan_rata_rata);
                     modalInfoProduk.find('#deskripsi').val(produk.deskripsi);
 
                 },
