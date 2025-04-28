@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Constants\MetodePembayaran;
+use App\Constants\StatusTransaksi;
+use App\Constants\StatusPembayaran;
 
 class Transaksi extends Model
 {
@@ -12,7 +14,9 @@ class Transaksi extends Model
     protected $guarded = [];
 
     protected $casts =  [
-        'metod_pembayaran' => MetodePembayaran::class
+        'metode_pembayaran' => MetodePembayaran::class,
+        'status' => StatusTransaksi::class,
+        'status_pembayaran' => StatusPembayaran::class,
     ];
 
     public function pesanan() {
