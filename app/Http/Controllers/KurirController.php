@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\StatusTransaksi;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
+use Illuminate\Validation\Rule;
+use App\Constants\StatusPembayaran;
+use App\Constants\MetodePembayaran;
 
 class KurirController extends Controller
 {
@@ -28,8 +32,8 @@ class KurirController extends Controller
         ]);
     }
 
-    public function scanQrcode() {
-        return view('kurir.scan-qrcode', [
+    public function konfirmasiPembayaranPage() {
+        return view('kurir.konfirmasi-pembayaran', [
             'page' => 'Konfirmasi Pembayaran'
         ]);
     }
