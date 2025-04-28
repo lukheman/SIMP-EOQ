@@ -41,17 +41,17 @@
                             <tr>
                                 <td> {{ $item->tanggal }}</td>
                                 <td>
-                                    @if ($item->status === 'pending')
+                                    @if ($item->status->value === 'pending')
                                     <span class="badge bg-secondary">{{ $item->status }}</span>
-                                    @elseif($item->status === 'diproses')
+                                    @elseif($item->status->value === 'diproses')
                                     <span class="badge bg-success">{{ $item->status }}</span>
-                                    @elseif($item->status === 'dikirim')
+                                    @elseif($item->status->value === 'dikirim')
                                     <span class="badge bg-warning">{{ $item->status }}</span>
-                                    @elseif($item->status === 'ditolak')
+                                    @elseif($item->status->value === 'ditolak')
                                     <span class="badge bg-danger">{{ $item->status }}</span>
-                                    @elseif($item->status === 'dibayar')
+                                    @elseif($item->status->value === 'dibayar')
                                     <span class="badge bg-orange">{{ $item->status }}</span>
-                                    @elseif($item->status === 'selesai')
+                                    @elseif($item->status->value === 'selesai')
                                     <span class="badge bg-green">{{ $item->status }}</span>
                                     @endif
                                 </td>
