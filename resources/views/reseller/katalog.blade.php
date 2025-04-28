@@ -125,11 +125,11 @@ $(document).ready(() => {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function (data) {
-                showToast('success', data.message);
+                showToast( data.message);
                 $('#modal-tambah-pesanan').modal('hide');
             },
             error: function (error) {
-                showToast('error', 'Gagal melakukan pembelian');
+                showToast( 'Gagal melakukan pembelian');
             }
         });
     });
