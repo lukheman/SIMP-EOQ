@@ -29,19 +29,12 @@
                         aria-describedby="table_pesanan_info">
                         <thead>
                             <tr>
-                                <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Tanggal
-                                </th>
-                                <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Penerima
-                                </th>
-                                <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Alamat
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Status</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Detail</th>
+                                <th>Tanggal </th>
+                                <th>Penerima </th>
+                                <th>Alamat </th>
+                                <th>Metode Pembayaran</th>
+                                <th>Status</th>
+                                <th>Detail</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,20 +45,23 @@
                                 <td> {{ $item->user->name }}</td>
                                 <td> {{ $item->user->reseller_detail->alamat }}</td>
                                 <td>
-                                    @if ($item->status === 'pending')
+                                    <span class="badge bg-success">{{ $item->metode_pembayaran }}</span>
+                                </td>
+                                <td>
+                                    @if ($item->status === \App\Constants\StatusTransaksi::PENDING)
                                     <span class="badge bg-secondary">{{ $item->status }}</span>
-                                    @elseif($item->status === 'diproses')
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIPROSES)
                                     <span class="badge bg-success">{{ $item->status }}</span>
-                                    @elseif($item->status === 'dikirim')
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIKIRIM)
                                     <span class="badge bg-warning">{{ $item->status }}</span>
-                                    @elseif($item->status === 'ditolak')
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::DITOLAK)
                                     <span class="badge bg-danger">{{ $item->status }}</span>
                                     @endif
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-sm btn-secondary btn-detail-transaksi"
                                         data-id-transaksi="{{ $item->id }}" data-toggle="modal"
-                                        data-target="#modal-detail-transaksi"> 
+                                        data-target="#modal-detail-transaksi">
                                         <i class="fas fa-eye"></i>
                                         Detail</button>
                                 </td>
