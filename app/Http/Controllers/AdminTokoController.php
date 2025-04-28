@@ -12,12 +12,16 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Produk;
 
+use App\Constants\StatusTransaksi;
+
+
+
 class AdminTokoController extends Controller
 {
 
     public function index() {
-        $pesanan = Transaksi::where('status', 'pending')->count();
-        $total_penjualan = Transaksi::where('status', 'selesai')->count();
+        $pesanan = Transaksi::where('status', StatusTransaksi::PENDING)->count();
+        $total_penjualan = Transaksi::where('status', StatusTransaksi::SELESAI)->count();
         $persediaan_barang = Produk::sum('persediaan');
 
         return view('admin_toko.index', [
