@@ -38,32 +38,25 @@ class KurirController extends Controller
         ]);
     }
 
-    public function konfirmasiPembayaran(Request $request) {
+    public function konfirmasiPembayaran(Request $request, $id) {
         $request->validate([
-            'id_transaksi' => 'required|exists:transaksi,id'
+            'status_pembayaran' => ['required', Rule::enum(StatusPembayaran::class)],
         ]);
 
-        $transaksi = Transaksi::with(['user', 'user.reseller_detail'])->findOrFail($request->id_transaksi);
+        $transaksi = Transaksi::with(['user', 'user.reseller_detail'])->findOrFail($id);
 
-        if($transaksi->status === 'dibayar') {
-            $transaksi['total_harga'] = Transaksi::totalHarga($request->id_transaksi);
+        if($transaksi->status === StatusTransaksi::DIKIRIM) {
+            $transaksi->status = StatusTransaksi::DITERIMA;
+            $transaksi->save();
+
+            $transaksi['total_harga'] = $transaksi->totalHarga();
+
             return response()->json([
                 'success' => true,
-                'message' => 'Pembayaran telah dikonfirmasi pada ' . $transaksi->updated_at,
+                'message' => 'Pesanan telah diserahkan ke pembeli',
                 'data' => $transaksi
-            ]);
+            ], 200);
         }
-
-        $transaksi->status = 'dibayar';
-        $transaksi->save();
-
-        $transaksi['total_harga'] = Transaksi::totalHarga($request->id_transaksi);
-        return response()->json([
-            'success' => true,
-            'message' => 'Pembayaran berhasil dikonfimasi',
-            'data' => $transaksi
-        ], 200);
-
 
     }
 
