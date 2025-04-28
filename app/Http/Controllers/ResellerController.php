@@ -10,6 +10,9 @@ use App\Models\Produk;
 use App\Models\Transaksi;
 use Illuminate\Support\Facades\Auth;
 
+use App\Constants\MetodePembayaran;
+use App\Constants\StatusTransaksi;
+
 class ResellerController extends Controller
 {
     public function index() {
@@ -62,13 +65,42 @@ class ResellerController extends Controller
     }
 
 
-    public function pesanan() {
-        $pesanan = Transaksi::where('id_user', Auth::id())->get();
+    public function transaksi(Request $request) {
 
-        return view('reseller.pesanan', [
-            'page' => 'Pesanan',
-            'pesanan' => $pesanan
+        $dibayar = $request->query('dibayar');
+        $pending = $request->query('pending');
+        $diproses = $request->query('diproses');
+        $dikirim = $request->query('dikirim');
+        $selesai = $request->query('selesai');
+
+        $transaksi = Transaksi::where('id_user', Auth::id());
+
+        if($dibayar === '0') {
+
+            $transaksi = $transaksi
+                ->where('metode_pembayaran', MetodePembayaran::TRANSFER)
+                ->where('status', StatusTransaksi::PENDING);
+
+        } else if ($pending === '1') {
+            $transaksi = $transaksi->where('status', StatusTransaksi::PENDING);
+        } else if($diproses === '1') {
+            $transaksi = $transaksi->where('status', StatusTransaksi::DIPROSES);
+        } else if($dikirim === '1') {
+            $transaksi = $transaksi->where('status', StatusTransaksi::DIKIRIM);
+        } else if($selesai === '1') {
+            $transaksi = $transaksi->where('status', StatusTransaksi::SELESAI);
+        } else {
+            /* $transaksi = Transaksi::where('id_user', Auth::id())->get(); */
+        }
+
+        $transaksi = $transaksi->get();
+
+
+        return view('reseller.transaksi', [
+            'page' => 'Transaksi',
+            'transaksi' => $transaksi
         ]);
+
     }
 
     public function pengiriman() {
