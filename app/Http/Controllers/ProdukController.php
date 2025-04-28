@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Produk;
 use Illuminate\Validation\Rule;
 
+use Illuminate\Support\Facades\Storage;
+
 class ProdukController extends Controller
 {
 
@@ -76,19 +78,25 @@ class ProdukController extends Controller
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'biaya_penyimpanan' => 'required|numeric:min:0',
             'biaya_pemesanan' => 'required|numeric:min:0',
-            'lead_time' => 'required|numeric:min:0',
-            'penggunaan_rata_rata' => 'required|numeric:min:0',
             'deskripsi' => 'nullable|string',
         ]);
 
 
         $data = $request->all();
 
+        $produk = Produk::findOrFail($id);
+
         if ($request->hasFile('gambar')) {
+
+            // hapus file lama
+            if($produk->gambar && Storage::disk('public')->exists($produk->gambar)) {
+                Storage::disk('public')->delete($produk->gambar);
+            }
+
+            // simpan file baru
             $data['gambar'] = $request->file('gambar')->store('images', 'public');
         }
 
-        $produk = Produk::findOrFail($id);
         $produk->update($data);
 
         return response()->json([
