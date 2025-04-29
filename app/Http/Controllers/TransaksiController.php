@@ -138,9 +138,12 @@ class TransaksiController extends Controller
     }
 
     private function handleAdminTokoActions(Request $request , Transaksi $transaksi) {
-        if ($request->status === StatusTransaksi::STATUS['diproses']) {
+
+        $status = StatusTransaksi::from($request->status);
+
+        if ($status === StatusTransaksi::DIPROSES) {
             return $this->prosesPesanan($transaksi);
-        } elseif ($request->status === StatusTransaksi::STATUS['dikirim']) {
+        } elseif ($status === StatusTransaksi::DIKIRIM) {
             return $this->kirimPesanan($transaksi);
         }
 
@@ -164,7 +167,7 @@ class TransaksiController extends Controller
 
         }
 
-        $transaksi->status = StatusTransaksi::STATUS['diproses'];
+        $transaksi->status = StatusTransaksi::DIPROSES;
         $transaksi->save();
 
         return response()->json([
@@ -174,33 +177,15 @@ class TransaksiController extends Controller
     }
 
     private function kirimPesanan(Transaksi $transaksi) {
-        if ($transaksi->status !== StatusTransaksi::STATUS['diproses']) {
+        if ($transaksi->status !== StatusTransaksi::DIPROSES) {
             return response()->json([
                 'success' => false,
                 'message' => 'Pesanan belum diproses',
             ], 200);
         }
 
-        $pesanan = Pesanan::with('produk')->where('id_transaksi', $transaksi->id)->get();
 
-        foreach ($pesanan as $item) {
-            $produk = Produk::find($item->produk->id);
-
-            // kurangi persediaan produk
-            $produk->persediaan -= $item->jumlah;
-            $produk->save();
-
-            // catat log mutasi
-            Mutasi::create([
-                'id_produk' => $item->id_produk,
-                'jumlah' => $item->jumlah,
-                'jenis' => 'keluar',
-                'keterangan' => 'Pengiriman pesanan'
-            ]);
-
-        }
-
-        $transaksi->status = StatusTransaksi::STATUS['dikirim'];
+        $transaksi->status = StatusTransaksi::DIKIRIM;
         $transaksi->save();
 
         return response()->json([
@@ -211,8 +196,9 @@ class TransaksiController extends Controller
 
     private function handleKurirActions(Request $request, Transaksi $transaksi) {
         $transaksi = Transaksi::with(['user', 'user.reseller_detail'])->findOrFail($transaksi->id);
+        /* FIX: this */
 
-        if ($transaksi->status === StatusTransaksi::STATUS['dikirim'] && $request->status === StatusTransaksi::STATUS['dibayar']  ) {
+        if ($transaksi->status === StatusTransaksi::DIKIRIM && $request->status === StatusTransaksi::STATUS['dibayar']  )           {
 
 
             $transaksi->status = StatusTransaksi::STATUS['dibayar'];
@@ -235,8 +221,8 @@ class TransaksiController extends Controller
     }
     private function handleResellerActions(Request $request, Transaksi $transaksi) {
 
-        if ($transaksi->status === StatusTransaksi::STATUS['dibayar'] && $request->status === StatusTransaksi::STATUS['selesai']) {
-            $transaksi->status = StatusTransaksi::STATUS['selesai'];
+        if (StatusTransaksi::from($request->status) === StatusTransaksi::DITERIMA) {
+            $transaksi->status = StatusTransaksi::SELESAI;
             $transaksi->save();
 
         }
