@@ -132,4 +132,22 @@ class ProdukController extends Controller
             'message' => 'Gagal mendapatkan produk'
         ], 500);
     }
+
+    public function kodeProduk($code) {
+        $produk = Produk::where('kode_produk', $code)->first();
+
+        if($produk) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Produk berhasil didapatkan',
+                'data' => $produk
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal mendapatkan produk'
+        ], 404);
+
+    }
 }
