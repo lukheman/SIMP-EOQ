@@ -67,14 +67,12 @@
 
                                 <td>
                                     <button type="button" class="btn btn-sm btn-outline-success btn-pesanan-diterima"
-                                        data-id-transaksi="{{ $item->id }}" {{ $item->status
-                                        === 'dibayar' ? '' : 'disabled' }}>
-                                        <i class="fas fa-check"></i>
-                                        Pesanan diterima</button>
+                                        data-id-transaksi="{{ $item->id }}" {{ $item->status === 'dibayar' ? '' : 'disabled' }}>
+                                        <i class="fas fa-check"></i> Pesanan diterima</button>
                                 </td>
 
                                 <td>
-                                    @if ($item->metode_pembayaran === 'transfer')
+                                    @if ($item->metode_pembayaran === \App\Constants\MetodePembayaran::TRANSFER)
 
                                         @if (isset($item->bukti_pembayaran))
 
