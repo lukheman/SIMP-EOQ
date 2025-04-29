@@ -32,8 +32,8 @@
                                 <th>Tanggal </th>
                                 <th>Penerima </th>
                                 <th>Alamat </th>
-                                <th>Metode Pembayaran</th>
-                                <th>Status</th>
+                                <th>Pembayaran</th>
+                                <th>Status Pengiriman</th>
                                 <th>Detail</th>
                             </tr>
                         </thead>
@@ -46,6 +46,14 @@
                                 <td> {{ $item->user->reseller_detail->alamat }}</td>
                                 <td>
                                     <span class="badge bg-success">{{ $item->metode_pembayaran }}</span>
+
+                                    @if ($item->status_pembayaran === \App\Constants\StatusPembayaran::LUNAS)
+                                        <span class="badge bg-success">{{ $item->status_pembayaran->label() }}</span>
+                                    @elseif($item->status_pembayaran === \App\Constants\StatusPembayaran::SETENGAHBAYAR)
+                                        <span class="badge bg-warning">{{ $item->status_pembayaran->label() }}</span>
+                                    @elseif($item->status_pembayaran === \App\Constants\StatusPembayaran::BELUMBAYAR)
+                                        <span class="badge bg-danger">{{ $item->status_pembayaran->label() }}</span>
+                                    @endif
                                 </td>
                                 <td>
                                     @if ($item->status === \App\Constants\StatusTransaksi::PENDING)
