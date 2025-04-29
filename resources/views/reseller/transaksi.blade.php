@@ -14,9 +14,11 @@
             <div class="row">
                 <div class="col-sm-12 col-md-6">
 
-
-                </div>
-                <div class="col-sm-12 col-md-6">
+                    <a href="{{ route('reseller.transaksi', ['belumbayar' => 0] )}}"  class="btn btn-outline-primary {{ request()->has('belumbayar') || count(request()->all()) === 0 ? 'active' : ''}}" id="btn-belum-bayar">Belum Bayar</a>
+                    <a href="{{ route('reseller.transaksi', ['pending' => 1] )}}"     class="btn btn-outline-primary {{ request()->has('pending') ? 'active' : ''}}" id="btn-pending">Pending</a>
+                    <a href="{{ route('reseller.transaksi', ['diproses' => 1]) }}"    class="btn btn-outline-primary {{ request()->has('diproses') ? 'active' : ''}}" id="btn-diproses">Diproses</a>
+                    <a href="{{ route('reseller.transaksi', ['dikirim' => 1])}}"      class="btn btn-outline-primary {{ request()->has('dikirim') ? 'active' : ''}}" id="btn-dikirim">Dikirim</a>
+                    <a href="{{ route('reseller.transaksi', ['selesai' => 1])}}"      class="btn btn-outline-primary {{ request()->has('selesai') ? 'active' : ''}}" id="btn-selesai">Selesai</a>
 
                 </div>
             </div>
