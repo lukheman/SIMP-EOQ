@@ -7,15 +7,15 @@
 
 <li class="nav-item">
     <a href="{{ route('kurir.pesanan') }}" class="nav-link {{ $page === 'Pesanan' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-clipboard-list"></i> 
-       <p>Pesanan</p> 
+        <i class="nav-icon fas fa-clipboard-list"></i>
+       <p>Pesanan</p>
     </a>
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('kurir.scan-qrcode') }}"
+    <a href="{{ route('kurir.konfirmasi-pembayaran-page') }}"
         class="nav-link {{ $page === 'Konfirmasi Pembayaran' ? 'active' : '' }}">
         <i class="nav-icon fas fa-qrcode"></i>
-       <p>Konfirmasi Pembayaran</p> 
+       <p>Konfirmasi Pembayaran</p>
     </a>
 </li>
