@@ -34,8 +34,17 @@ class PesananController extends Controller
 
         $keranjang = Keranjang::where('id_user', $id_user)->first();
 
-        // kalkulasi total harga barang yang dipesan
         $produk = Produk::find($request->id_produk);
+
+        // cek persediaan produk
+        if(!$produk->isPersediaanMencukupi($request->jumlah)) {
+            return response()->json([
+                'success' => false,
+                'message' => $produk->nama_produk . ' tidak cukup di persediaan'
+            ], 200);
+        }
+
+        // kalkulasi total harga barang yang dipesan
         $total_harga = $produk->harga_jual * $request->jumlah;
 
         // buat pesanan
