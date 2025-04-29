@@ -179,10 +179,6 @@
                 </button>
             </div>
             <div class="modal-body">
-                <!-- <div class="callout callout-info"> -->
-                <!--     <h5><i class="fas fa-info"></i> Note:</h5> -->
-                <!--     Produk dengan stok tidak mencukupi akan ditandai dengan warna merah. -->
-                <!-- </div> -->
                 <table class="table table-bordered" id="table-detail-transaksi">
                     <thead>
                         <tr>
