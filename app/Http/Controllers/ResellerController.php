@@ -67,7 +67,7 @@ class ResellerController extends Controller
 
     public function transaksi(Request $request) {
 
-        $dibayar = $request->query('dibayar');
+        $belumbayar = $request->query('belumbayar');
         $pending = $request->query('pending');
         $diproses = $request->query('diproses');
         $dikirim = $request->query('dikirim');
@@ -75,7 +75,7 @@ class ResellerController extends Controller
 
         $transaksi = Transaksi::where('id_user', Auth::id());
 
-        if($dibayar === '0') {
+        if($belumbayar === '0') {
 
             $transaksi = $transaksi
                 ->where('metode_pembayaran', MetodePembayaran::TRANSFER)
