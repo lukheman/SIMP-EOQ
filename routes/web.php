@@ -80,27 +80,31 @@ Route::middleware(['role:kurir'])->group(function() {
         Route::get('kurir', 'index')->name('kurir.index');
         Route::get('kurir/dashboard', 'index')->name('kurir.dashboard');
         Route::get('kurir/pesanan', 'pesanan')->name('kurir.pesanan');
-        Route::get('kurir/konfirmasiPembayaran', 'scanQrcode')->name('kurir.scan-qrcode');
-        Route::post('kurir/konfirmasiPembayaran', 'konfirmasiPembayaran')->name('kurir.konfirmasi-pembayaran');
+        Route::get('kurir/konfirmasi-pembayaran', 'konfirmasiPembayaranPage')->name('kurir.konfirmasi-pembayaran-page');
+        Route::post('kurir/konfirmasi-pembayaran/{id}', 'konfirmasiPembayaran')->name('kurir.konfirmasi-pembayaran');
     });
 });
 
+Route::resource('produk', ProdukController::class)->only(['store', 'update', 'destroy', 'show']);
 Route::controller(ProdukController::class)->group(function() {
     Route::get('produk/all', 'all')->name('produk.all');
+    Route::get('produk/kode-produk/{code}', 'kodeProduk')->name('produk.kode-produk');
 });
 
-Route::resource('produk', ProdukController::class)->only(['store', 'update', 'destroy', 'show']);
 Route::resource('pesanan', PesananController::class)->only(['store', 'update', 'destroy', 'show']);
 Route::controller(PesananController::class)->group(function() {
     Route::post('pesanan/checkout', 'checkout')->name('pesanan.checkout');
+    Route::post('pesanan/destroy-many', 'destroyMany')->name('pesanan.destroy-many');
 });
 
 Route::resource('persediaan', PersediaanController::class)->only(['store', 'update', 'destroy', 'show']);
 
-Route::resource('transaksi', TransaksiController::class)->only(['store', 'update', 'destroy', 'show']);
+Route::resource('transaksi', TransaksiController::class)->only(['index', 'store', 'update', 'destroy', 'show']);
 
 Route::controller(TransaksiController::class)->group(function() {
     Route::post('transaksi/detail', 'detail')->name('transaksi.detail');
+    Route::post('transaksi/bukti-pembayaran/{id}', 'buktiPembayaran')->name('transaksi.bukti-pembayaran');
+    Route::post('transaksi/update-status-pembayaran/{id}', 'updateStatusPembayaran')->name('transaksi.update-status-pembayaran');
 });
 
 Route::resource('mutasi', MutasiController::class)->only(['store', 'update', 'destroy', 'show',]);
