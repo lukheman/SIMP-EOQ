@@ -99,7 +99,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- <div class="float-right d-none d-sm-inline"> -->
             <!--     Anything you want -->
             <!-- </div> -->
-            <!-- <!-- Default to the left --> 
+            <!-- <!-- Default to the left -->
             <!-- <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights -->
             <!-- reserved. -->
         </footer>
@@ -144,22 +144,58 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <script>
 
-        const showToast = (icon, title) => {
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR'}).format(angka);
+        }
+
+        function swalToast(title, icon = 'success') {
+
             Swal.fire({
                 toast: true,
-                position: 'top-end', // Posisi toast
-                icon: icon, // Jenis ikon: success, error, warning, info, question
+                position: 'top-end',
+                icon: icon,
                 title: title,
                 showConfirmButton: false,
-                timer: 3000, // Durasi toast dalam milidetik
+                timer: 3000,
                 timerProgressBar: true,
-                // animation: false, // Nonaktifkan animasi
                 didOpen: (toast) => {
                     toast.addEventListener('mouseenter', Swal.stopTimer);
                     toast.addEventListener('mouseleave', Swal.resumeTimer);
                 }
             });
+
+
+        }
+
+        const showToast = (title, icon = 'success', reload=true) => {
+
+            // Reload halaman
+            if(reload) {
+                // Simpan status bahwa halaman akan di-reload
+                sessionStorage.setItem('reload', 'true');
+                sessionStorage.setItem('icon', icon);
+                sessionStorage.setItem('title', title);
+
+                window.location.reload();
+            } else  {
+
+                swalToast(title, icon);
+
+            }
         };
+
+        // Setelah halaman dimuat ulang, periksa apakah reload terjadi
+        $(window).on('load', function() {
+            if (sessionStorage.getItem('reload') === 'true') {
+                title = sessionStorage.getItem('title');
+                icon = sessionStorage.getItem('icon');
+                // Tampilkan toast
+                swalToast(title, icon);
+
+                // Hapus item setelah toast ditampilkan
+                sessionStorage.removeItem('reload');
+            }
+        });
         </script>
 
     @yield('custom-script')
