@@ -47,6 +47,7 @@ class KurirController extends Controller
 
         if($transaksi->status === StatusTransaksi::DIKIRIM) {
             $transaksi->status = StatusTransaksi::DITERIMA;
+            $transaksi->status_pembayaran = StatusPembayaran::LUNAS;
             $transaksi->save();
 
             $transaksi['total_harga'] = $transaksi->totalHarga();
