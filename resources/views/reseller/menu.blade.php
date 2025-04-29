@@ -20,8 +20,8 @@
 </li>
 
 <li class="nav-item">
-    <a href="{{ route('reseller.pesanan')}}" class="nav-link {{ $page === 'Pesanan' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-clipboard-list"></i> 
-        <p>Pesanan</p>
+    <a href="{{ route('reseller.transaksi')}}" class="nav-link {{ $page === 'Transaksi' ? 'active' : '' }}">
+        <i class="nav-icon fas fa-clipboard-list"></i>
+        <p>Transaksi Anda</p>
     </a>
 </li>
