@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Constants\Role;
 use App\Constants\MetodePembayaran;
+use App\Constants\StatusPembayaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,32 +24,32 @@ class TransaksiController extends Controller
     public function store(Request $request) {
         $request->validate([
             'metode_pembayaran' => ['required', Rule::enum(MetodePembayaran::class)],
-            'pesanan_dipilih' => 'required'
+            'pesanan_dipilih' => 'required|string'  // Menambahkan validasi untuk memastikan ini string
         ]);
 
         $pesanan_dipilih = $request->input('pesanan_dipilih');
         $pesanan_dipilih = explode(',', $pesanan_dipilih);
 
-        // FIX: fix ketika keranjang belum ada
         $keranjang = Keranjang::where('id_user', Auth::id())->first();
 
-        // buat transaksi
         $transaksi = Transaksi::create([
             'id_user' => Auth::id(),
-            'metode_pembayaran' => $request->metode_pembayaran
+            'metode_pembayaran' => $request->metode_pembayaran,
         ]);
 
-        Pesanan::where('id_keranjang', $keranjang->id)->update([
-            'id_transaksi' => $transaksi->id,
-            'id_keranjang' => null
-        ]);
+        // Update pesanan terkait
+        Pesanan::whereIn('id', $pesanan_dipilih)
+            ->where('id_keranjang', $keranjang->id)
+            ->update([
+                'id_transaksi' => $transaksi->id,
+                'id_keranjang' => null
+            ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Berhasil melakukan pemesanan barang',
+            'transaksi' => $transaksi
         ], 200);
-
-
     }
 
     public function buktiPembayaran(Request $request, $id) {
