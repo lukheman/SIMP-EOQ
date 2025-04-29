@@ -88,9 +88,14 @@ class ResellerController extends Controller
         } else if($dikirim === '1') {
             $transaksi = $transaksi->where('status', StatusTransaksi::DIKIRIM);
         } else if($selesai === '1') {
-            $transaksi = $transaksi->where('status', StatusTransaksi::SELESAI);
+            $transaksi = $transaksi->whereIn('status', [
+                StatusTransaksi::DITERIMA,
+                StatusTransaksi::SELESAI,
+            ]);
         } else {
-            /* $transaksi = Transaksi::where('id_user', Auth::id())->get(); */
+            $transaksi = $transaksi
+                ->where('metode_pembayaran', MetodePembayaran::TRANSFER)
+                ->where('status', StatusTransaksi::PENDING);
         }
 
         $transaksi = $transaksi->get();
