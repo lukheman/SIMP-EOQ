@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->foreignId('id_transaksi')->nullable()->constrained('transaksi')->onDelete('cascade');
             $table->foreignId('id_keranjang')->nullable()->constrained('keranjang')->onDelete('cascade');
-            $table->decimal('total_harga', 10, 2);
+            $table->decimal('total_harga', 12, 2);
             $table->integer('jumlah')->default(1);
             $table->timestamps();
         });
