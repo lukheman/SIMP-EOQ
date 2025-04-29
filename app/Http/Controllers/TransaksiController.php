@@ -20,10 +20,6 @@ use Illuminate\Validation\Rule;
 class TransaksiController extends Controller
 {
 
-    public function get() {
-        Transaksi::get();
-    }
-
     public function store(Request $request) {
         $request->validate([
             'metode_pembayaran' => ['required', Rule::enum(MetodePembayaran::class)],
