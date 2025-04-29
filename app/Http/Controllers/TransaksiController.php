@@ -84,6 +84,41 @@ class TransaksiController extends Controller
 
     }
 
+    public function updateStatusPembayaran(Request $request, $id) {
+
+        $request->validate([
+            'status_pembayaran' => ['required', Rule::enum(StatusPembayaran::class)],
+        ]);
+
+        $transaksi = Transaksi::findOrFail($id);
+
+        if (Auth::user()->role === Role::ROLE['admin_toko']) {
+            if(StatusPembayaran::from($request->status_pembayaran) === StatusPembayaran::SETENGAHBAYAR) {
+                $transaksi->status_pembayaran = StatusPembayaran::SETENGAHBAYAR;
+                $transaksi->save();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Status pembayaran berhasil diubah menjadi setengah bayar',
+                ], 200);
+            } else if(StatusPembayaran::from($request->status_pembayaran) === StatusPembayaran::LUNAS) {
+                $transaksi->status_pembayaran = StatusPembayaran::LUNAS;
+                $transaksi->save();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Status pembayaran berhasil diubah menjadi lunas',
+                ], 200);
+            }
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Aksi tidak valid untuk peran Anda.',
+        ], 403);
+
+    }
+
 
     public function update(Request $request, $id) {
         $data = $request->validate([
