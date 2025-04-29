@@ -5,6 +5,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
+use App\Constants\StatusTransaksi;
+use App\Constants\MetodePembayaran;
+use App\Constants\StatusPembayaran;
+
 return new class extends Migration
 {
     /**
@@ -16,7 +20,10 @@ return new class extends Migration
         Schema::create('transaksi', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['pending', 'diproses', 'dikirim', 'ditolak', 'selesai', 'batal', 'dibayar'])->default('pending'); // Status pesanan
+            $table->enum('status', StatusTransaksi::values())->default('pending'); // Status pesanan
+            $table->enum('status_pembayaran', StatusPembayaran::values())->default('belum_bayar');
+            $table->enum('metode_pembayaran', MetodePembayaran::values());
+            $table->string('bukti_pembayaran')->nullable();
             $table->date('tanggal')->default(now()->toDateString());
             $table->timestamps();
         });
