@@ -21,7 +21,7 @@ Route::middleware(['role:reseller'])->group(function() {
         Route::get('reseller/dashboard', 'index')->name('reseller.dashboard');
         Route::get('reseller/katalog', 'katalog')->name('reseller.katalog');
         Route::get('reseller/keranjang', 'keranjang')->name('reseller.keranjang');
-        Route::get('reseller/pesanan', 'pesanan')->name('reseller.pesanan');
+        Route::get('reseller/transaksi', 'transaksi')->name('reseller.transaksi');
         Route::get('reseller/pengiriman', 'pengiriman')->name('reseller.pengiriman');
 
     });
@@ -56,6 +56,8 @@ Route::middleware(['role:admin_gudang'])->group(function() {
         Route::get('admingudang/laporan-barang-masuk', 'laporanBarangMasuk')->name('admingudang.laporan-barang-masuk');
 
         Route::get('admingudang/laporan-penjualan', 'laporanPenjualan')->name('admingudang.laporan-penjualan');
+
+        Route::get('admingudang/scan-barang-masuk', 'scanBarangMasuk')->name('admingudang.scan-barang-masuk');
     });
 });
 
