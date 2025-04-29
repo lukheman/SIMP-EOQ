@@ -12,9 +12,6 @@
 <div class="card">
     <div class="card-header">
 
-        <!-- <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-add-persediaan" -->
-        <!--     id="btn-add-persediaan"> Tambah Persediaan</button> -->
-
     </div>
     <div class="card-body">
         <div id="table_pesanan_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -32,20 +29,15 @@
                         aria-describedby="table_pesanan_info">
                         <thead>
                             <tr>
-                                <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Tanggal
-                                </th>
-                                <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Pemesan
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Status</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Info</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Nota</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Ubah Status</th>
+                                <th>Tanggal </th>
+                                <th>Pemesan </th>
+                                <th>Info</th>
+                                <th>Nota</th>
+                                <th>Pembayaran</th>
+                                <th>Ubah Status Pembayaran</th>
+                                <th>Bukti Pembayaran</th>
+                                <th>Status</th>
+                                <th>Ubah Status Pengiriman</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -54,21 +46,6 @@
                             <tr>
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->user->name }}</td>
-                                <td>
-                                    @if ($item->status === 'pending')
-                                    <span class="badge bg-secondary">{{ $item->status }}</span>
-                                    @elseif($item->status === 'diproses')
-                                    <span class="badge bg-success">{{ $item->status }}</span>
-                                    @elseif($item->status === 'dikirim')
-                                    <span class="badge bg-warning">{{ $item->status }}</span>
-                                    @elseif($item->status === 'ditolak')
-                                    <span class="badge bg-danger">{{ $item->status }}</span>
-                                    @elseif($item->status === 'dibayar')
-                                    <span class="badge bg-orange">{{ $item->status }}</span>
-                                    @elseif($item->status === 'selesai')
-                                    <span class="badge bg-green">{{ $item->status }}</span>
-                                    @endif
-                                </td>
                                 <td>
                                     <button type="button" class="btn btn-sm btn-secondary btn-detail-transaksi"
                                         data-id-transaksi="{{ $item->id }}" data-toggle="modal"
@@ -81,23 +58,69 @@
                                     <form action="{{ route('admintoko.nota') }}" method="post">
                                         @csrf
                                         <input type="hidden" name="id_transaksi" value="{{ $item->id }}">
-                                        <button type="submit" class="btn btn-sm btn-danger"> 
+                                        <button type="submit" class="btn btn-sm btn-danger">
                                         <i class="nav-icon fas fa-print"></i>
                                         Cetak</button>
                                     </form>
 
                                 </td>
                                 <td>
+                                    <span class="badge bg-success">{{ $item->metode_pembayaran }}</span>
+
+                                    @if ($item->status_pembayaran === \App\Constants\StatusPembayaran::LUNAS)
+                                        <span class="badge bg-success">{{ $item->status_pembayaran->label() }}</span>
+                                    @elseif($item->status_pembayaran === \App\Constants\StatusPembayaran::SETENGAHBAYAR)
+                                        <span class="badge bg-warning">{{ $item->status_pembayaran->label() }}</span>
+                                    @elseif($item->status_pembayaran === \App\Constants\StatusPembayaran::BELUMBAYAR)
+                                        <span class="badge bg-danger">{{ $item->status_pembayaran->label() }}</span>
+                                    @endif
+                                </td>
+                                <td>
+
+                                    <button class="btn btn-sm btn-success btn-status-pembayaran-lunas" data-id-transaksi="{{ $item->id }}" {{ $item->metode_pembayaran === \App\Constants\MetodePembayaran::COD ? 'disabled' : ''}} >
+                                        <i class="fas fa-money-check"></i> Lunas</button>
+                                    <button class="btn btn-sm btn-warning btn-status-pembayaran-setengah-bayar" data-id-transaksi="{{ $item->id }}" {{ $item->metode_pembayaran === \App\Constants\MetodePembayaran::COD ? 'disabled' : ''}}>
+                                        <i class="fas fa-money-check"></i> Setengah Bayar</button>
+                                </td>
+
+                                <td>
+
+                                    @if ($item->metode_pembayaran === \App\Constants\MetodePembayaran::TRANSFER)
+
+                                        @if (isset($item->bukti_pembayaran))
+
+                                            <button type="button" class="btn btn-sm btn-primary btn-lihat-bukti-pembayaran" data-id-transaksi="{{ $item->id }}" data-bukti-pembayaran="{{ $item->bukti_pembayaran }}" data-toggle="modal" data-target="#modal-lihat-bukti-pembayaran">
+                                                <i class="fa fa-eye"></i> Lihat Bukti Pembayaran </button>
+                                        @else
+
+                                            <button type="button" class="btn btn-sm btn-primary btn-lihat-bukti-pembayaran disabled">
+                                            <i class="fa fa-eye"></i> Bukti Pembayaran Belum Ada </button>
+                                        @endif
+                                    @endif
+
+                                </td>
+                                <td>
+                                    @if ($item->status === \App\Constants\StatusTransaksi::PENDING)
+                                    <span class="badge bg-secondary">{{ $item->status }}</span>
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIPROSES)
+                                    <span class="badge bg-success">{{ $item->status }}</span>
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIKIRIM)
+                                    <span class="badge bg-warning">{{ $item->status }}</span>
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIKIRIM)
+                                    <span class="badge bg-orange">{{ $item->status }}</span>
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::SELESAI)
+                                    <span class="badge bg-green">{{ $item->status }}</span>
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::DITERIMA)
+                                    <span class="badge bg-primary">{{ $item->status }}</span>
+                                    @endif
+                                </td>
+                                <td>
                                     <button class="btn btn-sm btn-success btn-setujui-pesanan"
-                                        data-id-transaksi="{{ $item->id }}" {{ $item->status !== 'pending' ? 'disabled'
-                                        : ''}} > 
-                                        <i class="nav-icon fas fa-check"></i>
-                                        Terima</button>
+                                        data-id-transaksi="{{ $item->id }}" {{ $item->status !== \App\Constants\StatusTransaksi::PENDING ? 'disabled' : ''}} {{ $item->metode_pembayaran === \App\Constants\MetodePembayaran::TRANSFER && $item->status_pembayaran === \App\Constants\StatusPembayaran::BELUMBAYAR ? 'disabled' : ''}} >
+                                        <i class="nav-icon fas fa-check"></i> Terima</button>
                                     <button class="btn btn-sm btn-warning btn-kirim-pesanan"
-                                        data-id-transaksi="{{ $item->id }}" {{ $item->status !== 'diproses' ? 'disabled'
-                                        : ''}}> 
-                                        <i class="nav-icon fas fa-truck"></i>
-                                        Dikirim</button>
+                                        data-id-transaksi="{{ $item->id }}" {{ $item->status !== \App\Constants\StatusTransaksi::DIPROSES ? 'disabled' : ''}}>
+                                        <i class="nav-icon fas fa-truck"></i> Dikirim</button>
                                 </td>
                             </tr>
                             @endforeach
@@ -123,6 +146,27 @@
     </div>
 </div>
 
+<!-- modal-lihat-bukti-pembayaran -->
+<div class="modal fade show" id="modal-lihat-bukti-pembayaran" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Bukti Pembayaran</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+
+                <img src="" alt="" id="img-bukti-pembayaran" class="img-fluid">
+
+            </div>
+            <div class="modal-footer justify-content-between">
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!-- modal-update-persediaan - modal untuk menampilkan form tambah data produk -->
 <div class="modal fade show" id="modal-detail-transaksi" style="display: none;" aria-modal="true" role="dialog">
@@ -135,10 +179,10 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="callout callout-info">
-                    <h5><i class="fas fa-info"></i> Note:</h5>
-                    Produk dengan stok tidak mencukupi akan ditandai dengan warna merah.
-                </div>
+                <!-- <div class="callout callout-info"> -->
+                <!--     <h5><i class="fas fa-info"></i> Note:</h5> -->
+                <!--     Produk dengan stok tidak mencukupi akan ditandai dengan warna merah. -->
+                <!-- </div> -->
                 <table class="table table-bordered" id="table-detail-transaksi">
                     <thead>
                         <tr>
@@ -177,11 +221,7 @@
                 },
                 data: {'status': status},
                 success: function (data) {
-                    Swal.fire({
-                        title: data.success ? successMessage : 'Gagal memproses pesanan',
-                        icon: data.success ? 'success' : 'error',
-                        text: data.message,
-                    }).then(() => window.location.reload());
+                    showToast(data.success ? successMessage : data.message, icon = data.success ? 'success' : 'warning', reload=false);
                 },
                 error: function (error) {
                     console.log(error);
@@ -194,26 +234,48 @@
             });
         }
 
+        function updateStatusPembayaran(idTransaksi, statusPembayaran, successMessage) {
+            $.ajax({
+                url: `{{ route('transaksi.update-status-pembayaran', ':id')}}`.replace(':id', idTransaksi),
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {'status_pembayaran': statusPembayaran},
+                success: function (data) {
+                    console.log(data);
+                    showToast(data.success ? successMessage : 'Gagal mengubah status pembayaran', icon = data.success ? 'success' : 'error');
+                },
+                error: function (error) {
+                    console.log(error);
+                    Swal.fire({
+                        title: 'Terjadi kesalahan',
+                        icon: 'error',
+                        text: 'Silakan coba lagi atau hubungi administrator.',
+                    });
+                }
+            });
+        }
+
+        $('.btn-status-pembayaran-lunas').click(function () {
+            let idTransaksi = $(this).data('id-transaksi');
+            updateStatusPembayaran(idTransaksi, '{{ \App\Constants\StatusPembayaran::LUNAS }}', 'Status pembayaran berhasil diubah menjadi lunas');
+        });
+
+        $('.btn-status-pembayaran-setengah-bayar').click(function () {
+            let idTransaksi = $(this).data('id-transaksi');
+            updateStatusPembayaran(idTransaksi, '{{ \App\Constants\StatusPembayaran::SETENGAHBAYAR }}', 'Status pembayaran berhasil diubah menjadi setengah bayar');
+        });
 
 
         $('.btn-setujui-pesanan').click(function () {
             let idTransaksi = $(this).data('id-transaksi');
-
-            // if (!checkStockBeforeApproval(idTransaksi)) {
-            //     Swal.fire({
-            //         title: 'Stok Barang Kurang',
-            //         icon: 'warning',
-            //         text: 'Tidak dapat menyetujui pesanan karena stok barang tidak mencukupi.',
-            //     });
-            //     return;
-            // }
-
             updateTransactionStatus(idTransaksi, 'diproses', 'Pesanan berhasil disetujui');
         });
 
         $('.btn-kirim-pesanan').click(function () {
             let idTransaksi = $(this).data('id-transaksi');
-            updateTransactionStatus(idTransaksi, 'dikirim', 'Pesanan berhasil dikirim');
+            updateTransactionStatus(idTransaksi, 'dikirim', 'Pesanan diserahkan ke kurir');
         });
 
         $('.btn-tolak-pesanan').click(function () {
@@ -239,14 +301,19 @@
 
                         $("#table-detail-transaksi tbody").empty();
                         data.data.forEach((item, index) => {
+
+                            const isPending = data.data.status === '{{ \App\Constants\StatusTransaksi::PENDING }}';
+                            const rowClass = isPending && !item.cukup ? 'text-danger' : '';
+
                             let newRow = `
-                                <tr class="${item.cukup ? '' : 'text-danger'}">
+                                <tr class="${rowClass}">
                                     <td>${index + 1}</td>
                                     <td>${item.produk.nama_produk}</td>
                                     <td>${item.jumlah}</td>
                                     <td>${formatRupiah(item.produk.harga_jual)}</td>
                                     <td>${formatRupiah(item.total_harga)}</td>
                                 </tr>`;
+
                             $("#table-detail-transaksi tbody").append(newRow);
                         });
                     }
@@ -280,6 +347,17 @@
 
         });
 
+        $('.btn-lihat-bukti-pembayaran').click(function() {
+
+            const idTransaksi = $(this).data('id-transaksi');
+            $('#id-transaksi').val(idTransaksi);
+
+            const buktiPembayaran = $(this).data('bukti-pembayaran');
+            const baseUrl = "{{ asset('storage') }}";
+            $('#img-bukti-pembayaran').attr('src', `${baseUrl}/${buktiPembayaran}`);
+
+        });
+
 
     });
 </script>
@@ -289,7 +367,7 @@
 
         $('#table_pesanan').DataTable({
             "paging": true,
-            "lengthChange": false,
+            "lengthChange": true,
             "searching": false,
             "ordering": true,
             "info": true,
