@@ -98,8 +98,7 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">
 
-                        <i class="nav-icon fas fa-cart-plus"></i>
-                        Tambah Ke Keranjang</button>
+                        <i class="nav-icon fas fa-cart-plus"></i> Tambah Ke Keranjang</button>
                 </div>
             </form>
         </div>
@@ -125,11 +124,15 @@ $(document).ready(() => {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function (data) {
-                showToast( data.message);
+                if(data.success) {
+                    showToast(data.message);
+                } else {
+                    showToast(data.message, icon='warning');
+                }
                 $('#modal-tambah-pesanan').modal('hide');
             },
             error: function (error) {
-                showToast( 'Gagal melakukan pembelian');
+                showToast( 'Gagal melakukan pembelian', icon='error', reload=false);
             }
         });
     });
