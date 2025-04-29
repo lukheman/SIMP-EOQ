@@ -158,12 +158,27 @@ class TransaksiController extends Controller
         $pesanan = Pesanan::with('produk')->where('id_transaksi', $transaksi->id)->get();
 
         foreach ($pesanan as $item) {
-            if (!Produk::cekPersediaanProduk($item->jumlah, $item->id_produk)) {
+
+            $produk = Produk::find($item->produk->id);
+
+            if(!$produk->isPersediaanMencukupi($item->jumlah)) {
                 return response()->json([
                     'success' => false,
                     'message' => "Persediaan {$item->produk->nama_produk} tidak mencukupi",
                 ], 200);
             }
+
+            // kurangi persediaan produk
+            $produk->persediaan -= $item->jumlah;
+            $produk->save();
+
+            // catat log mutasi
+            Mutasi::create([
+                'id_produk' => $produk->id,
+                'jumlah' => $item->jumlah,
+                'jenis' => 'keluar',
+                'keterangan' => 'Pengiriman pesanan'
+            ]);
 
         }
 
