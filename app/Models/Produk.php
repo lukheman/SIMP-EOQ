@@ -21,11 +21,9 @@ class Produk extends Model
         return $this->hasMany(Mutasi::class, 'id_produk');
     }
 
-    public static function cekPersediaanProduk(int $permintaan, int $id_produk): bool
+    public function isPersediaanMencukupi(int $permintaan): bool
     {
-        $produk = Produk::find($id_produk);
-
-        return $produk ? $produk->persediaan >= $permintaan : false;
+        return $this->persediaan >= $permintaan;
     }
 
 }

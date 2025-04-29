@@ -24,7 +24,7 @@ class Pesanan extends Model
 
     public function getCukupAttribute()
     {
-        return Produk::cekPersediaanProduk($this->jumlah, $this->id_produk);
+        return $this->produk ? $this->produk->isPersediaanMencukupi($this->jumlah) : false;
     }
 
 }
