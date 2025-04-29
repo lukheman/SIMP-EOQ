@@ -174,10 +174,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (data) {
-                    showToast('success', data.message);
+                    showToast( data.message);
                 },
                 error: function (error) {
-                    showToast('error', 'Pesanan gagal dihapus');
+                    showToast( 'Pesanan gagal dihapus');
                 }
             });
 
@@ -214,13 +214,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(data) {
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 3000);
-                    showToast('success', data.message);
+                    showToast( data.message);
                 },
                 error: function (error) {
-                    showToast('error', 'Gagal melakukan transaksi');
+                    showToast( 'Gagal melakukan transaksi');
                 }
 
             });
@@ -236,16 +233,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (data) {
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 3000)
-                    showToast('success', data.message);
+                    showToast( data.message);
                 },
                 error: function (error) {
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 3000)
-                    showToast('error', 'Pesanan gagal dihapus');
+                    showToast( 'Pesanan gagal dihapus');
                 }
             });
 
