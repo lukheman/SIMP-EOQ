@@ -9,9 +9,7 @@
 @section('content')
 <div class="row">
     <div class="col-8">
-        <div style="display: inline-block; width: 100%;">
-            <div id="reader" style="width: 100%; height: 400px;"></div>
-        </div>
+        <div id="reader"></div>
     </div>
     <div class="col-4" id="info-pesanan">
         <div class="form-group">
@@ -90,7 +88,6 @@
                     showToast(data.message, icon='success', reload=false);
 
                     let transaksi = data.data;
-                    console.log(transaksi);
 
                     infoPesanan.find('#tanggal').val(transaksi.tanggal);
                     infoPesanan.find('#nama-pemesan').val(transaksi.user.name);
