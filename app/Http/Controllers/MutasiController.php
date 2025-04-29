@@ -15,7 +15,6 @@ class MutasiController extends Controller
         $data = $request->validate([
             'id_produk' => 'required|exists:produk,id',
             'jumlah' => 'required',
-            'tanggal' => 'required',
             'jenis' => 'required',
         ]);
 
@@ -77,9 +76,7 @@ class MutasiController extends Controller
 
     public function update(Request $request, $id) {
 
-        // validasi data
         $data = $request->validate([
-            'id_produk' => 'required',
             'jumlah' => 'required',
             'tanggal' => 'required',
         ]);
