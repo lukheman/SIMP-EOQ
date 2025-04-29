@@ -86,9 +86,8 @@ class TransaksiController extends Controller
 
 
     public function update(Request $request, $id) {
-        /* TODO: pakai constant status */
         $data = $request->validate([
-            'status' => 'required|in:pending,diproses,ditolak,dikirim,selesai,batal,dibayar',
+            'status' => ['required', Rule::enum(StatusTransaksi::class)],
         ]);
 
         $transaksi = Transaksi::findOrFail($id);
