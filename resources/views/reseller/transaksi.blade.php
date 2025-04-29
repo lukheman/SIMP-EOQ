@@ -260,7 +260,7 @@
                 },
                 success: function(resp) {
                     if(resp.success) {
-                        showToast('success', resp.message);
+                        showToast( resp.message);
                         $('#modal-kirim-bukti-pembayaran').modal('hide');
                         $('#modal-lihat-bukti-pembayaran').modal('hide');
                     }
@@ -275,26 +275,28 @@
         });
 
 
-        $('.btn-pesanan-diterima').click(function () {
+        $('.btn-pesanan-selesai').click(function () {
             let idTransaksi = $(this).data('id-transaksi');
 
             $.ajax({
-                url: `{{ route('transaksi.update', '')}}/${idTransaksi}`,
+                url: `{{ route('transaksi.update', ':id')}}`.replace(':id', idTransaksi),
                 method: 'PUT',
                 data: {
-                    status: 'selesai'
+                    status: '{{ \App\Constants\StatusTransaksi::DITERIMA }}'
                 },
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (data) {
-                    Swal.fire({
-                        title: data.message,
-                        icon: 'success'
-                    }).then(() => window.location.reload())
+                    showToast(data.message);
                 },
                 error: function (error) {
                     console.log(error);
+                    Swal.fire({
+                        title: 'Terjadi kesalahan',
+                        icon: 'error',
+                        text: 'Silakan coba lagi atau hubungi administrator.',
+                    });
                 }
             });
         });
