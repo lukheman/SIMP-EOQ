@@ -42,19 +42,20 @@
                             @foreach ($transaksi as $item)
                             <tr>
                                 <td> {{ $item->tanggal }}</td>
+
                                 <td>
-                                    @if ($item->status->value === 'pending')
+                                    @if ($item->status === \App\Constants\StatusTransaksi::PENDING)
                                     <span class="badge bg-secondary">{{ $item->status }}</span>
-                                    @elseif($item->status->value === 'diproses')
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIPROSES)
                                     <span class="badge bg-success">{{ $item->status }}</span>
-                                    @elseif($item->status->value === 'dikirim')
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIKIRIM)
                                     <span class="badge bg-warning">{{ $item->status }}</span>
-                                    @elseif($item->status->value === 'ditolak')
-                                    <span class="badge bg-danger">{{ $item->status }}</span>
-                                    @elseif($item->status->value === 'dibayar')
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIKIRIM)
                                     <span class="badge bg-orange">{{ $item->status }}</span>
-                                    @elseif($item->status->value === 'selesai')
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::SELESAI)
                                     <span class="badge bg-green">{{ $item->status }}</span>
+                                    @elseif($item->status === \App\Constants\StatusTransaksi::DITERIMA)
+                                    <span class="badge bg-primary">{{ $item->status }}</span>
                                     @endif
                                 </td>
                                 <td>
@@ -68,9 +69,9 @@
                                 </td>
 
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-outline-success btn-pesanan-diterima"
-                                        data-id-transaksi="{{ $item->id }}" {{ $item->status === 'dibayar' ? '' : 'disabled' }}>
-                                        <i class="fas fa-check"></i> Pesanan diterima</button>
+                                    <button type="button" class="btn btn-sm btn-outline-success btn-pesanan-selesai"
+                                        data-id-transaksi="{{ $item->id }}" {{ $item->status === \App\Constants\StatusTransaksi::DITERIMA ? '' : 'disabled' }}>
+                                        <i class="fas fa-check"></i>Pesanan selesai</button>
                                 </td>
 
                                 <td>
@@ -84,7 +85,9 @@
 
                                         @else
 
-                                            <button type="button" class="btn btn-sm btn-outline-primary btn-kirim-bukti-pembayaran" data-id-transaksi="{{ $item->id }}" data-toggle="modal" data-target="#modal-kirim-bukti-pembayaran">
+                                            <button type="button" class="btn btn-sm btn-outline-primary btn-kirim-bukti-pembayaran"
+                                                data-id-transaksi="{{ $item->id }}" data-toggle="modal" data-target="#modal-kirim-bukti-pembayaran"
+                                                {{ $item->status === \App\Constants\StatusTransaksi::SELESAI ? 'disabled' : '' }}>
                                             <i class="fa fa-paper-plane"></i> Kirim Bukti Pembayaran
                                             </button>
 
