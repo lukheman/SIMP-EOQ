@@ -12,11 +12,6 @@
 <div class="card">
     <div class="card-header">
 
-        <button class="btn btn-outline-primary" type="button" id="btn-hitung-eoq" data-toggle="modal"
-            data-target="#modal-hitung-eoq">
-            <i class="fas fa-calculator"></i>
-            Hitung EOQ</button>
-
     </div>
     <div class="card-body">
         <div id="table_eoq_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -33,43 +28,26 @@
                     <table id="table_eoq" class="table table-bordered table-striped dataTable dtr-inline"
                         aria-describedby="table_eoq_info">
                         <thead>
-                            <tr>
-                                <th class="sorting" tabindex="0" aria-controls="table_eoq" rowspan="1" colspan="1">Nama
-                                    Produk</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_eoq" rowspan="1" colspan="1">EOQ
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_eoq" rowspan="1" colspan="1">
-                                    Safety Stock
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_eoq" rowspan="1" colspan="1">ROP
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_eoq" rowspan="1" colspan="1">Aksi
-                                </th>
+                            <tr class="text-center">
+                                <th>Kode Produk</th>
+                                <th>Nama Produk</th>
+                                <th>EOQ</th>
+                                <th>Safety Stock</th>
+                                <th>ROP</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            @if(isset($produk))
                             @foreach($produk as $item)
-                            @if ($item->eoq > 0)
                             <tr>
+                                <td class="text-center">{{ $item->kode_produk }}</td>
                                 <td>{{ $item->nama_produk }}</td>
-                                <td>{{ $item->eoq }}</td>
-                                <td>{{ $item->ss }}</td>
-                                <td>{{ $item->rop }}</td>
-                                <td>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-primary btn-update-persediaan" data-toggle="modal"
-                                            data-target="#modal-update-persediaan"
-                                            data-id-persediaan="{{ $item->id }}">Edit</button>
-                                        <button class="btn btn-sm btn-danger btn-delete-persediaan"
-                                            data-id-persediaan="{{ $item->id }}">Hapus</button>
-                                    </div>
-                                </td>
+                                <td>{{ $item->economicOrderQuantity() }}</td>
+                                <td>{{ $item->safetyStock() }}</td>
+                                <td>{{ $item->reorderPoint() }}</td>
+
                             </tr>
-                            @endif
                             @endforeach
-                            @endif
                         </tbody>
                         <tfoot>
 
