@@ -45,7 +45,7 @@
                     <table id="table_produk" class="table table-bordered table-striped dataTable dtr-inline"
                         aria-describedby="table_produk_info">
                         <thead>
-                            <tr>
+                            <tr class="text-center">
 
                                 <th>Kode Produk</th>
                                 <th>Nama Produk</th>
@@ -60,14 +60,13 @@
 
                             @foreach ($produk as $item)
                             <tr>
-                                <td> {{ $item->kode_produk }}</td>
+                                <td class="text-center"> {{ $item->kode_produk }}</td>
                                 <td> {{ $item->nama_produk }}</td>
                                 <td> {{ number_format($item->harga_beli, 0, ',', '.') }}</td>
                                 <td> {{ number_format($item->harga_jual, 0, ',', '.') }}</td>
                                 <td> {{ number_format($item->biaya_penyimpanan, 0, ',', '.') }}</td>
                                 <td> {{ number_format($item->biaya_pemesanan, 0, ',', '.') }}</td>
-                                <td>
-                                    <div class="btn-group">
+                                <td class="text-center">
                                         <button class="btn btn-sm btn-info btn-info-produk" data-toggle="modal"
                                             data-target="#modal-info-produk" data-id-produk="{{ $item->id }}">
                                             <i class="fas fa-info"></i>
@@ -80,7 +79,6 @@
                                             data-id-produk="{{ $item->id }}">
                                             <i class="fas fa-trash"></i>
                                             Hapus</button>
-                                    </div>
                                 </td>
                             </tr>
                             @endforeach
