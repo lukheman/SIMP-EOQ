@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Produk;
 use App\Models\Mutasi;
+use function var_dump;
 
 class AdminGudangController extends Controller
 {
@@ -70,18 +71,6 @@ class AdminGudangController extends Controller
 
     }
 
-    private function hitungSafetyStock($PM, $PRR, $LT) {
-        return ($PM - $PRR) * $LT;
-    }
-
-    private function hitungReorderPoint($SS, $LT, $Q) {
-        return $SS + ($LT * $Q);
-    }
-
-    private function hitungEconomicOrderQuantity($D, $S, $H) {
-        return sqrt((2 * $D * $S) / $H);
-    }
-
     private function cekLogPenjualan($periode, $id_produk) {
         list($tahun, $bulan) = explode('-', $periode);
 
@@ -94,62 +83,13 @@ class AdminGudangController extends Controller
 
     }
 
-    public function hitung(Request $request) {
-
-        $periodeAwal = $request->periode_awal;
-        $periodeAkhir = $request->periode_akhir;
-
-        $tanggalAwal = (new DateTime($periodeAwal))->modify('first day of this month')->format('Y-m-d');
-        $tanggalAkhir = (new DateTime($periodeAkhir))->modify('last day of this month')->format('Y-m-d');
+    public function eoq() {
 
         $produk = Produk::all();
-
-        foreach($produk as $item) {
-
-            $D = Mutasi::where('id_produk', $item->id)
-                ->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
-                ->where('jenis', 'keluar')
-                ->sum('jumlah');
-
-            if($D <= 0) {
-                continue;
-            }
-
-            $S = $item->biaya_pemesanan; // biaya pemesanan
-            $H = $item->biaya_penyimpanan; // biaya penyimpanan
-            $LT = $item->lead_time; // waktu tunggu
-            $Q = $item->rata_rata_penggunaan; // penggunaan rata-rata
-            $PRR = $D / 2; // penjualan rata-rata dibagi 2 karena dihitung dari 2 periode
-
-            $PM = $this->getPM($periodeAwal, $periodeAkhir, $item->id); // penjualan maksimum
-
-            $EOQ = $this->hitungEconomicOrderQuantity($D, $S, $H);
-
-            $SS = $this->hitungSafetyStock($PM, $PRR, $LT);
-
-            $ROP = $this->hitungReorderPoint($SS, $LT, $Q);
-
-            $item->eoq = round($EOQ);
-            $item->ss = $SS;
-            $item->rop = $ROP;
-            $item->pm = $PM;
-            $item->biaya_pemesanan = $S;
-            $item->biaya_penyimpanan = $H;
-
-        }
-
 
         return view('admin_gudang.eoq', [
             'page' => 'EOQ',
             'produk' => $produk
-        ]);
-
-    }
-
-    public function eoq() {
-
-        return view('admin_gudang.eoq', [
-            'page' => 'EOQ',
         ]);
     }
 
