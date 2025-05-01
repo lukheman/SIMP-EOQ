@@ -19,6 +19,10 @@ class Produk extends Model
         return $this->hasMany(Pesanan::class, 'id_produk');
     }
 
+    public function restock() {
+        return $this->hasMany(Restock::class, 'id_produk');
+    }
+
     public function mutasi() {
         return $this->hasMany(Mutasi::class, 'id_produk');
     }
