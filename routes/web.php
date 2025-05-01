@@ -12,6 +12,7 @@ use App\Http\Controllers\PemilikTokoController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\PesananController;
+use App\Http\Controllers\RestockController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -108,6 +109,11 @@ Route::controller(TransaksiController::class)->group(function() {
 });
 
 Route::resource('mutasi', MutasiController::class)->only(['store', 'update', 'destroy', 'show',]);
+
+Route::resource('restock', RestockController::class)->only(['store', 'update', 'destroy']);
+Route::controller(RestockController::class)->group(function() {
+    Route::get('restock/exist/{barcode}', 'exist')->name('restock.exist');
+});
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('home');
