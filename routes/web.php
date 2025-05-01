@@ -86,9 +86,9 @@ Route::middleware(['role:kurir'])->group(function() {
     });
 });
 
-Route::resource('produk', ProdukController::class)->only(['store', 'update', 'destroy', 'show']);
+Route::resource('produk', ProdukController::class)->only(['store', 'update', 'destroy', 'show', 'index']);
 Route::controller(ProdukController::class)->group(function() {
-    Route::get('produk/all', 'all')->name('produk.all');
+    /* Route::get('produk/all', 'all')->name('produk.all'); */
     Route::get('produk/kode-produk/{code}', 'kodeProduk')->name('produk.kode-produk');
 });
 
