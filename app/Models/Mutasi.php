@@ -6,6 +6,8 @@ use Carbon\Carbon;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Illuminate\Support\Facades\DB;
+
 class Mutasi extends Model
 {
     protected $table = 'mutasi';
@@ -24,30 +26,24 @@ class Mutasi extends Model
         return $this->produk->harga_beli * $this->jumlah;
     }
 
-    public static function penjualanMaksimum($id_produk, $periode1, $periode2) {
-        /* $periode1 = Carbon::parse($periode1)->subMonth(); */
-        /* $periode2 = Carbon::parse($periode2)->subMonth(); */
+    public static function penjualanMaksimum($id_produk, $periode) {
 
-        $penjualanPeriode1 = self::where('id_produk', $id_produk)
-            ->whereYear('tanggal', $periode1->year)
-            ->whereMonth('tanggal', $periode1->month)
+        $maxMingguan = self::where('id_produk', $id_produk)
             ->where('jenis', 'keluar')
-            ->sum('jumlah');
+            ->whereYear('tanggal', $periode->year)
+            ->whereMonth('tanggal', $periode->month)
+            ->selectRaw('YEAR(tanggal) AS tahun, WEEK(tanggal, 1) AS minggu, SUM(jumlah) AS total')
+            ->groupBy('tahun', 'minggu')
+            ->orderByDesc('total')
+            ->first();
 
-        $penjualanPeriode2 = self::where('id_produk', $id_produk)
-            ->whereYear('tanggal', $periode2->year)
-            ->whereMonth('tanggal', $periode2->month)
-            ->where('jenis', 'keluar')
-            ->sum('jumlah');
+        return $maxMingguan->total ?? 0;
 
-        return max($penjualanPeriode1, $penjualanPeriode2);
 
     }
 
     // rata-rata penjualan harian
     public static function rataRataPenjualan($id_produk, Carbon $periode) {
-
-        /* $periode = Carbon::parse($periode); */
 
         $penjualan = self::where('id_produk', $id_produk)
             ->whereYear('tanggal', $periode->subMonth()->year)
@@ -58,6 +54,21 @@ class Mutasi extends Model
         $rata_rata = $penjualan / $periode->daysInMonth;
 
         return $rata_rata;
+
+    }
+
+    public static function rataRataPenjualanSemua($periode) {
+
+        $jumlahHari = $periode->daysInMonth;
+
+        $rataRataPerProduk = self::select('id_produk', DB::raw("SUM(jumlah) / {$jumlahHari} AS rata_rata_harian"))
+            ->where('jenis', 'keluar')
+            ->whereYear('tanggal', $periode->year)
+            ->whereMonth('tanggal', $periode->month)
+            ->groupBy('id_produk')
+            ->get();
+
+        return $rataRataPerProduk;
 
     }
 
