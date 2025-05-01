@@ -15,35 +15,91 @@ class MutasiSeeder extends Seeder
     {
         date_default_timezone_set("Asia/Jakarta");
 
-        DB::table('mutasi')->insert([ 
-            [ 
-                'id_produk' => 3,
-                'tanggal' => "2025-01-01",
+        DB::table('mutasi')->insert([
+            [
+                'id_produk' => 1,
+                'tanggal' => "2025-02-01",
                 'jumlah' => 50,
                 'jenis' => 'keluar'
             ],
-            [ 
-                'id_produk' => 3,
-                'tanggal' => "2025-01-10",
+            [
+                'id_produk' => 1,
+                'tanggal' => "2025-02-10",
                 'jumlah' => 50,
                 'jenis' => 'keluar'
             ],
-            [ 
-                'id_produk' => 3,
-                'tanggal' => "2025-01-20",
+            [
+                'id_produk' => 1,
+                'tanggal' => "2025-02-20",
                 'jumlah' => 20,
                 'jenis' => 'keluar'
             ],
-            [ 
-                'id_produk' => 3,
-                'tanggal' => "2025-02-10",
+            [
+                'id_produk' => 1,
+                'tanggal' => "2025-03-8",
                 'jumlah' => 65,
                 'jenis' => 'keluar'
             ],
-            [ 
-                'id_produk' => 3,
-                'tanggal' => "2025-02-10",
+            [
+                'id_produk' => 1,
+                'tanggal' => "2025-03-10",
                 'jumlah' => 65,
+                'jenis' => 'keluar'
+            ],
+
+            // tepung terigu
+            [
+                'id_produk' => 2,
+                'tanggal' => "2025-02-01",
+                'jumlah' => 30,
+                'jenis' => 'keluar'
+            ],
+            [
+                'id_produk' => 2,
+                'tanggal' => "2025-02-10",
+                'jumlah' => 20,
+                'jenis' => 'keluar'
+            ],
+            [
+                'id_produk' => 2,
+                'tanggal' => "2025-02-20",
+                'jumlah' => 35,
+                'jenis' => 'keluar'
+            ],
+            [
+                'id_produk' => 2,
+                'tanggal' => "2025-03-8",
+                'jumlah' => 10,
+                'jenis' => 'keluar'
+            ],
+            [
+                'id_produk' => 2,
+                'tanggal' => "2025-03-1",
+                'jumlah' => 20,
+                'jenis' => 'keluar'
+            ],
+            [
+                'id_produk' => 2,
+                'tanggal' => "2025-03-10",
+                'jumlah' => 30,
+                'jenis' => 'keluar'
+            ],
+            [
+                'id_produk' => 2,
+                'tanggal' => "2025-04-1",
+                'jumlah' => 10,
+                'jenis' => 'keluar'
+            ],
+            [
+                'id_produk' => 2,
+                'tanggal' => "2025-04-8",
+                'jumlah' => 20,
+                'jenis' => 'keluar'
+            ],
+            [
+                'id_produk' => 2,
+                'tanggal' => "2025-04-16",
+                'jumlah' => 30,
                 'jenis' => 'keluar'
             ],
 
