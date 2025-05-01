@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\Produk;
 use App\Models\Mutasi;
-use function var_dump;
+use App\Models\Restock;
 
 class AdminGudangController extends Controller
 {
@@ -30,6 +30,15 @@ class AdminGudangController extends Controller
         return view('admin_gudang.barang-masuk', [
             'page' => 'Barang Masuk',
             'barang_masuk' => $barang_masuk
+        ]);
+    }
+
+    public function pesanan() {
+        $pesanan = Restock::with('produk')->get();
+
+        return view('admin_gudang.pesanan', [
+            'page' => 'Pesanan',
+            'pesanan' => $pesanan
         ]);
     }
 
