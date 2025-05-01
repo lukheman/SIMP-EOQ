@@ -377,23 +377,39 @@ function startScanner() {
     Quagga.onDetected(function(result) {
         const barcode = result.codeResult.code;
 
+        // cek apakah produk telah di pesan dan ada di table restock
         $.ajax({
-            url: `{{ route('produk.kode-produk', ':code') }}`.replace(':code', barcode), // Dynamically insert barcode
+            url: `{{ route('restock.exist', ':code') }}`.replace(':code', barcode), // Dynamically insert barcode
             method: 'GET',
             success: function(data) {
                 if (data.success) {
-                    data = data.data;
+
+                    $.ajax({
+                        url: `{{ route('produk.kode-produk', ':code') }}`.replace(':code', barcode), // Dynamically insert barcode
+                        method: 'GET',
+                        success: function(data) {
+                            if (data.success) {
+                                data = data.data;
 
 
-                    $('#modal-scan-barcode').modal('hide');
-                    $('#modal-add-mutasi').modal('show');
+                                $('#modal-scan-barcode').modal('hide');
+                                $('#modal-add-mutasi').modal('show');
 
-                    $('#kode-produk').val(data.kode_produk);
-                    $('#nama-produk').val(data.nama_produk);
-                    $('#id-produk').val(data.id);
+                                $('#kode-produk').val(data.kode_produk);
+                                $('#nama-produk').val(data.nama_produk);
+                                $('#id-produk').val(data.id);
+
+                            } else {
+                                showToast(data.message, icon='error');
+                            }
+                        },
+                        error: function (xhr) {
+                            console.log('Request failed:', xhr.responseJSON);
+                        }
+                    });
 
                 } else {
-                    console.log('Error:', data.message);
+                    showToast(data.message, icon='error');
                 }
             },
             error: function (xhr) {
