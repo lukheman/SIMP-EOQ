@@ -18,14 +18,14 @@ class ProdukSeeder extends Seeder
 
         $data = [
             [
-                'nama_produk' => 'Gula Pasir',
+                'nama_produk' => 'Indomie Goreng Soto',
                 'kode_produk' => '5285000390596',
-                'persediaan' => 50,
+                'persediaan' => 300,
                 'harga_beli' => 6000.00,
                 'harga_jual' => 9000.00,
-                'lead_time' => 7,
-                'biaya_penyimpanan' => 50000.00,
-                'biaya_pemesanan' => 100000.00,
+                'lead_time' => 5,
+                'biaya_penyimpanan' => 100000.00,
+                'biaya_pemesanan' => 900000.00,
                 'deskripsi' => 'Gula Pasir dengan kemasan 1 kg.',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -33,8 +33,8 @@ class ProdukSeeder extends Seeder
 
             [
                 'nama_produk' => 'Tepung Terigu',
-                'kode_produk' => '5285000281929',
-                'persediaan' => 50,
+                'kode_produk' => '2616885672904',
+                'persediaan' => 300,
                 'harga_beli' => 10000.00,
                 'harga_jual' => 12000.00,
                 'lead_time' => 5,
