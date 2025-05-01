@@ -5,6 +5,8 @@
     </a>
 </li>
 
+<li class="nav-header">DATA</li>
+
 <li class="nav-item">
     <a href="{{ route('admingudang.produk')}}" class="nav-link {{ $page === 'Produk' ? 'active' : '' }}">
         <i class="nav-icon fas fa-cubes"></i>
@@ -19,6 +21,8 @@
     </a>
 </li>
 
+<li class="nav-header">RESTOK</li>
+
 <li class="nav-item">
     <a href="{{ route('admingudang.barang-masuk')}}" class="nav-link {{ $page === 'Barang Masuk' ? 'active' : '' }}">
         <i class="nav-icon fas fa-box-open"></i>
@@ -26,12 +30,19 @@
     </a>
 </li>
 
+<li class="nav-item">
+    <a href="{{ route('admingudang.pesanan')}}" class="nav-link {{ $page === 'Pesanan' ? 'active' : '' }}">
+        <i class="nav-icon fas fa-clipboard-list"></i>
+        <p>Pesanan</p>
+    </a>
+</li>
 
+<li class="nav-header">EOQ</li>
 
 <li class="nav-item">
     <a href="{{ route('admingudang.eoq')}}" class="nav-link {{ $page === 'EOQ' ? 'active' : '' }}">
         <i class="nav-icon fas fa-calculator"></i>
-        <p> EOQ </p>
+        <p> Hitung EOQ </p>
     </a>
 </li>
 
