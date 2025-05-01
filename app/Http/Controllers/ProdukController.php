@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 class ProdukController extends Controller
 {
 
-    public function all() {
+    public function index() {
         $produk = Produk::all();
 
         return response()->json([
