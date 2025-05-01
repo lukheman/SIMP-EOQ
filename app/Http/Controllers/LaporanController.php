@@ -6,6 +6,7 @@ use App\Models\Produk;
 use Illuminate\Http\Request;
 use App\Models\Mutasi;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class LaporanController extends Controller
 {
@@ -15,16 +16,19 @@ class LaporanController extends Controller
             'ttd' => 'required'
         ]);
 
-        list($tahun, $bulan) = explode('-', $request->periode);
+        $periode = Carbon::parse($request->periode);
 
         $penjualan = Mutasi::with('produk')
-            ->whereYear('tanggal', $tahun)
-            ->whereMonth('tanggal', $bulan)
+            ->whereYear('tanggal', $periode->year)
+            ->whereMonth('tanggal', $periode->month)
             ->where('jenis', 'keluar')
             ->get();
 
+        $rataRata = Mutasi::rataRataPenjualanSemua($periode);
+
         return view('invoices.laporan-penjualan', [
             'penjualan' => $penjualan,
+            'rataRata' => $rataRata,
             'periode' => $request->periode,
             'ttd' => $request->ttd
         ]);
