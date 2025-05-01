@@ -34,21 +34,16 @@ class Produk extends Model
 
     public function economicOrderQuantity() {
 
-        $bulanAwal = Carbon::now()->subMonth(3);
-        $bulanAkhir = Carbon::now()->subMonth(2);
-
-        $tanggalAwal = $bulanAwal->startOfMonth()->toDateString();
-        $tanggalAkhir= $bulanAkhir->endOfMonth()->toDateString();
+        $periode = Carbon::now()->subMonth(2); // bulan lalu
 
         $D = Mutasi::where('id_produk', $this->id)
-            ->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
+            ->whereYear('tanggal', $periode->year)
+            ->whereMonth('tanggal', $periode->month)
             ->where('jenis', 'keluar')
             ->sum('jumlah');
 
-
         $S = $this->biaya_pemesanan;
         $H = $this->biaya_penyimpanan;
-
 
         return sqrt((2 * $D * $S) / $H);
 
@@ -57,21 +52,19 @@ class Produk extends Model
 
     public function safetyStock() {
 
-        $bulanAwal = Carbon::now()->subMonth(3);
-        $bulanAkhir = Carbon::now()->subMonth(2);
-
-        $tanggalAwal = $bulanAwal->startOfMonth()->toDateString();
-        $tanggalAkhir= $bulanAkhir->endOfMonth()->toDateString();
+        $periode = Carbon::now()->subMonth(); // bulan lalu
 
         $D = Mutasi::where('id_produk', $this->id)
-            ->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
+            ->whereYear('tanggal', $periode->year)
+            ->whereMonth('tanggal', $periode->month)
             ->where('jenis', 'keluar')
             ->sum('jumlah');
 
-        $PM = Mutasi::penjualanMaksimum($this->id, $bulanAwal, $bulanAkhir); // penjualan maksimum
-        $PRR = $D / 2; // penjualan rata-rata dibagi 2 karena dihitung dari 2 periode
+        $PM = Mutasi::penjualanMaksimum($this->id, $periode); // penjualan maksimum
+        $PRR = $D / 4; // penjualan rata-rata dibagi 4 (perminggu)
         $LT = $this->lead_time; // waktu tunggu
 
+        /* dd($PM, $PRR); */
         return ($PM - $PRR) * $LT;
     }
 
@@ -79,7 +72,7 @@ class Produk extends Model
 
         $SS = $this->safetyStock();
         $LT = $this->lead_time; // waktu tunggu
-        $Q = Mutasi::rataRataPenjualan($this->id, Carbon::now());
+        $Q = Mutasi::rataRataPenjualan($this->id, Carbon::now()->subMonth());
         return $SS + ($LT * $Q);
     }
 
