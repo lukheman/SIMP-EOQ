@@ -13,7 +13,7 @@
     <div class="card-header">
 
         <button class="btn btn-outline-primary" type="button" data-toggle="modal" data-target="#modal-scan-barcode"
-            id="btn-add-mutasi"> <i class="fas fa-plus"></i> Tambah Barang Masuk</button>
+            id="btn-add-mutasi"> <i class="fas fa-barcode"></i> Scan Barcode</button>
     </div>
     <div class="card-body">
         <div id="table_persediaan_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -230,10 +230,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (data) {
-                    Swal.fire({
-                        title: data.message,
-                        icon: "success",
-                    }).then(() => window.location.reload());
+                    showToast(data.message);
                 },
                 error: function (error) {
                     console.log(error);
@@ -244,30 +241,6 @@
                 },
             })
         });
-
-        // $('#btn-add-mutasi').click(() => {
-        //
-        //     let modalAddMutasi = $('#modal-add-mutasi');
-        //
-        //     $.ajax({
-        //         url: '{{ route('produk.all') }}',
-        //         method: 'GET',
-        //         success: function (data) {
-        //             $('#nama-produk').empty();
-        //             data.data.forEach((item) => {
-        //                 modalAddMutasi.find('#nama-produk').append(new Option(`${item.kode_produk} | ${item.nama_produk}`, item.id))
-        //             });
-        //
-        //             const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
-        //             modalAddMutasi.find('#tanggal').val(today);
-        //
-        //         },
-        //         error: function (error) {
-        //             console.log(error);
-        //         }
-        //
-        //     });
-        // });
 
 
         // handler untuk mengupdate data
@@ -355,10 +328,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function (data) {
-                            Swal.fire({
-                                title: 'Data barang masuk berhasil dihapus.',
-                                icon: "success",
-                            }).then(() => window.location.reload());
+                            showToast('Data barang masuk berhasil dihapus.');
                         },
                         error: function (error) {
                             Swal.fire({
