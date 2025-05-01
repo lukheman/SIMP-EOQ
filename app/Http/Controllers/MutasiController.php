@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Models\Mutasi;
 use App\Models\Produk;
+use App\Models\Restock;
+
+use Carbon\Carbon;
 
 class MutasiController extends Controller
 {
@@ -24,8 +27,27 @@ class MutasiController extends Controller
 
 
         if ($request->jenis === 'masuk') {
+            $restock = Restock::where('id_produk', $request->id_produk)->first();
+
+            $tanggalPesan = Carbon::parse($restock->tanggal_pesan);
+            $tanggalSelesai = Carbon::now();
+
+            // Hitung selisih hari
+            $leadTime = $tanggalPesan->diffInDays($tanggalSelesai);
+
             $produk->persediaan += $request->jumlah;
+            $produk->lead_time = $leadTime;
             $produk->save();
+
+            $restock->delete();
+
+
+            // hapus pesanan restock
+
+            // update lead time
+
+
+
         } else {
             $produk->persediaan -= $request->jumlah;
             $produk->save();
