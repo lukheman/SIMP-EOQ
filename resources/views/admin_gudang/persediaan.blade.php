@@ -12,9 +12,6 @@
 <div class="card">
     <div class="card-header">
 
-        <!-- <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#modal-add-persediaan" -->
-        <!--     id="btn-add-persediaan"> Tambah Persediaan</button> -->
-
     </div>
     <div class="card-body">
         <div id="table_persediaan_wrapper" class="dataTables_wrapper dt-bootstrap4">
@@ -31,12 +28,10 @@
                     <table id="table_persediaan" class="table table-bordered table-striped dataTable dtr-inline"
                         aria-describedby="table_persediaan_info">
                         <thead>
-                            <tr>
-                                <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1"
-                                    colspan="1">Nama Produk</th>
-
-                                <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1"
-                                    colspan="1">Persediaan</th>
+                            <tr class="text-center">
+                                <th>Kode Produk</th>
+                                <th>Nama Produk</th>
+                                <th>Persediaan</th>
 
                             </tr>
                         </thead>
@@ -44,8 +39,9 @@
 
                             @foreach ($produk as $item)
                             <tr>
+                                <td class="text-center"> {{ $item->kode_produk }}</td>
                                 <td> {{ $item->nama_produk }}</td>
-                                <td> {{ $item->persediaan }}</td>
+                                <td class="text-center"> {{ $item->persediaan }}</td>
                             </tr>
                             @endforeach
 
@@ -314,7 +310,7 @@
 
         $('#btn-add-persediaan').click(() => {
             $.ajax({
-                url: '{{ route('produk.all') }}',
+                url: '{{ route('produk.index') }}',
                 method: 'GET',
                 success: function (data) {
                     data.data.forEach((item) => {
