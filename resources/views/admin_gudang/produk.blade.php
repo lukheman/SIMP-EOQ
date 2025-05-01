@@ -19,11 +19,11 @@
             </div>
 
             <div class="col-6 d-flex justify-content-end">
-                <button class="btn btn-outline-primary mr-2" type="button" id="btn-show-harga">
+                <button class="btn btn-outline-primary mr-2 active btn-show-column" type="button" id="btn-show-harga">
                 <i class="fas fa-money"></i>Harga Barang</button>
-                <button class="btn btn-outline-primary mr-2" type="button" id="btn-show-biaya-penyimpanan">
+                <button class="btn btn-outline-primary mr-2 btn-show-column" type="button" id="btn-show-biaya-penyimpanan">
                 <i class="fas fa-money"></i>Biaya Penyimpanan</button>
-                <button class="btn btn-outline-primary" type="button" id="btn-show-biaya-pemesanan">
+                <button class="btn btn-outline-primary btn-show-column" type="button" id="btn-show-biaya-pemesanan">
                 <i class="fas fa-money"></i>Biaya Pemesanan</button>
             </div>
         </div>
@@ -422,6 +422,11 @@
 <script>
 
     $(document).ready(function () {
+
+        $('.btn-show-column').click(function(){
+            $('.btn-show-column').removeClass('active');
+            $(this).addClass('active');
+        });
 
         // handler untuk menambahkan data
         $('#form-add-produk').on('submit', function (e) {
