@@ -31,7 +31,7 @@
             width: 150px;
         }
 
-        #pesanan {
+        #pesanan, #rata-rata {
             border-collapse: collapse;
             margin-top: 50px;
             margin-bottom: 50px;
@@ -40,7 +40,10 @@
 
 
         #pesanan td,
-        #pesanan th {
+        #pesanan th,
+        #rata-rata td,
+        #rata-rata th
+        {
             border: 1px solid black;
             padding: 8px;
         }
@@ -76,8 +79,8 @@
             <thead>
 
                 <tr>
-                    <th>No</th>
-                    <th>Jenis Produk</th>
+                    <th>Tanggal</th>
+                    <th>Nama Produk</th>
                     <th>Terjual</th>
                     <th>Total Harga (Rp.)</th>
                 </tr>
@@ -92,7 +95,7 @@
 
                 @foreach ($penjualan as $item)
                 <tr>
-                    <td>{{ ++$i }}</td>
+                    <td class="text-center">{{ $item->tanggal }}</td>
                     <td>{{ $item->produk->nama_produk }}</td>
                     <td style="text-align: center;">{{ $item->jumlah}}</td>
                     <td style="text-align: right;">{{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
@@ -107,6 +110,36 @@
                     <td style="text-align: center;" colspan="3">Total</td>
                     <td style="text-align: right;">{{ number_format($total, 2, ',', '.')}}</td>
                 </tr>
+
+            </tbody>
+
+        </table>
+
+        <table id="rata-rata">
+
+            <thead>
+
+                <tr>
+                    <th>Nama Produk</th>
+                    <th>Rata-rata penjualan harian</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+                @php
+                $total = 0;
+                $i = 0;
+                @endphp
+
+                @foreach ($rataRata as $item)
+                <tr>
+                    <td>{{ $item->produk->nama_produk }}</td>
+                    <td class="text-center">{{ round($item->rata_rata_harian) }}</td>
+                </tr>
+
+                @endforeach
+
 
             </tbody>
 
