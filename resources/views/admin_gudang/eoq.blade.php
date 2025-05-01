@@ -42,9 +42,9 @@
                             <tr>
                                 <td class="text-center">{{ $item->kode_produk }}</td>
                                 <td>{{ $item->nama_produk }}</td>
-                                <td>{{ $item->economicOrderQuantity() }}</td>
-                                <td>{{ $item->safetyStock() }}</td>
-                                <td>{{ $item->reorderPoint() }}</td>
+                                <td class="text-center">{{ $item->economicOrderQuantity() }}</td>
+                                <td class="text-center">{{ $item->safetyStock() }}</td>
+                                <td class="text-center">{{ $item->reorderPoint() }}</td>
 
                             </tr>
                             @endforeach
@@ -149,7 +149,7 @@
         $('#btn-hitung-eoq').click(() => {
 
             $.ajax({
-                url: '{{ route('produk.all') }}',
+                url: '{{ route('produk.index') }}',
                 method: 'GET',
                 success: function (data) {
                     data.data.forEach((item) => {
