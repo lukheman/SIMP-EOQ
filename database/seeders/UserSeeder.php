@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
         // Daftar role dengan nama berbeda untuk setiap role
         $roles = [
             'reseller' => 'Marcus',
+            'reseller' => 'Citra',
             'admin_toko' => 'Nuruddin',
             'admin_gudang' => 'Madun',
             'pemilik_toko' => 'Hendri',
@@ -26,7 +27,7 @@ class UserSeeder extends Seeder
         // Menyisipkan data ke tabel 'users'
         foreach ($roles as $role => $name) {
             DB::table('users')->insert([
-                'username' => $role,
+                /* 'username' => $role, */
                 'email' => $role . '@example.com',
                 'password' => Hash::make('password123'), // Gunakan hashing untuk keamanan
                 'role' => $role,
