@@ -16,6 +16,9 @@ use App\Http\Controllers\RestockController;
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('reseller/registrasi', [ResellerController::class, 'registrasi'])->name('reseller.registrasi');
+Route::post('reseller/signup', [ResellerController::class, 'signup'])->name('reseller.signup');
+
 Route::middleware(['role:reseller'])->group(function() {
     Route::controller(ResellerController::class)->group(function() {
         Route::get('reseller', 'index')->name('reseller.index');
