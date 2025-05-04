@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Keranjang;
 use App\Models\Pesanan;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 use App\Models\Produk;
@@ -15,6 +16,33 @@ use App\Constants\StatusTransaksi;
 
 class ResellerController extends Controller
 {
+
+    public function signup(Request $request) {
+
+        $request->validate([
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+            'confirm_password' => ['required', 'same:password'],
+        ]);
+
+
+        $user = User::query()->create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => 'reseller'
+        ]);
+
+        return to_route('login');
+
+
+    }
+
+    public function registrasi() {
+        return view('reseller.registrasi');
+    }
+
     public function index() {
         $keranjang = Keranjang::where('id_user', Auth::id())->first();
 
