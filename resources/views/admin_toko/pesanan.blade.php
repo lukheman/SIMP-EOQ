@@ -217,7 +217,7 @@
                 },
                 data: {'status': status},
                 success: function (data) {
-                    showToast(data.success ? successMessage : data.message, icon = data.success ? 'success' : 'warning', reload=false);
+                    showToast(data.success ? successMessage : data.message, icon = data.success ? 'success' : 'warning');
                 },
                 error: function (error) {
                     console.log(error);

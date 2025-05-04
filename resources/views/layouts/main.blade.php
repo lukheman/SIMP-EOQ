@@ -8,7 +8,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ Auth::user()->role }} | {{ Auth::user()->name }}</title>
+    <title>
+        {{ auth()->check() ? Auth::user()->role . ' | '. Auth::user()->name : '' }}
+    </title>
 
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
