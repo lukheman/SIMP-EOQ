@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('harga_jual', 10, 2);
             $table->decimal('biaya_penyimpanan', 10, 2);
             $table->decimal('biaya_pemesanan', 10, 2);
-            $table->integer('lead_time'); // waktu tunggu dalam satuan hari
+            $table->integer('lead_time')->default(0); // waktu tunggu dalam satuan hari
             $table->text('deskripsi')->nullable();
             $table->string('gambar')->nullable();
             $table->timestamps();

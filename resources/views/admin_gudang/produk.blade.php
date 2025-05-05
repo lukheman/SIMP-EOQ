@@ -504,7 +504,7 @@
 
                 if (result.isConfirmed) {
                     $.ajax({
-                        url: `{{ route('produk.destroy', '') }}/${idProduk}`,
+                        url: `{{ route('produk.destroy', ':id') }}`.replace(':id', idProduk),
                         method: 'DELETE',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
