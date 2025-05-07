@@ -1,64 +1,64 @@
-<li class="nav-item">
-    <a href="{{ route('admingudang.dashboard') }}" class="nav-link {{ $page === 'Dashboard' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-tachometer-alt"></i>
-        <p>Dashboard</p>
-    </a>
-</li>
 
-<li class="nav-header">DATA</li>
+<x-nav-link
+    :href="route('admingudang.dashboard')"
+    icon="fas fa-tachometer-alt"
+    :active="$page === 'Dashboard'" >
+    Dashboard
+</x-nav-link>
 
-<li class="nav-item">
-    <a href="{{ route('admingudang.produk')}}" class="nav-link {{ $page === 'Produk' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-cubes"></i>
-        <p> Data Produk </p>
-    </a>
-</li>
+<li class="nav-header">DATA PRODUK</li>
 
-<li class="nav-item">
-    <a href="{{ route('admingudang.persediaan')}}" class="nav-link {{ $page === 'Persediaan' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-boxes"></i>
-        <p> Persediaan Produk </p>
-    </a>
-</li>
+<x-nav-link
+    :href="route('admingudang.produk')"
+    icon="fas fa-cubes"
+    :active="$page === 'Produk'">
+    Data Produk
+</x-nav-link>
+
+<x-nav-link
+    :href="route('admingudang.produk.persediaan')"
+    icon="fas fa-boxes"
+    :active="$page === 'Persediaan Produk'">
+    Persediaan Produk
+</x-nav-link>
 
 <li class="nav-header">RESTOK</li>
 
-<li class="nav-item">
-    <a href="{{ route('admingudang.barang-masuk')}}" class="nav-link {{ $page === 'Barang Masuk' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-box-open"></i>
-        <p> Barang Masuk </p>
-    </a>
-</li>
+<x-nav-link
+    :href="route('admingudang.barang-masuk')"
+    icon="fas fa-box-open"
+    :active="$page === 'Barang Masuk'">
+    Barang Masuk
+</x-nav-link>
 
-<li class="nav-item">
-    <a href="{{ route('admingudang.pesanan')}}" class="nav-link {{ $page === 'Pesanan' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-clipboard-list"></i>
-        <p>Pesanan</p>
-    </a>
-</li>
+<x-nav-link
+    :href="route('admingudang.pesanan')"
+    icon="fas fa-clipboard-list"
+    :active="$page === 'Pesanan'">
+    Pesanan
+</x-nav-link>
 
 <li class="nav-header">EOQ</li>
 
-<li class="nav-item">
-    <a href="{{ route('admingudang.eoq')}}" class="nav-link {{ $page === 'EOQ' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-calculator"></i>
-        <p> Hitung EOQ </p>
-    </a>
-</li>
+<x-nav-link
+    :href="route('admingudang.eoq')"
+    icon="fas fa-calculator"
+    :active="$page === 'EOQ'">
+    Hitung EOQ
+</x-nav-link>
 
 <li class="nav-header">LAPORAN</li>
 
-<li class="nav-item">
-    <a href="{{ route('admingudang.laporan-barang-masuk') }}"
-        class="nav-link  {{ $page === 'Laporan Barang Masuk' ? 'active' : '' }}">
-        <i class="fas fa-box-open nav-icon"></i>
-        <p>Barang Masuk</p>
-    </a>
-</li>
+<x-nav-link
+    :href="route('admingudang.laporan-barang-masuk')"
+    icon="fas fa-box-open"
+    :active="$page === 'Laporan Barang Masuk'">
+    Barang Masuk
+</x-nav-link>
 
-<li class="nav-item">
-    <a href="{{ route('admingudang.laporan-penjualan') }}" class="nav-link  {{ $page === 'Laporan Penjualan' ? 'active' : '' }}">
-        <i class="far fa-chart-bar nav-icon"></i>
-        <p>Penjualan</p>
-    </a>
-</li>
+<x-nav-link
+    :href="route('admingudang.laporan-penjualan')"
+    icon="far fa-chart-bar"
+    :active="$page === 'Laporan Penjualan'">
+    Penjualan
+</x-nav-link>
