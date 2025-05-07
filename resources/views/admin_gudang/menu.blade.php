@@ -22,6 +22,20 @@
     Persediaan Produk
 </x-nav-link>
 
+<x-nav-link
+    :href="route('admingudang.produk.biaya-pemesanan')"
+    icon="fas fa-boxes"
+    :active="$page === 'Biaya Pemesanan Produk'">
+    Biaya Pemesanan
+</x-nav-link>
+
+<x-nav-link
+    :href="route('admingudang.produk.biaya-penyimpanan')"
+    icon="fas fa-boxes"
+    :active="$page === 'Biaya Penyimpanan Produk'">
+    Biaya Penyimpanan
+</x-nav-link>
+
 <li class="nav-header">RESTOK</li>
 
 <x-nav-link
