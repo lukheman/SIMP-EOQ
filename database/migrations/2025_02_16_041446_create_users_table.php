@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->enum('role', ['reseller', 'admin_toko', 'admin_gudang', 'pemilik_toko', 'kurir']);
             $table->string('phone', 15)->nullable();
+            $table->string('alamat')->nullable();
             $table->timestamps(); // created_at / updated_at
         });
     }
