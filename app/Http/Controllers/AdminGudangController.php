@@ -32,7 +32,7 @@ class AdminGudangController extends Controller
     }
 
     public function persediaan() {
-        $produk = Produk::all();
+        $produk = Produk::with('persediaan')->get();
 
         return view("{$this->role}.produk.persediaan", [
             'page' => 'Persediaan Produk',
