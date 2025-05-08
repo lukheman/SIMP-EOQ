@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Produk;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -20,12 +21,12 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Indomie Goreng Soto',
                 'kode_produk' => '5285000390596',
-                'persediaan' => 300,
+                /* 'persediaan' => 300, */
                 'harga_beli' => 6000.00,
                 'harga_jual' => 9000.00,
                 'lead_time' => 5,
-                'biaya_penyimpanan' => 100000.00,
-                'biaya_pemesanan' => 900000.00,
+                /* 'biaya_penyimpanan' => 100000.00, */
+                /* 'biaya_pemesanan' => 900000.00, */
                 'deskripsi' => 'Gula Pasir dengan kemasan 1 kg.',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -34,18 +35,25 @@ class ProdukSeeder extends Seeder
             [
                 'nama_produk' => 'Tepung Terigu',
                 'kode_produk' => '2616885672904',
-                'persediaan' => 300,
+                /* 'persediaan' => 300, */
                 'harga_beli' => 10000.00,
                 'harga_jual' => 12000.00,
                 'lead_time' => 5,
-                'biaya_penyimpanan' => 30000.00,
-                'biaya_pemesanan' => 75000.00,
+                /* 'biaya_penyimpanan' => 30000.00, */
+                /* 'biaya_pemesanan' => 75000.00, */
                 'deskripsi' => 'Tepung Terigu dengan kemasan 1 kg.',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
         ];
 
-        DB::table('produk')->insert($data);
+        foreach($data as $item) {
+            $produk = Produk::create($item);
+            $produk->persediaan()->create();
+            $produk->biayaPemesanan()->create(['biaya' => 100000.00]);
+            $produk->biayaPenyimpanan()->create(['biaya' => 100000.00]);
+        }
+
+
     }
 }
