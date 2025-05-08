@@ -23,7 +23,7 @@
     </div>
     <!-- /.card-header -->
     <div class="card-body">
-    Log penjualan dibuat secara otomatis ketika pesanan dikirim.
+    Log penjualan dibuat secara otomatis ketika pesanan diterima.
     </div>
     <!-- /.card-body -->
 </div>
@@ -51,19 +51,13 @@
                     <table id="table_pesanan" class="table table-bordered table-striped dataTable dtr-inline"
                         aria-describedby="table_pesanan_info">
                         <thead>
-                            <tr>
-                                <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Tanggal
-                                </th>
-                                <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Jenis Produk
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Jumlah Terjual</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Total Harga (Rp.)</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Aksi</th>
+                            <tr class="text-center">
+                                <th>Tanggal </th>
+                                <th>Jenis Produk </th>
+                                <th>Jumlah Terjual</th>
+                                <th>Harga Satuan (Rp.)</th>
+                                <th>Total Harga (Rp.)</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,9 +66,10 @@
                             <tr>
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->produk->nama_produk }}</td>
-                                <td> {{ $item->jumlah }}</td>
-                                <td> {{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
-                                <td>
+                                <td class="text-right"> {{ $item->jumlah }}</td>
+                                <td class="text-right"> {{ number_format($item->produk->harga_jual, 2, ',', '.') }}</td>
+                                <td class="text-right"> {{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
+                                <td class="text-right">
                                     <button class="btn btn-sm btn-danger btn-delete-penjualan"
                                         data-id-penjualan="{{ $item->id }}">
                                         <i class="fas fa-trash"></i>
