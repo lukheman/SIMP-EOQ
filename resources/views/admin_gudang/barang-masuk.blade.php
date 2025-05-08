@@ -31,19 +31,12 @@
                         aria-describedby="table_persediaan_info">
                         <thead>
                             <tr>
-                                <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Tanggal
-                                </th>
-                                <th class="sorting sorting_asc" tabindex="0" aria-controls="table_pesanan" rowspan="1"
-                                    colspan="1" aria-sort="ascending">Jenis Produk
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Jumlah</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Total Harga (Rp.)</th>
-                                <th class="sorting" tabindex="0" aria-controls="table_pesanan" rowspan="1" colspan="1">
-                                    Aksi</th>
-                            </tr>
+                                <th>Tanggal </th>
+                                <th>Jenis Produk </th>
+                                <th>Jumlah Dipesan</th>
+                                <th>Harga Satuan (Rp.)</th>
+                                <th>Total Harga (Rp.)</th>
+                                <th>Aksi</th> </tr>
                         </thead>
                         <tbody>
 
@@ -52,7 +45,8 @@
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->produk->nama_produk }}</td>
                                 <td> {{ $item->jumlah }}</td>
-                                <td> {{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
+                                <td> {{ number_format($item->produk->harga_beli, 2, ',', '.') }}</td>
+                                <td> {{ number_format($item->total_harga_beli, 2, ',', '.') }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-warning text-white btn-update-mutasi"
                                         data-id-mutasi="{{ $item->id }}" data-toggle="modal"
