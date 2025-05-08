@@ -31,13 +31,14 @@
                             <tr>
                                 <th>Tanggal </th>
                                 <th>Pemesan </th>
-                                <th>Info</th>
-                                <th>Nota</th>
-                                <th>Pembayaran</th>
+                                <th>Status Transaksi</th>
+                                <th>Metode Pembayaran</th>
+                                <th>Status Pembayaran</th>
                                 <th>Ubah Status Pembayaran</th>
+                                <th>Pilih Kurir</th>
                                 <th>Bukti Pembayaran</th>
-                                <th>Status</th>
-                                <th>Ubah Status Pengiriman</th>
+                                <th>Nota</th>
+                                <th>Info</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -47,42 +48,28 @@
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->user->name }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-sm btn-secondary btn-detail-transaksi"
-                                        data-id-transaksi="{{ $item->id }}" data-toggle="modal"
-                                        data-target="#modal-detail-transaksi">
-                                        <i class="nav-icon fas fa-info"></i>
-                                        Info</button>
-                                </td>
-                                <td>
-
-                                    <form action="{{ route('admintoko.nota') }}" method="post">
-                                        @csrf
-                                        <input type="hidden" name="id_transaksi" value="{{ $item->id }}">
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                        <i class="nav-icon fas fa-print"></i>
-                                        Cetak</button>
-                                    </form>
-
+                                    <x-status-transaksi :status="$item->status" />
                                 </td>
                                 <td>
                                     <span class="badge bg-success">{{ $item->metode_pembayaran }}</span>
 
-                                    @if ($item->status_pembayaran === \App\Constants\StatusPembayaran::LUNAS)
-                                        <span class="badge bg-success">{{ $item->status_pembayaran->label() }}</span>
-                                    @elseif($item->status_pembayaran === \App\Constants\StatusPembayaran::SETENGAHBAYAR)
-                                        <span class="badge bg-warning">{{ $item->status_pembayaran->label() }}</span>
-                                    @elseif($item->status_pembayaran === \App\Constants\StatusPembayaran::BELUMBAYAR)
-                                        <span class="badge bg-danger">{{ $item->status_pembayaran->label() }}</span>
-                                    @endif
+                                </td>
+                                <td>
+                                    <x-status-pembayaran :status="$item->status_pembayaran" />
                                 </td>
                                 <td>
 
                                     <button class="btn btn-sm btn-success btn-status-pembayaran-lunas" data-id-transaksi="{{ $item->id }}" {{ $item->metode_pembayaran === \App\Constants\MetodePembayaran::COD ? 'disabled' : ''}} >
                                         <i class="fas fa-money-check"></i> Lunas</button>
-                                    <button class="btn btn-sm btn-warning btn-status-pembayaran-setengah-bayar" data-id-transaksi="{{ $item->id }}" {{ $item->metode_pembayaran === \App\Constants\MetodePembayaran::COD ? 'disabled' : ''}}>
-                                        <i class="fas fa-money-check"></i> Setengah Bayar</button>
                                 </td>
 
+                                <td>
+
+                                    <button class="btn btn-sm btn-warning btn-kirim-pesanan"
+                                        data-id-transaksi="{{ $item->id }}" {{ $item->status !== \App\Constants\StatusTransaksi::DIPROSES ? 'disabled' : ''}}>
+                                        <i class="nav-icon fas fa-truck"></i> Dikirim</button>
+
+                                </td>
                                 <td>
 
                                     @if ($item->metode_pembayaran === \App\Constants\MetodePembayaran::TRANSFER)
@@ -99,28 +86,25 @@
                                     @endif
 
                                 </td>
+
                                 <td>
-                                    @if ($item->status === \App\Constants\StatusTransaksi::PENDING)
-                                    <span class="badge bg-secondary">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIPROSES)
-                                    <span class="badge bg-success">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIKIRIM)
-                                    <span class="badge bg-warning">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIKIRIM)
-                                    <span class="badge bg-orange">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::SELESAI)
-                                    <span class="badge bg-green">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::DITERIMA)
-                                    <span class="badge bg-primary">{{ $item->status }}</span>
-                                    @endif
+
+                                    <form action="{{ route('admintoko.nota') }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="id_transaksi" value="{{ $item->id }}">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="nav-icon fas fa-print"></i>
+                                        Cetak</button>
+                                    </form>
+
                                 </td>
+
                                 <td>
-                                    <button class="btn btn-sm btn-success btn-setujui-pesanan"
-                                        data-id-transaksi="{{ $item->id }}" {{ $item->status !== \App\Constants\StatusTransaksi::PENDING ? 'disabled' : ''}} {{ $item->metode_pembayaran === \App\Constants\MetodePembayaran::TRANSFER && $item->status_pembayaran === \App\Constants\StatusPembayaran::BELUMBAYAR ? 'disabled' : ''}} >
-                                        <i class="nav-icon fas fa-check"></i> Terima</button>
-                                    <button class="btn btn-sm btn-warning btn-kirim-pesanan"
-                                        data-id-transaksi="{{ $item->id }}" {{ $item->status !== \App\Constants\StatusTransaksi::DIPROSES ? 'disabled' : ''}}>
-                                        <i class="nav-icon fas fa-truck"></i> Dikirim</button>
+                                    <button type="button" class="btn btn-sm btn-secondary btn-detail-transaksi"
+                                        data-id-transaksi="{{ $item->id }}" data-toggle="modal"
+                                        data-target="#modal-detail-transaksi">
+                                        <i class="nav-icon fas fa-info"></i>
+                                        Info</button>
                                 </td>
                             </tr>
                             @endforeach
@@ -256,11 +240,6 @@
         $('.btn-status-pembayaran-lunas').click(function () {
             let idTransaksi = $(this).data('id-transaksi');
             updateStatusPembayaran(idTransaksi, '{{ \App\Constants\StatusPembayaran::LUNAS }}', 'Status pembayaran berhasil diubah menjadi lunas');
-        });
-
-        $('.btn-status-pembayaran-setengah-bayar').click(function () {
-            let idTransaksi = $(this).data('id-transaksi');
-            updateStatusPembayaran(idTransaksi, '{{ \App\Constants\StatusPembayaran::SETENGAHBAYAR }}', 'Status pembayaran berhasil diubah menjadi setengah bayar');
         });
 
 
