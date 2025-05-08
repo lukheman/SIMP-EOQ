@@ -12,12 +12,40 @@ use App\Models\Restock;
 
 class AdminGudangController extends Controller
 {
+    protected $role = 'admin_gudang';
+
+    public function biayaPenyimpanan() {
+        $produk = Produk::query()->with('biayaPenyimpanan')->get();
+
+        return view("{$this->role}.produk.biaya-penyimpanan", [
+            'page' => 'Biaya Penyimpanan Produk',
+            'produk' => $produk
+        ]);
+    }
+
+    public function biayaPemesanan() {
+        $produk = Produk::query()->with('biayaPemesanan')->get();
+        return view("{$this->role}.produk.biaya-pemesanan", [
+            'page' => 'Biaya Pemesanan Produk',
+            'produk' => $produk
+        ]);
+    }
+
+    public function persediaan() {
+        $produk = Produk::all();
+
+        return view("{$this->role}.produk.persediaan", [
+            'page' => 'Persediaan Produk',
+            'produk' => $produk
+        ]);
+    }
+
 
     public function index() {
         $total_produk = Produk::count();
         $total_persediaan = Produk::sum('persediaan');
 
-        return view('admin_gudang.index', [
+        return view("{$this->role}.index", [
             'page' => 'Dashboard',
             'total_produk' => $total_produk,
             'total_persediaan' => $total_persediaan
