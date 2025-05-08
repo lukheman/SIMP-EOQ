@@ -15,15 +15,15 @@ class MutasiController extends Controller
 
     public function store(Request $request) {
 
-        $data = $request->validate([
+        $validated = $request->validate([
             'id_produk' => 'required|exists:produk,id',
             'jumlah' => 'required',
             'jenis' => 'required',
         ]);
 
-        $produk = Produk::find($request->id_produk);
+        $produk = Produk::query()->with('persediaan')->find($request->id_produk);
 
-        $mutasi =  Mutasi::create($data);
+        $mutasi =  Mutasi::create($validated);
 
 
         if ($request->jenis === 'masuk') {
