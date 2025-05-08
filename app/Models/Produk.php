@@ -50,10 +50,10 @@ class Produk extends Model
             ->where('jenis', 'keluar')
             ->sum('jumlah');
 
-        $S = $this->biaya_pemesanan;
-        $H = $this->biaya_penyimpanan;
+        $S = $this->biayaPemesanan->biaya;
+        $H = $this->biayaPenyimpanan->biaya;
 
-        return sqrt((2 * $D * $S) / $H);
+        return round(sqrt((2 * $D * $S) / $H), 2);
 
     }
 
@@ -81,9 +81,8 @@ class Produk extends Model
         $SS = $this->safetyStock();
         $LT = $this->lead_time; // waktu tunggu
         $Q = Mutasi::rataRataPenjualan($this->id, Carbon::now()->subMonth());
-        return $SS + ($LT * $Q);
+        return round($SS + ($LT * $Q), 2);
     }
-
 
 
 }
