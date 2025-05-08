@@ -24,7 +24,7 @@ class ProdukController extends Controller
 
     public function store(Request $request) {
 
-        $request->validate([
+        $validated = $request->validate([
             'nama_produk' => 'required',
             'kode_produk' => 'required|unique:produk,kode_produk',
             'harga_beli' => 'required|numeric|min:0',
@@ -41,7 +41,15 @@ class ProdukController extends Controller
             $data['gambar'] = $request->file('gambar')->store('images', 'public');
         }
 
-        $produk = Produk::create($data);
+        $produk = Produk::create($request->except(['biaya_penyimpanan', 'biaya_pemesanan']));
+
+        $produk->biayaPenyimpanan()->create([
+            'biaya' => $validated['biaya_penyimpanan']
+        ]);
+
+        $produk->biayaPemesanan()->create([
+            'biaya' => $validated['biaya_pemesanan']
+        ]);
 
         if($produk) {
             return response()->json([
@@ -62,7 +70,7 @@ class ProdukController extends Controller
     public function update(Request $request, $id) {
 
         // validasi data
-        $data = $request->validate([
+        $validated = $request->validate([
             'nama_produk' => [
                 'required',
                 Rule::unique('produk', 'nama_produk')->ignore($id)
@@ -95,7 +103,15 @@ class ProdukController extends Controller
             $data['gambar'] = $request->file('gambar')->store('images', 'public');
         }
 
-        $produk->update($data);
+        $produk->update($request->except(['biaya_penyimpanan', 'biaya_pemesanan']));
+
+        $produk->biayaPenyimpanan()->update([
+            'biaya' => $validated['biaya_penyimpanan']
+        ]);
+
+        $produk->biayaPemesanan()->update([
+            'biaya' => $validated['biaya_pemesanan']
+        ]);
 
         return response()->json([
             'success' => true,
@@ -117,7 +133,7 @@ class ProdukController extends Controller
     }
 
     public function show($id) {
-        $produk = Produk::find($id);
+        $produk = Produk::query()->with(['biayaPenyimpanan', 'biayaPemesanan'])->find($id);
 
         if($produk) {
             return response()->json([
