@@ -43,7 +43,7 @@ class AdminGudangController extends Controller
 
     public function index() {
         $total_produk = Produk::count();
-        $total_persediaan = Produk::sum('persediaan');
+        $total_persediaan = Produk::with('persediaan')->get()->sum('jumlah');
 
         return view("{$this->role}.index", [
             'page' => 'Dashboard',
