@@ -55,7 +55,7 @@ class AdminGudangController extends Controller
     public function barangMasuk() {
         $barang_masuk = Mutasi::with('produk')->where('jenis', 'masuk')->get();
 
-        return view('admin_gudang.barang-masuk', [
+        return view("{$this->role}.barang-masuk", [
             'page' => 'Barang Masuk',
             'barang_masuk' => $barang_masuk
         ]);
@@ -64,24 +64,16 @@ class AdminGudangController extends Controller
     public function pesanan() {
         $pesanan = Restock::with('produk')->get();
 
-        return view('admin_gudang.pesanan', [
+        return view("{$this->role}.pesanan", [
             'page' => 'Pesanan',
             'pesanan' => $pesanan
         ]);
     }
 
-    public function persediaan() {
-        $produk = Produk::all();
-
-        return view('admin_gudang.persediaan', [
-            'page' => 'Persediaan',
-            'produk' => $produk
-        ]);
-    }
 
     public function produk() {
-        $produk = Produk::all();
-        return view('admin_gudang.produk', [
+        $produk = Produk::query()->with(['biayaPenyimpanan', 'biayaPemesanan'])->get();
+        return view("{$this->role}.produk.produk", [
             'page' => 'Produk',
             'produk' => $produk
         ]);
@@ -124,7 +116,7 @@ class AdminGudangController extends Controller
 
         $produk = Produk::all();
 
-        return view('admin_gudang.eoq', [
+        return view("{$this->role}.eoq", [
             'page' => 'EOQ',
             'produk' => $produk
         ]);
@@ -133,7 +125,7 @@ class AdminGudangController extends Controller
     public function laporanPenjualan() {
         $penjualan = Mutasi::where('jenis', 'keluar')->get();
 
-        return view('admin_gudang.laporan-penjualan', [
+        return view("{$this->role}.laporan-penjualan", [
             'page' => 'Laporan Penjualan',
             'penjualan' => $penjualan
         ]);
@@ -162,7 +154,7 @@ class AdminGudangController extends Controller
     public function laporanBarangMasuk() {
         $barang_masuk = Mutasi::with('produk')->where('jenis', 'masuk')->get();
 
-        return view('admin_gudang.laporan-barang-masuk', [
+        return view("{$this->role}.laporan-barang-masuk", [
             'page' => 'Laporan Barang Masuk',
             'barang_masuk' => $barang_masuk
         ]);
