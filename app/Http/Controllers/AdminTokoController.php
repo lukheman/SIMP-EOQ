@@ -71,11 +71,8 @@ class AdminTokoController extends Controller
     }
 
     public function laporanPenjualan() {
-        $penjualan = Mutasi::where('jenis', 'keluar')->get();
-
         return view('admin_toko.laporan-penjualan', [
             'page' => 'Laporan Penjualan',
-            'penjualan' => $penjualan
         ]);
     }
 
