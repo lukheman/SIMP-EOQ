@@ -2,11 +2,10 @@
 
 namespace App\Constants;
 
-class Role
-{
-    public const ROLE = [
-        'admin_toko' => 'admin_toko',
-        'reseller' => 'reseller',
-        'kurir' => 'kurir',
-    ];
+enum Role: string {
+    case ADMINTOKO = 'admin_toko';
+    case ADMINGUDANG= 'admin_gudang';
+    case PEMILIKTOKO = 'pemilik_toko';
+    case RESELLER = 'reseller';
+    case KURIR = 'kurir';
 }
