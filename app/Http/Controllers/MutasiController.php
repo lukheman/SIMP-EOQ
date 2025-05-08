@@ -35,18 +35,13 @@ class MutasiController extends Controller
             // Hitung selisih hari
             $leadTime = $tanggalPesan->diffInDays($tanggalSelesai);
 
-            $produk->persediaan += $request->jumlah;
+            $produk->persediaan->jumlah += $request->jumlah;
+
             $produk->lead_time = $leadTime;
+            $produk->persediaan->save();
             $produk->save();
 
             $restock->delete();
-
-
-            // hapus pesanan restock
-
-            // update lead time
-
-
 
         } else {
             $produk->persediaan -= $request->jumlah;
