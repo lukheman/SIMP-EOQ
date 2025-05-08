@@ -10,29 +10,54 @@ use Carbon\Carbon;
 
 class LaporanController extends Controller
 {
-    public function laporanPenjualan(Request $request ) {
+
+public function laporanPenjualan(Request $request)
+    {
+        // Validate input
         $request->validate([
-            'periode' => 'required',
-            'ttd' => 'required'
+            'periode' => 'required|date_format:Y-m',
+            'ttd' => 'required|string|max:255',
         ]);
 
-        $periode = Carbon::parse($request->periode);
+        // Parse periode
+        $periode = Carbon::createFromFormat('Y-m', $request->periode)->startOfMonth();
+        $year = $periode->year;
+        $month = $periode->month;
+        $jumlahHari = $periode->daysInMonth;
 
+        // Fetch and group sales data
         $penjualan = Mutasi::with('produk')
-            ->whereYear('tanggal', $periode->year)
-            ->whereMonth('tanggal', $periode->month)
+            ->select(
+                'mutasi.*',
+                DB::raw('SUM(mutasi.jumlah) OVER (PARTITION BY mutasi.id_produk) / ? AS rata_rata_harian'),
+                DB::raw('COUNT(*) OVER (PARTITION BY mutasi.id_produk) AS total_mutasi')
+            )
             ->where('jenis', 'keluar')
+            ->whereYear('tanggal', $year)
+            ->whereMonth('tanggal', $month)
+            ->orderBy('id_produk')
+            ->orderBy('tanggal')
+            ->setBindings([$jumlahHari, 'keluar', $year, $month])
             ->get();
 
-        $rataRata = Mutasi::rataRataPenjualanSemua($periode);
+        // Group sales by product
+        $groupedPenjualan = $penjualan->groupBy('id_produk')->map(function ($sales) {
+            return [
+                'items' => $sales,
+                'rowspan' => $sales->count(),
+                'rata_rata_harian' => $sales->first()->rata_rata_harian,
+            ];
+        });
+
+        // Calculate total sales
+        $total = $penjualan->sum('total_harga_jual');
 
         return view('invoices.laporan-penjualan', [
-            'penjualan' => $penjualan,
-            'rataRata' => $rataRata,
-            'periode' => $request->periode,
-            'ttd' => $request->ttd
+            'groupedPenjualan' => $groupedPenjualan,
+            'total' => $total,
+            'periode' => $periode->format('Y-m'),
+            'ttd' => $request->ttd,
         ]);
-
     }
 
     public function laporanBarangMasuk(Request $request) {
