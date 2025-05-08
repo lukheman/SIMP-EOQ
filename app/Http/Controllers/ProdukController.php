@@ -51,6 +51,8 @@ class ProdukController extends Controller
             'biaya' => $validated['biaya_pemesanan']
         ]);
 
+        $produk->persediaan()->create();
+
         if($produk) {
             return response()->json([
                 'success' => true,
