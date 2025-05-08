@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('biaya_penyimpanan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_produk')->constrained('produk')->cascadeOnDelete();
-            $table->decimal('biaya', 10, 2);
+            $table->decimal('biaya', 10, 2)->default(0);
             $table->timestamps();
         });
     }
