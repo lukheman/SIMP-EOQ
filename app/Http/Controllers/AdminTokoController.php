@@ -22,7 +22,7 @@ class AdminTokoController extends Controller
     public function index() {
         $pesanan = Transaksi::where('status', StatusTransaksi::PENDING)->count();
         $total_penjualan = Transaksi::where('status', StatusTransaksi::SELESAI)->count();
-        $persediaan_barang = Produk::sum('persediaan');
+        $persediaan_barang = Produk::with('persediaan')->get()->sum('persediaan.jumlah');
 
         return view('admin_toko.index', [
             'page' => 'Dashboard',
