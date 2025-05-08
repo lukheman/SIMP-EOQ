@@ -123,32 +123,8 @@ class AdminGudangController extends Controller
     }
 
     public function laporanPenjualan() {
-        $penjualan = Mutasi::where('jenis', 'keluar')->get();
 
-        return view("{$this->role}.laporan-penjualan", [
-            'page' => 'Laporan Penjualan',
-            'penjualan' => $penjualan
-        ]);
-    }
-
-    public function cetakLaporanPenjualan(Request $request) {
-        $request->validate([
-            'periode' => 'required'
-        ]);
-
-        list($tahun, $bulan) = explode('-', $request->periode);
-
-        $penjualan = Mutasi::with('produk')
-            ->whereYear('tanggal', $tahun)
-            ->whereMonth('tanggal', $bulan)
-            ->where('jenis', 'keluar')
-            ->get();
-
-        return view('invoices.laporan-penjualan', [
-            'penjualan' => $penjualan,
-            'periode' => $request->periode,
-            'ttd' => 'Kepala Gudang'
-        ]);
+        return view("{$this->role}.laporan-penjualan", [ 'page' => 'Laporan Penjualan', ]);
     }
 
     public function laporanBarangMasuk() {
