@@ -15,11 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nama_produk', 100);
             $table->string('kode_produk', 20)->unique();
-            $table->integer('persediaan')->default(0);
             $table->decimal('harga_beli', 10, 2);
             $table->decimal('harga_jual', 10, 2);
-            $table->decimal('biaya_penyimpanan', 10, 2);
-            $table->decimal('biaya_pemesanan', 10, 2);
             $table->integer('lead_time')->default(0); // waktu tunggu dalam satuan hari
             $table->text('deskripsi')->nullable();
             $table->string('gambar')->nullable();
