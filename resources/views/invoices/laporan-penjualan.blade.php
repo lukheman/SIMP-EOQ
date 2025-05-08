@@ -82,66 +82,35 @@
                     <th>Tanggal</th>
                     <th>Nama Produk</th>
                     <th>Terjual</th>
+                    <th>Rata-rata Harian</th>
+                    <th>Harga Satuan (Rp.)</th>
                     <th>Total Harga (Rp.)</th>
                 </tr>
 
             </thead>
 
-            <tbody>
-                @php
-                $total = 0;
-                $i = 0;
-                @endphp
-
-                @foreach ($penjualan as $item)
-                <tr>
-                    <td class="text-center">{{ $item->tanggal }}</td>
-                    <td>{{ $item->produk->nama_produk }}</td>
-                    <td style="text-align: center;">{{ $item->jumlah}}</td>
-                    <td style="text-align: right;">{{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
-                    @php
-                    $total += $item->total_harga_jual
-                    @endphp
-                </tr>
-
-                @endforeach
-
-                <tr>
-                    <td style="text-align: center;" colspan="3">Total</td>
-                    <td style="text-align: right;">{{ number_format($total, 2, ',', '.')}}</td>
-                </tr>
-
-            </tbody>
-
-        </table>
-
-        <table id="rata-rata">
-
-            <thead>
-
-                <tr>
-                    <th>Nama Produk</th>
-                    <th>Rata-rata penjualan harian</th>
-                </tr>
-
-            </thead>
-
-            <tbody>
-                @php
-                $total = 0;
-                $i = 0;
-                @endphp
-
-                @foreach ($rataRata as $item)
-                <tr>
-                    <td>{{ $item->produk->nama_produk }}</td>
-                    <td class="text-center">{{ round($item->rata_rata_harian) }}</td>
-                </tr>
-
-                @endforeach
-
-
-            </tbody>
+                <tbody>
+                    @foreach ($groupedPenjualan as $group)
+                    @foreach ($group['items'] as $index => $item)
+                    <tr>
+                        <td class="text-center">{{ $item->tanggal }}</td>
+                        <td>{{ $item->produk->nama_produk }}</td>
+                        <td style="text-align: center;">{{ $item->jumlah }}</td>
+                        @if ($index === 0)
+                        <td rowspan="{{ $group['rowspan'] }}" style="text-align: center;">
+                            {{ number_format($group['rata_rata_harian'], 2, ',', '.') }}
+                        </td>
+                        @endif
+                        <td style="text-align: right;">{{ number_format($item->produk->harga_jual, 2, ',', '.') }}</td>
+                        <td style="text-align: right;">{{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
+                    </tr>
+                    @endforeach
+                    @endforeach
+                    <tr>
+                        <td colspan="5" style="text-align: right;"><strong>Total</strong></td>
+                        <td style="text-align: right;"><strong>{{ number_format($total, 2, ',', '.') }}</strong></td>
+                    </tr>
+                </tbody>
 
         </table>
 
@@ -156,5 +125,41 @@
     </div>
 
 </body>
+
+<script>
+
+function gabungKolomDenganIDYangSama(tableId) {
+  const table = document.getElementById(tableId);
+  if (!table) return;
+
+  for (let row of table.rows) {
+    let prevId = '';
+    let prevCell = null;
+    let spanCount = 1;
+
+    for (let i = 0; i < row.cells.length;) {
+      const cell = row.cells[i];
+      const cellId = cell.id;
+
+      if (cellId === prevId && prevCell) {
+        spanCount++;
+        prevCell.colSpan = spanCount;
+        cell.remove(); // Hapus sel duplikat
+        // i tetap, karena cell sudah dihapus
+      } else {
+        prevId = cellId;
+        prevCell = cell;
+        spanCount = 1;
+        i++; // hanya naikkan index jika tidak menghapus
+      }
+    }
+  }
+}
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   gabungKolomDenganIDYangSama('pesanan');
+// });
+
+</script>
 
 </html>
