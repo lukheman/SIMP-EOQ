@@ -43,12 +43,16 @@ Route::middleware(['role:admin_toko'])->group(function() {
     });
 });
 
-Route::middleware(['role:admin_gudang'])->group(function() {
+Route::middleware(['role:admin_gudang', 'auth'])->group(function() {
     Route::controller(AdminGudangController::class)->group(function() {
         Route::get('admingudang', 'index')->name('admingudang.index');
         Route::get('admingudang/dashboard', 'index')->name('admingudang.dashboard');
-        Route::get('admingudang/persediaan', 'persediaan')->name('admingudang.persediaan');
+
         Route::get('admingudang/produk', 'produk')->name('admingudang.produk');
+        Route::get('admingudang/produk/persediaan', 'persediaan')->name('admingudang.produk.persediaan');
+        Route::get('admingudang/produk/biaya-pemesanan', 'biayaPemesanan')->name('admingudang.produk.biaya-pemesanan');
+        Route::get('admingudang/produk/biaya-penyimpanan', 'biayaPenyimpanan')->name('admingudang.produk.biaya-penyimpanan');
+
 
         Route::get('admingudang/eoq', 'eoq')->name('admingudang.eoq');
         Route::post('admingudang/hitung', 'hitung')->name('admingudang.hitung');
