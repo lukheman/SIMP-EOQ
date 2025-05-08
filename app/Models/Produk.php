@@ -27,6 +27,14 @@ class Produk extends Model
         return $this->hasMany(Mutasi::class, 'id_produk');
     }
 
+    public function biayaPemesanan() {
+        return $this->hasOne(BiayaPemesanan::class, 'id_produk');
+    }
+
+    public function biayaPenyimpanan() {
+        return $this->hasOne(BiayaPenyimpanan::class, 'id_produk');
+    }
+
     public function isPersediaanMencukupi(int $permintaan): bool
     {
         return $this->persediaan >= $permintaan;
