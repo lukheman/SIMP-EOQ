@@ -13,13 +13,23 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\RestockController;
+use App\Http\Controllers\ProfileController;
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('reseller/registrasi', [ResellerController::class, 'registrasi'])->name('reseller.registrasi');
-Route::post('reseller/signup', [ResellerController::class, 'signup'])->name('reseller.signup');
+Route::get('/registrasi', [AuthController::class, 'registrasi'])->name('reseller.registrasi');
+Route::post('/signup', [AuthController::class, 'signup'])->name('reseller.signup');
 
-Route::middleware(['role:reseller'])->group(function() {
+Route::resource('profile', ProfileController::class)->only(['index', 'update'])->middleware('auth');
+
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('home');
+Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
+Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+Route::get('/dashboard', [AuthController::class, 'index'])->name('Dashboard');
+
+Route::middleware(['role:reseller', 'auth'])->group(function() {
     Route::controller(ResellerController::class)->group(function() {
         Route::get('reseller', 'index')->name('reseller.index');
         Route::get('reseller/dashboard', 'index')->name('reseller.dashboard');
