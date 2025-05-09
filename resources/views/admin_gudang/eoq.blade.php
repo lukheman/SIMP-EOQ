@@ -31,9 +31,10 @@
                             <tr class="text-center">
                                 <th>Kode Produk</th>
                                 <th>Nama Produk</th>
-                                <th>EOQ</th>
                                 <th>Safety Stock</th>
                                 <th>ROP</th>
+                                <th>Persediaan Saat Ini</th>
+                                <th>Jumlah yang harus dipesan (EOQ)</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,9 +43,10 @@
                             <tr>
                                 <td class="text-center">{{ $item->kode_produk }}</td>
                                 <td>{{ $item->nama_produk }}</td>
-                                <td class="text-center">{{ $item->economicOrderQuantity() }}</td>
                                 <td class="text-center">{{ $item->safetyStock() }}</td>
                                 <td class="text-center">{{ $item->reorderPoint() }}</td>
+                                <td class="text-center">{{ $item->persediaan->jumlah }}</td>
+                                <td class="text-center">{{ $item->economicOrderQuantity() }}</td>
 
                             </tr>
                             @endforeach
