@@ -7,6 +7,24 @@
 @endsection
 
 @section('content')
+
+<div class="row mb-3">
+
+    <div class="col-12">
+        <form action="{{ route('reseller.katalog')}}" method="get">
+
+            <div class="input-group">
+                <input type="text" class="form-control" name="q" value="{{ request('q') }}" placeholder="Cari produk">
+                <span class="input-group-append">
+                    <button type="submit" class="btn btn-info btn-flat">Cari</button>
+                </span>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+
 <div class="row">
 
     @foreach ($produk as $item)

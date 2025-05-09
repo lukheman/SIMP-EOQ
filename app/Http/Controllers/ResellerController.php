@@ -39,12 +39,20 @@ class ResellerController extends Controller
         ]);
     }
 
-    public function katalog() {
-        $produk = Produk::all();
+    public function katalog(Request $request) {
+        $query = $request->input('q');
+
+        $produk = Produk::query()
+            ->when($query, function ($q) use ($query) {
+                $q->where('nama_produk', 'like', "%{$query}%");
+            })
+            ->get(); // atau ->get() jika tidak ingin pagination
+
 
         return view('reseller.katalog', [
             'page' => 'Katalog',
-            'produk' => $produk
+            'produk' => $produk,
+            'query' => $query
         ]);
     }
 
