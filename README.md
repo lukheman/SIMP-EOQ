@@ -2,11 +2,13 @@
 
 | username                 | password    |
 |--------------------------|-------------|
-| admin_gudang@example.com | password123 |
-| admin_toko@example.com   | password123 |
-| pemilik_toko@example.com | password123 |
-| reseller@example.com     | password123 |
-| kurir@example.com        | password123 |
+| admingudang@example.com  | password123 |
+| admintoko@example.com    | password123 |
+| pemiliktoko@example.com  | password123 |
+| reseller1@example.com    | password123 |
+| reseller2@example.com    | password123 |
+| kurir1@example.com       | password123 |
+| kurir2@example.com       | password123 |
 
 # Kebutuhan instalasi
 
@@ -50,3 +52,15 @@ php artisan serve
 
 ## penjelasana halaman konfimasi pembayaran pada role kurir
 - jika kurir mengonfirmasi pesanan dengan scan-qr maka status transaksi akan berubah menjadi `diterima` dan status pembayaran akan menjadi `lunas` karena kurir telah menerima uang
+
+## Revisi
+
+- [x] tambah kop di laporan
+- [x] tambah pencarian produk di katalog
+- [x] halaman registrasi reseller tambahkan tombol keluar
+- [x] halaman profile user
+- [x] tambah tanggal expater di admin gudang dan reseller
+- [x] tambahakn alamat,no hp, nama reseller, di bagian atas tabel
+- [x] admin gudang eoq: tambahkan stok saat ini berapa dan harga
+- [x] tambahkan pencarian di bagian admin gudang eoq
+- [x] tambahkan tombol tambah pesanan di keranjang reseller
