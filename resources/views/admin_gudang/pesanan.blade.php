@@ -32,7 +32,8 @@
                         <thead>
                             <tr class="text-center">
                                 <th>Tanggal Pesan</th>
-                                <th>Jenis Produk </th>
+                                <th>Kode Produk</th>
+                                <th>Nama Produk</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -41,6 +42,7 @@
                             @foreach ($pesanan as $item)
                             <tr>
                                 <td> {{ $item->tanggal_pesan }}</td>
+                                <td class="text-center"> {{ $item->produk->kode_produk }}</td>
                                 <td> {{ $item->produk->nama_produk }}</td>
                                 <td class="text-center">
                                     <button class="btn btn-sm btn-danger btn-delete-pesanan"
