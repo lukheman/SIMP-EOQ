@@ -217,7 +217,8 @@
                     showToast( data.message);
                 },
                 error: function (error) {
-                    showToast( 'Gagal melakukan transaksi');
+                    console.log(error)
+                    showToast( 'Gagal melakukan transaksi', icon='error', reload=false);
                 }
 
             });
