@@ -42,7 +42,7 @@ class ProdukController extends Controller
             $data['gambar'] = $request->file('gambar')->store('images', 'public');
         }
 
-        $produk = Produk::create($request->except(['biaya_penyimpanan', 'biaya_pemesanan']));
+        $produk = Produk::create(collect($data)->except(['biaya_penyimpanan', 'biaya_pemesanan'])->all());
 
         $produk->biayaPenyimpanan()->create([
             'biaya' => $validated['biaya_penyimpanan']
@@ -104,7 +104,7 @@ class ProdukController extends Controller
             $data['gambar'] = $request->file('gambar')->store('images', 'public');
         }
 
-        $produk->update($request->except(['biaya_penyimpanan', 'biaya_pemesanan']));
+        $produk->update(collect($data)->except(['biaya_penyimpanan', 'biaya_pemesanan'])->all());
 
         $produk->biayaPenyimpanan()->update([
             'biaya' => $validated['biaya_penyimpanan']
