@@ -1,30 +1,29 @@
-<li class="nav-item">
-    <a href="{{ route('admintoko.index' )}}" class="nav-link {{ $page === 'Dashboard' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-tachometer-alt"></i>
-        <p>Dashboard</p>
-    </a>
-</li>
+<x-nav-link
+    :href="route('admintoko.index')"
+    icon="fas fa-tachometer-alt"
+    :active="$page === 'Dashboard'">
+    Dashboard
+</x-nav-link>
 
-<li class="nav-item">
-    <a href="{{ route('admintoko.persediaan')}}" class="nav-link {{ $page === 'Persediaan' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-boxes"></i>
-        <p>Persediaan Barang</p>
-    </a>
-</li>
+<x-nav-link
+    :href="route('admintoko.persediaan')"
+    icon="fas fa-boxes"
+    :active="$page === 'Persediaan'">
+    Persediaan Barang
+</x-nav-link>
 
-<li class="nav-item">
-    <a href="{{ route('admintoko.pesanan') }}" class="nav-link {{ $page === 'Pesanan' ? 'active' : '' }}">
-        <i class="nav-icon fas fa-clipboard"></i>
-        <p>Pesanan</p>
-    </a>
-</li>
+<x-nav-link
+    :href="route('admintoko.pesanan')"
+    icon="fas fa-clipboard"
+    :active="$page === 'Pesanan'">
+    Pesanan
+</x-nav-link>
 
 <li class="nav-header">LAPORAN</li>
 
-<li class="nav-item">
-    <a href="{{ route('admintoko.laporan-penjualan') }}"
-        class="nav-link  {{ $page === 'Laporan Penjualan' ? 'active' : '' }}">
-        <i class="fas fa-chart-bar nav-icon"></i>
-        <p>Penjualan</p>
-    </a>
-</li>
+<x-nav-link
+    :href="route('admintoko.laporan-penjualan')"
+    icon="fas fa-chart-bar"
+    :active="$page === 'Laporan Penjualan'">
+    Penjualan
+</x-nav-link>
