@@ -98,4 +98,37 @@ class PesananController extends Controller
 
     }
 
+
+    public function show($id) {
+
+        $pesanan = Pesanan::query()->with('produk')->find($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Berhasil mendapakan pesanan",
+            'data' => $pesanan
+        ]);
+
+
+    }
+
+    public function update(Request $request, $id) {
+
+        $request->validate([
+            'jumlah' => 'required|numeric'
+        ]);
+
+        $pesanan = Pesanan::find($id);
+        $pesanan->jumlah = $request->jumlah;
+        $pesanan->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesanan berhasil diperbarui',
+            'data' => $pesanan
+        ], 200);
+
+
+    }
+
 }
