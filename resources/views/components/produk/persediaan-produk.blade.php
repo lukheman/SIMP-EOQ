@@ -18,8 +18,11 @@
                         aria-describedby="table_persediaan_info">
                         <thead>
                             <tr class="text-center">
+
                                 <th>Kode Produk</th>
                                 <th>Nama Produk</th>
+                                <th>Harga Beli (Rp.)</th>
+                                <th>Harga Jual (Rp.)</th>
                                 <th>Persediaan</th>
 
                             </tr>
@@ -30,6 +33,8 @@
                             <tr>
                                 <td class="text-center"> {{ $item->kode_produk }}</td>
                                 <td> {{ $item->nama_produk }}</td>
+                                <td class="text-right"> {{ number_format($item->harga_beli, 0, ',', '.') }}</td>
+                                <td class="text-right"> {{ number_format($item->harga_jual, 0, ',', '.') }}</td>
                                 <td class="text-center"> {{ $item->persediaan->jumlah }}</td>
                             </tr>
                             @endforeach
@@ -62,11 +67,11 @@ $(document).ready(function() {
 
     $('#table_persediaan').DataTable({
         "paging": true,
-        "lengthChange": false,
+        "lengthChange": true,
         "searching": true,
         "ordering": true,
         "info": true,
-        "autoWidth": false,
+        "autoWidth": true,
         "responsive": true,
     });
 
