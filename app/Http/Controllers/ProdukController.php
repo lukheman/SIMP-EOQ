@@ -32,7 +32,8 @@ class ProdukController extends Controller
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'biaya_penyimpanan' => 'required|numeric|min:0',
             'biaya_pemesanan' => 'required|numeric|min:0',
-            'deskripsi' => 'nullable|string'
+            'deskripsi' => 'nullable|string',
+            'exp' => 'required'
         ]);
 
         $data = $request->all();
@@ -73,20 +74,18 @@ class ProdukController extends Controller
 
         // validasi data
         $validated = $request->validate([
-            'nama_produk' => [
-                'required',
-                Rule::unique('produk', 'nama_produk')->ignore($id)
-            ],
             'kode_produk' => [
                 'required',
                 Rule::unique('produk', 'kode_produk')->ignore($id)
             ],
+            'nama_produk' => 'required',
             'harga_beli' => 'required|numeric:min:0',
             'harga_jual' => 'required|numeric:min:0',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'biaya_penyimpanan' => 'required|numeric:min:0',
             'biaya_pemesanan' => 'required|numeric:min:0',
             'deskripsi' => 'nullable|string',
+            'exp' => 'required'
         ]);
 
 
