@@ -8,10 +8,9 @@ use App\Models\Mutasi;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class LaporanController extends Controller
-{
+class LaporanController extends Controller {
 
-public function laporanPenjualan(Request $request)
+    public function laporanPenjualan(Request $request)
     {
         // Validate input
         $request->validate([
@@ -90,7 +89,7 @@ public function laporanPenjualan(Request $request)
 
     public function laporanPersediaanProduk() {
 
-        $produk = Produk::all();
+        $produk = Produk::with('persediaan')->get();
 
         return view('invoices.laporan-persediaan-produk', [
             'produk' => $produk,
