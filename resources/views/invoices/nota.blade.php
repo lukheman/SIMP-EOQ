@@ -76,9 +76,14 @@
                 <td>{{ $penerima->name }}</td>
             </tr>
             <tr>
+                <td>Telepon</td>
+                <td>:</td>
+                <td>{{ $penerima->phone ?? '-' }}</td>
+            </tr>
+            <tr>
                 <td>Alamat</td>
                 <td>:</td>
-                <td>{{ $penerima->alamat}}</td>
+                <td>{{ $penerima->alamat ?? '-'}}</td>
             </tr>
         </table>
 
