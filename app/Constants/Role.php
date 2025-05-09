@@ -8,4 +8,8 @@ enum Role: string {
     case PEMILIKTOKO = 'pemiliktoko';
     case RESELLER = 'reseller';
     case KURIR = 'kurir';
+
+    public static function values(): array {
+        return array_map(fn($case) => $case->value, self::cases());
+    }
 }
