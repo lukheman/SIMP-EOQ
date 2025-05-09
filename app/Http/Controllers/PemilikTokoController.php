@@ -39,14 +39,15 @@ class PemilikTokoController extends Controller
         ]);
     }
 
-    
+    public function persediaan() {
+        return view('pemilik_toko.persediaan', [
+            'page' => 'Persediaan Produk'
+        ]);
+    }
 
     public function laporanBarangMasuk() {
-        $barang_masuk = Mutasi::with('produk')->where('jenis', 'masuk')->get();
-
         return view('pemilik_toko.laporan-barang-masuk', [
             'page' => 'Laporan Barang Masuk',
-            'barang_masuk' => $barang_masuk
         ]);
     }
 
