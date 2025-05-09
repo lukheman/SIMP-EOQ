@@ -44,6 +44,7 @@
 
                                 <th>Kode Produk</th>
                                 <th>Nama Produk</th>
+                                <th>Tanggal Kadaluarsa</th>
                                 <th>Harga Beli (Rp)</th>
                                 <th>Harga Jual (Rp)</th>
                                 <th>Aksi</th>
@@ -55,6 +56,7 @@
                             <tr>
                                 <td class="text-center"> {{ $item->kode_produk }}</td>
                                 <td> {{ $item->nama_produk }}</td>
+                                <td> {{ $item->exp }}</td>
                                 <td> {{ number_format($item->harga_beli, 0, ',', '.') }}</td>
                                 <td> {{ number_format($item->harga_jual, 0, ',', '.') }}</td>
                                 <td class="text-center">
@@ -150,6 +152,11 @@
                                 <input type="file" class="form-control" name="gambar" id="gambar">
                             </div>
 
+                            <div class="form-group">
+                                <label for="tanggal-kadaluarsa">Tanggal Kadaluarsa</label>
+                                <input type="date" class="form-control" name="exp" id="tanggal-kadaluarsa" min="{{ date('Y-m-d') }}">
+                            </div>
+
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -236,6 +243,11 @@
                             </div>
 
 
+                            <div class="form-group">
+                                <label for="tanggal-kadaluarsa">Tanggal Kadaluarsa</label>
+                                <input type="date" class="form-control" name="exp" id="tanggal-kadaluarsa" min="{{ date('Y-m-d') }}">
+                            </div>
+
 
                         </div>
                         <div class="col-md-6">
@@ -263,6 +275,9 @@
                                 <textarea class="form-control" name="deskripsi" id="deskripsi"
                                     placeholder="Deskripsi Produk"></textarea>
                             </div>
+
+
+
 
                         </div>
                     </div>
@@ -298,10 +313,24 @@
                     </div>
 
                     <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-6">
+
                         <div class="form-group">
                             <label for="kode-produk">Kode Produk</label>
                             <input type="text" class="form-control" name="kode_produk" id="kode-produk" readonly>
                         </div>
+                            </div>
+                            <div class="col-6">
+
+                            <div class="form-group">
+                                <label for="tanggal-kadaluarsa">Tanggal Kadaluarsa</label>
+                                <input type="date" class="form-control" name="exp" id="tanggal-kadaluarsa" min="{{ date('Y-m-d') }}" readonly>
+                            </div>
+
+                            </div>
+                        </div>
+
 
                         <div class="form-group">
                             <label for="nama-produk">Nama Produk</label>
@@ -507,6 +536,7 @@
                     formUpdateProduk.find('#biaya-penyimpanan').val(produk.biaya_penyimpanan.biaya);
                     formUpdateProduk.find('#biaya-pemesanan').val(produk.biaya_pemesanan.biaya);
                     formUpdateProduk.find('#deskripsi').val(produk.deskripsi);
+                    formUpdateProduk.find('#tanggal-kadaluarsa').val(produk.exp);
 
                 },
                 error: function (error) {
@@ -544,6 +574,7 @@
                     modalInfoProduk.find('#biaya-penyimpanan').val(produk.biaya_penyimpanan.biaya);
                     modalInfoProduk.find('#biaya-pemesanan').val(produk.biaya_pemesanan.biaya);
                     modalInfoProduk.find('#deskripsi').val(produk.deskripsi);
+                    modalInfoProduk.find('#tanggal-kadaluarsa').val(produk.exp);
 
                 },
                 error: function (error) {
