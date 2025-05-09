@@ -37,20 +37,24 @@
                         aria-describedby="table_persediaan_info">
                         <thead>
                             <tr>
-                                <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1"
-                                    colspan="1">Nama Produk</th>
 
-                                <th class="sorting" tabindex="0" aria-controls="table_persediaan" rowspan="1"
-                                    colspan="1">Persediaan</th>
+                                <th>Kode Produk</th>
+                                <th>Nama Produk</th>
+                                <th>Harga Beli (Rp.)</th>
+                                <th>Harga Jual (Rp.)</th>
+                                <th>Persediaan</th>
+
                             </tr>
                         </thead>
                         <tbody>
 
                             @foreach ($produk as $item)
                             <tr>
+                                <td class="text-center"> {{ $item->kode_produk }}</td>
                                 <td> {{ $item->nama_produk }}</td>
-                                <td> {{ $item->persediaan }}</td>
-
+                                <td class="text-right"> {{ number_format($item->harga_beli, 0, ',', '.') }}</td>
+                                <td class="text-right"> {{ number_format($item->harga_jual, 0, ',', '.') }}</td>
+                                <td class="text-center"> {{ $item->persediaan->jumlah }}</td>
                             </tr>
                             @endforeach
 
