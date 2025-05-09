@@ -68,26 +68,30 @@
             <thead>
 
                 <tr>
+
                     <th>No</th>
+                    <th>Kode Produk</th>
                     <th>Nama Produk</th>
+                    <th>Harga Beli (Rp.)</th>
+                    <th>Harga Jual (Rp.)</th>
                     <th>Persediaan</th>
+
 
                 </tr>
 
             </thead>
 
             <tbody>
-                @php
-                $i = 0;
-                @endphp
 
                 @foreach ($produk as $item)
                 <tr>
-                    <td>{{ ++$i }}</td>
+                    <td>{{ $loop->index + 1 }}</td>
+                    <td style="text-align: center;">{{ $item->kode_produk }}</td>
                     <td>{{ $item->nama_produk }}</td>
-                    <td>{{ $item->persediaan }}</td>
+                    <td style="text-align: right;"> {{ number_format($item->harga_beli, 0, ',', '.') }}</td>
+                    <td style="text-align: right;"> {{ number_format($item->harga_jual, 0, ',', '.') }}</td>
+                    <td style="text-align: center;">{{ $item->persediaan->jumlah }}</td>
                 </tr>
-
                 @endforeach
 
             </tbody>
