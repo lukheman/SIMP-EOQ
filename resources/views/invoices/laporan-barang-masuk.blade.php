@@ -7,6 +7,7 @@
     <title>Laporan Barang Masuk</title>
 
 
+    <!-- TODO: buat perhari -->
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -59,8 +60,9 @@
 
 <body onload="window.print()">
     <div class="container">
-        <h3 class="text-center">UD TOKO DIVA MOWEWE</h3>
-        <hr>
+
+        <x-kop-laporan />
+
         <h5 class="text-center"><u>Laporan Barang Masuk</u></h5>
 
         <table id="keterangan">

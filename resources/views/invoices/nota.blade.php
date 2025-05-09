@@ -59,8 +59,9 @@
 
 <body onload="window.print()">
     <div class="container">
-        <h3 class="text-center">UD TOKO DIVA MOWEWE</h3>
-        <hr>
+
+        <x-kop-laporan tanggal_cetak="kam"/>
+
         <h5 class="text-center"><u>Nota Pesanan Barang</u></h5>
 
         <table id="keterangan">
