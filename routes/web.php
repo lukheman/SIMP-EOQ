@@ -41,7 +41,7 @@ Route::middleware(['role:reseller', 'auth'])->group(function() {
     });
 });
 
-Route::middleware(['role:admin_toko'])->group(function() {
+Route::middleware(['role:admintoko', 'auth'])->group(function() {
     Route::controller(AdminTokoController::class)->group(function() {
         Route::get('admintoko', 'index')->name('admintoko.index');
         Route::get('admintoko/dashboard', 'index')->name('admintoko.dashboard');
@@ -53,7 +53,7 @@ Route::middleware(['role:admin_toko'])->group(function() {
     });
 });
 
-Route::middleware(['role:admin_gudang', 'auth'])->group(function() {
+Route::middleware(['role:admingudang', 'auth'])->group(function() {
     Route::controller(AdminGudangController::class)->group(function() {
         Route::get('admingudang', 'index')->name('admingudang.index');
         Route::get('admingudang/dashboard', 'index')->name('admingudang.dashboard');
@@ -80,10 +80,12 @@ Route::middleware(['role:admin_gudang', 'auth'])->group(function() {
 });
 
 
-Route::middleware(['role:pemilik_toko'])->group(function() {
+Route::middleware(['role:pemiliktoko', 'auth'])->group(function() {
     Route::controller(PemilikTokoController::class)->group(function() {
         Route::get('pemiliktoko', 'index')->name('pemiliktoko.index');
         Route::get('pemiliktoko/dashboard', 'index')->name('pemiliktoko.dashboard');
+
+        Route::get('pemiliktoko/persediaan', 'persediaan')->name('pemiliktoko.persediaan');
 
         Route::get('pemiliktoko/laporan-penjualan', 'laporanPenjualan')->name('pemiliktoko.laporan-penjualan');
 
@@ -93,7 +95,7 @@ Route::middleware(['role:pemilik_toko'])->group(function() {
     });
 });
 
-Route::middleware(['role:kurir'])->group(function() {
+Route::middleware(['role:kurir', 'auth'])->group(function() {
     Route::controller(KurirController::class)->group(function() {
         Route::get('kurir', 'index')->name('kurir.index');
         Route::get('kurir/dashboard', 'index')->name('kurir.dashboard');
@@ -123,6 +125,7 @@ Route::controller(TransaksiController::class)->group(function() {
     Route::post('transaksi/detail', 'detail')->name('transaksi.detail');
     Route::post('transaksi/bukti-pembayaran/{id}', 'buktiPembayaran')->name('transaksi.bukti-pembayaran');
     Route::post('transaksi/update-status-pembayaran/{id}', 'updateStatusPembayaran')->name('transaksi.update-status-pembayaran');
+    Route::post('transaksi/update-kurir/{id}', 'updateKurir')->name('transaksi.update-kurir');
 });
 
 Route::resource('mutasi', MutasiController::class)->only(['store', 'update', 'destroy', 'show',]);
@@ -132,12 +135,6 @@ Route::controller(RestockController::class)->group(function() {
     Route::get('restock/exist/{barcode}', 'exist')->name('restock.exist');
 });
 
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::get('/', [AuthController::class, 'showLoginForm'])->name('home');
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
-Route::get('/dashboard', [AuthController::class, 'index'])->name('Dashboard');
 
 Route::post('/laporan/laporan-penjualan', [LaporanController::class, 'laporanPenjualan'])->name('laporan-penjualan');
 Route::post('/laporan/laporan-barang-masuk', [LaporanController::class, 'laporanBarangMasuk'])->name('laporan-barang-masuk');
