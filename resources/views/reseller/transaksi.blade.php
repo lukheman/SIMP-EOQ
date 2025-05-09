@@ -30,11 +30,13 @@
                         <thead>
                             <tr>
                                 <th>Tanggal</th>
-                                <th>Info</th>
                                 <th>Status Transaksi</th>
-                                <th>Pembayaran</th>
+                                <th>Metode Pembayaran</th>
+                                <th>Status Pembayaran</th>
                                 <th>Bukti Pembayaran</th>
                                 <th>Konfirmasi</th>
+
+                                <th>Info</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,39 +45,21 @@
                             <tr>
                                 <td> {{ $item->tanggal }}</td>
 
-                                <td>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-detail-transaksi"
-                                        data-id-transaksi="{{ $item->id }}" data-toggle="modal"
-                                        data-target="#modal-detail-transaksi">
-                                        <i class="fas fa-info"></i>Detail Transaksi</button>
-                                </td>
 
                                 <td>
-                                    @if ($item->status === \App\Constants\StatusTransaksi::PENDING)
-                                    <span class="badge bg-secondary">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIPROSES)
-                                    <span class="badge bg-success">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIKIRIM)
-                                    <span class="badge bg-warning">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::DIKIRIM)
-                                    <span class="badge bg-orange">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::SELESAI)
-                                    <span class="badge bg-green">{{ $item->status }}</span>
-                                    @elseif($item->status === \App\Constants\StatusTransaksi::DITERIMA)
-                                    <span class="badge bg-primary">{{ $item->status }}</span>
-                                    @endif
+
+                                    <x-status-transaksi :status="$item->status" />
+
                                 </td>
 
                                 <td>
                                     <span class="badge bg-success">{{ $item->metode_pembayaran }}</span>
+                                </td>
 
-                                    @if ($item->status_pembayaran === \App\Constants\StatusPembayaran::LUNAS)
-                                        <span class="badge bg-success">{{ $item->status_pembayaran->label() }}</span>
-                                    @elseif($item->status_pembayaran === \App\Constants\StatusPembayaran::SETENGAHBAYAR)
-                                        <span class="badge bg-warning">{{ $item->status_pembayaran->label() }}</span>
-                                    @elseif($item->status_pembayaran === \App\Constants\StatusPembayaran::BELUMBAYAR)
-                                        <span class="badge bg-danger">{{ $item->status_pembayaran->label() }}</span>
-                                    @endif
+                                <td>
+
+                                    <x-status-pembayaran :status="$item->status_pembayaran" />
+
                                 </td>
 
                                 <td>
@@ -103,6 +87,13 @@
                                     <button type="button" class="btn btn-sm btn-outline-success btn-pesanan-selesai"
                                         data-id-transaksi="{{ $item->id }}" {{ $item->status === \App\Constants\StatusTransaksi::DITERIMA ? '' : 'disabled' }}>
                                         <i class="fas fa-check"></i>Pesanan selesai</button>
+                                </td>
+
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-detail-transaksi"
+                                        data-id-transaksi="{{ $item->id }}" data-toggle="modal"
+                                        data-target="#modal-detail-transaksi">
+                                        <i class="fas fa-info"></i>Detail Transaksi</button>
                                 </td>
                             </tr>
                             @endforeach
