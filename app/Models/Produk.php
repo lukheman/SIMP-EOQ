@@ -42,7 +42,7 @@ class Produk extends Model
 
     public function economicOrderQuantity() {
 
-        $periode = Carbon::now()->subMonth(2); // bulan lalu
+        $periode = Carbon::now()->subMonth(); // bulan lalu
 
         $D = Mutasi::where('id_produk', $this->id)
             ->whereYear('tanggal', $periode->year)
@@ -72,7 +72,6 @@ class Produk extends Model
         $PRR = $D / 4; // penjualan rata-rata dibagi 4 (perminggu)
         $LT = $this->lead_time; // waktu tunggu
 
-        /* dd($PM, $PRR); */
         return ($PM - $PRR) * $LT;
     }
 
