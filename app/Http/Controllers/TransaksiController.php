@@ -13,6 +13,7 @@ use App\Models\Produk;
 use App\Models\Mutasi;
 use App\Models\Keranjang;
 use App\Models\Pesanan;
+use App\Models\User;
 
 use App\Constants\StatusTransaksi;
 use Illuminate\Support\Facades\Storage;
@@ -22,7 +23,7 @@ class TransaksiController extends Controller
 {
 
     public function store(Request $request) {
-        $request->validate([
+        $validated = $request->validate([
             'metode_pembayaran' => ['required', Rule::enum(MetodePembayaran::class)],
             'pesanan_dipilih' => 'required|string'  // Menambahkan validasi untuk memastikan ini string
         ]);
@@ -35,6 +36,7 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::create([
             'id_user' => Auth::id(),
             'metode_pembayaran' => $request->metode_pembayaran,
+            'status' => MetodePembayaran::from($validated['metode_pembayaran']) === MetodePembayaran::COD ? StatusTransaksi::DIPROSES : StatusTransaksi::PENDING
         ]);
 
         // Update pesanan terkait
@@ -125,17 +127,12 @@ class TransaksiController extends Controller
 
         $transaksi = Transaksi::findOrFail($id);
 
-        if (Auth::user()->role === Role::ROLE['admin_toko']) {
-            if(StatusPembayaran::from($request->status_pembayaran) === StatusPembayaran::SETENGAHBAYAR) {
-                $transaksi->status_pembayaran = StatusPembayaran::SETENGAHBAYAR;
-                $transaksi->save();
+        if (Role::from(Auth::user()->role) === Role::ADMINTOKO) {
+            if(StatusPembayaran::from($request->status_pembayaran) === StatusPembayaran::LUNAS) {
 
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Status pembayaran berhasil diubah menjadi setengah bayar',
-                ], 200);
-            } else if(StatusPembayaran::from($request->status_pembayaran) === StatusPembayaran::LUNAS) {
+                // jika lunas maka status pengiriman otomatis jadi diproses
                 $transaksi->status_pembayaran = StatusPembayaran::LUNAS;
+                $transaksi->status = StatusTransaksi::DIPROSES;
                 $transaksi->save();
 
                 return response()->json([
@@ -160,11 +157,11 @@ class TransaksiController extends Controller
 
         $transaksi = Transaksi::findOrFail($id);
 
-        if (Auth::user()->role === Role::ROLE['admin_toko']) {
+        if (Role::from(Auth::user()->role) === Role::ADMINTOKO) {
             return $this->handleAdminTokoActions($request, $transaksi);
-        } elseif (Auth::user()->role === Role::ROLE['kurir']) {
+        } elseif (Role::from(Auth::user()->role) === Role::KURIR) {
             return $this->handleKurirActions($request, $transaksi);
-        } elseif (Auth::user()->role === Role::ROLE['reseller']) {
+        } elseif (Role::from(Auth::user()->role) === Role::RESELLER) {
             return $this->handleResellerActions($request, $transaksi);
         }
 
@@ -179,7 +176,7 @@ class TransaksiController extends Controller
         $status = StatusTransaksi::from($request->status);
 
         if ($status === StatusTransaksi::DIPROSES) {
-            return $this->prosesPesanan($transaksi);
+            return $this->kurangiPersediaan($transaksi);
         } elseif ($status === StatusTransaksi::DIKIRIM) {
             return $this->kirimPesanan($transaksi);
         }
@@ -191,14 +188,12 @@ class TransaksiController extends Controller
 
     }
 
-    private function prosesPesanan(Transaksi $transaksi) {
-        $pesanan = Pesanan::with('produk')->where('id_transaksi', $transaksi->id)->get();
+    private function kurangiPersediaan(Transaksi $transaksi) {
+        $pesanan = Pesanan::with(['produk', 'produk.persediaan'])->where('id_transaksi', $transaksi->id)->get();
 
         foreach ($pesanan as $item) {
 
-            $produk = Produk::find($item->produk->id);
-
-            if(!$produk->isPersediaanMencukupi($item->jumlah)) {
+            if(!$item->produk->isPersediaanMencukupi($item->jumlah)) {
                 return response()->json([
                     'success' => false,
                     'message' => "Persediaan {$item->produk->nama_produk} tidak mencukupi",
@@ -206,12 +201,12 @@ class TransaksiController extends Controller
             }
 
             // kurangi persediaan produk
-            $produk->persediaan -= $item->jumlah;
-            $produk->save();
+            $item->produk->persediaan->jumlah -= $item->jumlah;
+            $item->produk->persediaan->save();
 
             // catat log mutasi
             Mutasi::create([
-                'id_produk' => $produk->id,
+                'id_produk' => $item->produk->id,
                 'jumlah' => $item->jumlah,
                 'jenis' => 'keluar',
                 'keterangan' => 'Pengiriman pesanan'
@@ -219,16 +214,22 @@ class TransaksiController extends Controller
 
         }
 
-        $transaksi->status = StatusTransaksi::DIPROSES;
-        $transaksi->save();
-
         return response()->json([
             'success' => true,
-            'message' => 'Pesanan berhasil diterima',
+            'message' => 'Persediaan pesanan berhasil dikurangi',
         ], 200);
     }
 
     private function kirimPesanan(Transaksi $transaksi) {
+        if ($transaksi->status === StatusTransaksi::DIKIRIM) {
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Pesanan telah diserahkan ke kurir',
+            ], 200);
+
+        }
+
         if ($transaksi->status !== StatusTransaksi::DIPROSES) {
             return response()->json([
                 'success' => false,

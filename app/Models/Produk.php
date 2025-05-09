@@ -37,7 +37,7 @@ class Produk extends Model
 
     public function isPersediaanMencukupi(int $permintaan): bool
     {
-        return $this->persediaan >= $permintaan;
+        return $this->persediaan->jumlah >= $permintaan;
     }
 
     public function economicOrderQuantity() {
