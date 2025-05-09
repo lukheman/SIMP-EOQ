@@ -17,6 +17,7 @@ class Transaksi extends Model
         'metode_pembayaran' => MetodePembayaran::class,
         'status' => StatusTransaksi::class,
         'status_pembayaran' => StatusPembayaran::class,
+        'tanggal' => 'datetime:Y-m-d'
     ];
 
     public function pesanan() {
@@ -27,18 +28,12 @@ class Transaksi extends Model
         return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function totalHarga() {
+    public function kurir() {
+        return $this->belongsTo(User::class, 'id_kurir');
+    }
 
-        $total_harga = 0;
-
-        $pesanan = Pesanan::where('id_transaksi', $this->id)->get();
-
-        foreach ($pesanan as $item) {
-            $total_harga += $item->total_harga;
-        }
-
-        return $total_harga;
-
+    public function getTotalHargaAttribute() {
+          return Pesanan::where('id_transaksi', $this->id)->sum('total_harga');
     }
 
 }
