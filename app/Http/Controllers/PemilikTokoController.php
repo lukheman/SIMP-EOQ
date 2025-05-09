@@ -12,7 +12,7 @@ class PemilikTokoController extends Controller
 
     public function index() {
         $transaksi = Transaksi::where('status', 'selesai')->count();
-        $persediaan_barang = Produk::sum('persediaan');
+        $persediaan_barang = Produk::with('persediaan')->get()->sum('persediaan.jumlah');
 
         return view('pemilik_toko.index', [
             'page' => 'Dashboard',
@@ -31,7 +31,7 @@ class PemilikTokoController extends Controller
     }
 
     public function laporanPersediaanProduk() {
-        $produk = Produk::all();
+        $produk = Produk::with('persediaan')->get();
 
         return view('pemilik_toko.laporan-persediaan-produk', [
             'page' => 'Laporan Persediaan Produk',
