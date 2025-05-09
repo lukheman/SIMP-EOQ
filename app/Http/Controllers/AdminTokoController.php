@@ -58,7 +58,7 @@ class AdminTokoController extends Controller
 
         $pesanan = Pesanan::with(['produk'])->where('id_transaksi', $request->id_transaksi)->get();
         $pengirim = Auth::user();
-        $penerima = Transaksi::with('user', 'user.reseller_detail')->first()->user;
+        $penerima = Transaksi::with('user')->find($request->id_transaksi)->user;
 
         $qrcode = QrcodeHelper::getQrcodeString($request->id_transaksi);
 

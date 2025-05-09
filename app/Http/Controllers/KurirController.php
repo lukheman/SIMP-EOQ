@@ -24,7 +24,7 @@ class KurirController extends Controller
     }
 
     public function pesanan() {
-        $pesanan = Transaksi::with(['user', 'user.reseller_detail'])->where('status', 'dikirim')->get();
+        $pesanan = Transaksi::with(['user'])->where('status', 'dikirim')->where('id_kurir', auth()->user()->id)->get();
 
         return view('kurir.pesanan', [
             'page' => 'Pesanan',
@@ -43,21 +43,29 @@ class KurirController extends Controller
             'status_pembayaran' => ['required', Rule::enum(StatusPembayaran::class)],
         ]);
 
-        $transaksi = Transaksi::with(['user', 'user.reseller_detail'])->findOrFail($id);
+        $transaksi = Transaksi::with('user')->findOrFail($id);
+
+        if($transaksi->id_kurir !== auth()->user()->id) {
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Pesanan tidak valid, mohon periksa apakah pesanan telah diberikan kepada Anda',
+            ], 200);
+
+        }
 
         if($transaksi->status === StatusTransaksi::DIKIRIM) {
             $transaksi->status = StatusTransaksi::DITERIMA;
             $transaksi->status_pembayaran = StatusPembayaran::LUNAS;
             $transaksi->save();
-
-            $transaksi['total_harga'] = $transaksi->totalHarga();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Pesanan telah diserahkan ke pembeli',
-                'data' => $transaksi
-            ], 200);
         }
+
+        $transaksi['total_harga'] = $transaksi->total_harga;
+        return response()->json([
+            'success' => true,
+            'message' => 'Pesanan telah diserahkan ke pembeli',
+            'data' => $transaksi
+        ], 200);
 
     }
 

@@ -77,7 +77,7 @@
             <tr>
                 <td>Alamat</td>
                 <td>:</td>
-                <td>{{ $penerima->reseller_detail->alamat}}</td>
+                <td>{{ $penerima->alamat}}</td>
             </tr>
         </table>
 

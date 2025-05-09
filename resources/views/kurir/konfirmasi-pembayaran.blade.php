@@ -91,9 +91,11 @@
 
                     infoPesanan.find('#tanggal').val(transaksi.tanggal);
                     infoPesanan.find('#nama-pemesan').val(transaksi.user.name);
-                    infoPesanan.find('#alamat').val(transaksi.user.reseller_detail.alamat);
+                    infoPesanan.find('#alamat').val(transaksi.user.alamat);
                     infoPesanan.find('#total-harga').val(formatRupiah(transaksi.total_harga));
                     infoPesanan.find('#btn-detail-transaksi').attr('data-id-transaksi', transaksi.id);
+                } else {
+                    showToast(data.message, icon='warning', reload=false);
                 }
 
                 setTimeout(() => {
