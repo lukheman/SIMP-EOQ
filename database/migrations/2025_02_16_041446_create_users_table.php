@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('name', 100);
             $table->string('password');
             $table->enum('role', Role::values());
-            $table->string('phone', 15)->nullable();
+            $table->string('phone', 15)->nullable()->unique();
             $table->string('alamat')->nullable();
             $table->string('foto')->nullable();
             $table->timestamps(); // created_at / updated_at
