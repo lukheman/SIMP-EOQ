@@ -81,6 +81,42 @@ class TransaksiController extends Controller
 
     }
 
+    public function updateKurir(Request $request, $id) {
+
+        $request->validate([
+            'id_kurir' => ['required', 'exists:users,id']
+        ]);
+
+
+        if (Role::from(Auth::user()->role) === Role::ADMINTOKO) {
+
+            $transaksi = Transaksi::findOrFail($id);
+            $kurir = User::find($request->id_kurir);
+
+
+            if($transaksi->status === StatusTransaksi::DIPROSES) {
+                $transaksi->status = StatusTransaksi::DIKIRIM;
+
+                $this->kurangiPersediaan($transaksi);
+            }
+            // jika lunas maka status pengiriman otomatis jadi diproses
+            $transaksi->update(['id_kurir' => $request->id_kurir]);
+            $transaksi->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => "Pesanan diserahkan kepada {$kurir->name}",
+            ], 200);
+
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Aksi tidak valid untuk peran Anda.',
+        ], 403);
+
+    }
+
     public function updateStatusPembayaran(Request $request, $id) {
 
         $request->validate([
