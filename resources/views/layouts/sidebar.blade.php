@@ -39,12 +39,16 @@
                 @yield('sidebar-menu')
 
                 <li class="nav-header">PENGGUNA</li>
-                <li class="nav-item">
-                    <a href="{{ route('logout') }}" class="nav-link">
-                        <i class="nav-icon fas fa-sign-out-alt text-danger"></i>
-                        <p class="text">Logout</p>
-                    </a>
-                </li>
+
+                <x-nav-link :href="route('profile.index')" :active="$page === 'Profil'" icon="fas fa-user" >
+                   Profile
+                </x-nav-link>
+
+                <x-nav-link
+                    :href="route('logout')" icon="fas fa-sign-out-alt text-danger" >
+                    Logout
+                </x-nav-link>
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
