@@ -3,9 +3,9 @@
 namespace App\Constants;
 
 enum Role: string {
-    case ADMINTOKO = 'admin_toko';
-    case ADMINGUDANG= 'admin_gudang';
-    case PEMILIKTOKO = 'pemilik_toko';
+    case ADMINTOKO = 'admintoko';
+    case ADMINGUDANG= 'admingudang';
+    case PEMILIKTOKO = 'pemiliktoko';
     case RESELLER = 'reseller';
     case KURIR = 'kurir';
 }
