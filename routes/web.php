@@ -17,8 +17,8 @@ use App\Http\Controllers\ProfileController;
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/registrasi', [AuthController::class, 'registrasi'])->name('reseller.registrasi');
-Route::post('/signup', [AuthController::class, 'signup'])->name('reseller.signup');
+Route::get('/registrasi', [AuthController::class, 'registrasi'])->name('registrasi');
+Route::post('/signup', [AuthController::class, 'signup'])->name('signup');
 
 Route::resource('profile', ProfileController::class)->only(['index', 'update'])->middleware('auth');
 
