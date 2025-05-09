@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -10,11 +11,42 @@ use App\Models\User;
 class AuthController extends Controller
 {
 
+    public function signup(Request $request) {
+
+        $request->validate([
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+            'confirm_password' => ['required', 'same:password'],
+        ]);
+
+
+        $user = User::query()->create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'role' => 'reseller'
+        ]);
+
+        return to_route('login');
+
+
+    }
+
+    public function registrasi() {
+        return view('reseller.registrasi');
+    }
+
     public function index() {
         return view('dashboard');
     }
 
     public function showLoginForm() {
+
+        if (Auth::check()) {
+            return redirect()->route(auth()->user()->role . '.index');
+        }
+
         return view('auth.login');
     }
 
@@ -31,20 +63,19 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            return match($user->role) {
-                'admin_gudang' => redirect()->route('admingudang.index'),
-                'admin_toko' => redirect()->route('admintoko.index'),
-                'reseller' => redirect()->route('reseller.index'),
-                'pemilik_toko' => redirect()->route('pemiliktoko.index'),
-                'kurir' => redirect()->route('kurir.index'),
+            return match(Role::from($user->role)) {
+                 Role::ADMINGUDANG => redirect()->route('admingudang.index'),
+                 Role::ADMINTOKO => redirect()->route('admintoko.index'),
+                 Role::RESELLER => redirect()->route('reseller.index'),
+                 Role::PEMILIKTOKO => redirect()->route('pemiliktoko.index'),
+                 Role::KURIR => redirect()->route('kurir.index'),
                 default => redirect()->route('login')
             };
 
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ]);
+        flash('Password atau email salah', 'danger');
+        return back();
     }
 
     public function logout(Request $request)
