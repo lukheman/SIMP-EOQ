@@ -33,6 +33,7 @@
                         <a href="{{ route('reseller.registrasi')}}"> Reseller </a>
                     </p>
 
+                <x-flash-message />
                 <form action="{{ url('/login') }}" method="POST">
                 @csrf
                     <div class="input-group mb-3">
