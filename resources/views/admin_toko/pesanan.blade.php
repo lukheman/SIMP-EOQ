@@ -65,11 +65,22 @@
 
                                 <td>
 
-                                    <button class="btn btn-sm btn-warning btn-kirim-pesanan"
-                                        data-id-transaksi="{{ $item->id }}" {{ $item->status !== \App\Constants\StatusTransaksi::DIPROSES ? 'disabled' : ''}}>
-                                        <i class="nav-icon fas fa-truck"></i> Dikirim</button>
+
+                                    <form>
+                                        <select data-id-transaksi="{{ $item->id }}" class="form-control pilih-kurir"
+                                            {{ $item->status === \App\Constants\StatusTransaksi::DIPROSES || $item->status === \App\Constants\StatusTransaksi::DIKIRIM ? '' : 'disabled'  }}>
+                                            @if (!$item->id_kurir)
+                                                <option value="">Pilih Kurir</option>
+                                            @endif
+                                            @foreach ($kurir as $itemKurir)
+                                            <option value="{{ $itemKurir->id }}" {{ $item->id_kurir === $itemKurir->id ? 'selected' : ''}}>{{ $itemKurir->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </form>
+
 
                                 </td>
+
                                 <td>
 
                                     @if ($item->metode_pembayaran === \App\Constants\MetodePembayaran::TRANSFER)
@@ -351,5 +362,44 @@
         });
 
     });
+</script>
+
+<script>
+
+$(document).ready(function() {
+
+    $('.pilih-kurir').change(function() {
+
+        const idTransaksi = $(this).data('id-transaksi');
+
+        if($(this).val() !== '') {
+
+            $.ajax({
+                url: "{{ route('transaksi.update-kurir', ':id')}}".replace(':id', idTransaksi),
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                // data: {'status': '{{ \App\Constants\StatusTransaksi::DIKIRIM }}'},
+                data: { 'id_kurir': $(this).val() },
+                success: function (data) {
+                    showToast(data.success ? data.message : 'Pesanan gagal diserahkan kepada kurir', icon = data.success ? 'success' : 'warning');
+                },
+                error: function (error) {
+                    console.log(error);
+                    Swal.fire({
+                        title: 'Terjadi kesalahan',
+                        icon: 'error',
+                        text: 'Silakan coba lagi atau hubungi administrator.',
+                    });
+                }
+            });
+
+        }
+
+    });
+
+});
+
 </script>
 @endsection
