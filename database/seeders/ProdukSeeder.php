@@ -49,7 +49,7 @@ class ProdukSeeder extends Seeder
 
         foreach($data as $item) {
             $produk = Produk::create($item);
-            $produk->persediaan()->create();
+            $produk->persediaan()->create(['jumlah' => 30]);
             $produk->biayaPemesanan()->create(['biaya' => 100000.00]);
             $produk->biayaPenyimpanan()->create(['biaya' => 100000.00]);
         }
