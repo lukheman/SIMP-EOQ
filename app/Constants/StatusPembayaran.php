@@ -5,7 +5,6 @@ namespace App\Constants;
 enum StatusPembayaran: string
 {
     case BELUMBAYAR = 'belum_bayar';
-    case SETENGAHBAYAR = 'setengah_bayar';
     case LUNAS = 'lunas';
 
     public static function values(): array {
