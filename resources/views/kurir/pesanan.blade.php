@@ -32,7 +32,8 @@
                                 <th>Tanggal </th>
                                 <th>Penerima </th>
                                 <th>Alamat </th>
-                                <th>Pembayaran</th>
+                                <th>Metode Pembayaran</th>
+                                <th>Status Pembayaran</th>
                                 <th>Status Pengiriman</th>
                                 <th>Detail</th>
                             </tr>
@@ -43,17 +44,12 @@
                             <tr>
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->user->name }}</td>
-                                <td> {{ $item->user->reseller_detail->alamat }}</td>
+                                <td> {{ $item->user->alamat }}</td>
                                 <td>
                                     <span class="badge bg-success">{{ $item->metode_pembayaran }}</span>
-
-                                    @if ($item->status_pembayaran === \App\Constants\StatusPembayaran::LUNAS)
-                                        <span class="badge bg-success">{{ $item->status_pembayaran->label() }}</span>
-                                    @elseif($item->status_pembayaran === \App\Constants\StatusPembayaran::SETENGAHBAYAR)
-                                        <span class="badge bg-warning">{{ $item->status_pembayaran->label() }}</span>
-                                    @elseif($item->status_pembayaran === \App\Constants\StatusPembayaran::BELUMBAYAR)
-                                        <span class="badge bg-danger">{{ $item->status_pembayaran->label() }}</span>
-                                    @endif
+                                </td>
+                                <td>
+                                    <x-status-pembayaran :status="$item->status_pembayaran" />
                                 </td>
                                 <td>
                                     @if ($item->status === \App\Constants\StatusTransaksi::PENDING)
