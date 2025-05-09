@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('lead_time')->default(0); // waktu tunggu dalam satuan hari
             $table->text('deskripsi')->nullable();
             $table->string('gambar')->nullable();
+            $table->date('exp')->nullable();
             $table->timestamps();
         });
     }
