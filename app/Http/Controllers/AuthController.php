@@ -14,10 +14,11 @@ class AuthController extends Controller
     public function signup(Request $request) {
 
         $request->validate([
-            'name' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-            'confirm_password' => ['required', 'same:password'],
+            'role'     => ['required', 'exists:users,role'],
+            'name'     => 'required|string|max:100',
+            'email'    => 'required|email|max:100|unique:users,email',
+            'phone'    => 'nullable|string|max:15|unique:users,phone',
+            'password' => 'nullable|string|min:4|confirmed',
         ]);
 
 
@@ -25,7 +26,8 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'role' => 'reseller'
+            'role' => $request->role,
+            'phone' => $request->phone,
         ]);
 
         return to_route('login');
@@ -34,7 +36,7 @@ class AuthController extends Controller
     }
 
     public function registrasi() {
-        return view('reseller.registrasi');
+        return view('registrasi');
     }
 
     public function index() {
