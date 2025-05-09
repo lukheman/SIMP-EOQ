@@ -33,7 +33,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password123'), // Gunakan hashing untuk keamanan
                 'role' => $role,
                 'name' => $name, // Nama sesuai dengan role
-                'phone' => '081234567890',
+                'phone' => '0820' . sprintf('%08d', mt_rand(0, 99999999)),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
