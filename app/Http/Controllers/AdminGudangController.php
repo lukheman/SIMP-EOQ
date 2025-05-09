@@ -128,11 +128,8 @@ class AdminGudangController extends Controller
     }
 
     public function laporanBarangMasuk() {
-        $barang_masuk = Mutasi::with('produk')->where('jenis', 'masuk')->get();
-
         return view("{$this->role}.laporan-barang-masuk", [
             'page' => 'Laporan Barang Masuk',
-            'barang_masuk' => $barang_masuk
         ]);
     }
 
