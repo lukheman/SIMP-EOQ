@@ -26,7 +26,7 @@
                 <div class="card card-primary card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
-                            <img class="profile-user-img img-fluid img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture">
+                            <img class="profile-user-img img-fluid img-circle" src="{{ asset('storage/' . $user->foto) }}" alt="User profile picture">
                         </div>
 
                         <h3 class="profile-username text-center">{{ $user->name }}</h3>
@@ -35,7 +35,7 @@
 
                         <x-flash-message/>
 
-                        <form method="POST" action="{{ route('profile.update', $user->id)}}" id="form-update-profile">
+                        <form method="POST" action="{{ route('profile.update', $user->id)}}" id="form-update-profile" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
@@ -47,6 +47,11 @@
                             <div class="form-group">
                                 <label for="email">Email</label>
                                 <input name="email" type="email" id="email" class="form-control" value="{{ $user->email }}" readonly>
+                            </div>
+
+                            <div class="form-group" style="display: none;" id="input-foto">
+                                <label for="foto">Foto Profile</label>
+                                <input type="file" class="form-control" name="foto" id="foto">
                             </div>
 
                             <div class="form-group">
@@ -107,6 +112,7 @@
                 $('#btn-simpan-profile').show();
                 $('#input-password').show();
                 $('#input-password-confimation').show();
+                $('#input-foto').show();
                 $(this).hide();
 
                 $('form input[readonly], form textarea[readonly]').removeAttr('readonly');
@@ -115,6 +121,7 @@
             $('#btn-simpan-profile').click(function() {
                 $('#btn-ubah-profile').show();
                 $('#input-password').hide();
+                $('#input-foto').hide();
                 $('#input-password-confimation').hide();
                 $(this).hide();
                 $('form input, form textarea').attr('readonly', 'readonly');
