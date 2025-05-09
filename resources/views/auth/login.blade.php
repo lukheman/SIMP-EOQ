@@ -30,7 +30,7 @@
             <div class="card-body login-card-body">
                     <p class="login-box-msg">
  Daftar Menjadi
-                        <a href="{{ route('reseller.registrasi')}}"> Reseller </a>
+                        <a href="{{ route('registrasi')}}"> Reseller / Kurir</a>
                     </p>
 
                 <x-flash-message />
