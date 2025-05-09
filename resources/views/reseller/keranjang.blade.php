@@ -39,7 +39,7 @@
                                 <th>Jumlah</th>
                                 <th>Harga Satuan (Rp.)</th>
                                 <th>Total Harga (Rp.)</th>
-                                <th class="column-aksi">Aksi</th>
+                                <th class="column-aksi text-right">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,10 +51,14 @@
                                 <td> {{ $item->jumlah }}</td>
                                 <td> {{ number_format($item->produk->harga_jual, 0, ',', '.')}}</td>
                                 <td> {{ number_format($item->total_harga, 0, ',', '.')}}</td>
-                                <td class="column-aksi">
+                                <td class="column-aksi text-right">
                                     <button class="btn btn-outline-danger btn-sm btn-delete-pesanan" data-id-pesanan="{{ $item->id }}">
                                         <i class="fas fa-trash"></i>
                                         Hapus</button>
+
+                                    <button class="btn btn-sm btn-outline-primary btn-tambah-pesanan" data-id-pesanan="{{ $item->id }}" data-toggle="modal" data-target="#modal-update-pesanan">
+                                        <i class="fas fa-plus"></i>
+                                        Tambah Pesanan</button>
                                 </td>
 
                             </tr>
@@ -79,6 +83,66 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade show" id="modal-update-pesanan" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Pemesanan</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <form id="form-update-pesanan">
+
+                <input type="hidden" id="id-pesanan" name="id_pesanan" disabled>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 col-sm-6 text-center">
+                            <img class="img-fluid" width="200" height="10" id="img-gambar-produk">
+                        </div>
+                        <div class="col-12 col-sm-6">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p id="nama-produk"></p>
+                                    <p><small id="deskripsi-produk"></small></p>
+                                    <p id="harga-jual"></p>
+
+                                </div>
+                                <div class="col-12">
+                                    <div class="input-group" style="width: 200px;">
+                                        <div class="input-group-prepend">
+                                            <button type="button" class="btn btn-default" id="btn-kurang-jumlah">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+
+                                        </div>
+                                        <input type="number" name="jumlah" id="jumlah" class="form-control" value="1">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-default" id="btn-tambah-jumlah">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary"> <i class="nav-icon fas fa-save"></i> Simpan</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
 </div>
 
 <div class="modal fade show" id="modal-metode-pembayaran" style="display: none;" aria-modal="true" role="dialog">
@@ -107,7 +171,7 @@
 
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                <button type="submit" class="btn btn-primary" id="btn-checkout"></i>Checkout</button>
+                <button type="submit" class="btn btn-primary"></i>Checkout</button>
             </div>
             </form>
         </div>
@@ -156,6 +220,83 @@
             });
 
         });
+
+        $('#form-update-pesanan').on('submit', function(e) {
+            e.preventDefault();
+
+
+            const idPesanan = $('#form-update-pesanan #id-pesanan').val();
+            console.log(idPesanan);
+
+            $.ajax({
+                url: "{{ route('pesanan.update', ':id')}}".replace(':id', idPesanan),
+                method: 'PUT',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: $(this).serialize(),
+                success: function(data) {
+                    if(data.success) {
+                        showToast(data.message);
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                    // showToast('Hubungi administrator', icon='error', reload=false);
+                }
+
+
+            });
+
+
+        });
+
+        $('.btn-tambah-pesanan').click(function() {
+
+            const idPesanan = $(this).data('id-pesanan');
+
+            let modalUpdatePesanan = $('#modal-update-pesanan');
+
+            $.ajax({
+                url: "{{ route('pesanan.show', ':id')}}".replace(':id', idPesanan),
+                mehtod: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (data) {
+
+                    if(data.success) {
+
+                        let pesanan = data.data;
+                        const baseUrl = "{{ asset('storage') }}";
+                        $('#img-gambar-produk').attr('src', `${baseUrl}/${pesanan.produk.gambar}`);
+                        modalUpdatePesanan.find('#id-pesanan').val(pesanan.id);
+                        modalUpdatePesanan.find('#nama-produk').text(pesanan.produk.nama_produk);
+                        modalUpdatePesanan.find('#harga-jual').text(formatRupiah(pesanan.produk.harga_jual));
+                        modalUpdatePesanan.find('#deskripsi-produk').text(pesanan.produk.deskripsi);
+                        modalUpdatePesanan.find('#jumlah').val(pesanan.jumlah);
+                    }
+                },
+                error: function (error) {
+                    // console.log(error);
+                    showToast( 'Hubungi administrator', icon='danger', reload=false);
+                }
+
+            });
+
+        });
+
+    $('#btn-tambah-jumlah').click(function () {
+        let jumlah = parseInt($('#jumlah').val())
+        $('#jumlah').val(jumlah + 1);
+    });
+
+    $('#btn-kurang-jumlah').click(function () {
+        let jumlah = parseInt($('#jumlah').val())
+        if (jumlah > 1) {
+            $('#jumlah').val(jumlah - 1);
+        }
+    });
 
         $('#btn-delete-pilihan-pesanan').click(function() {
 
@@ -254,10 +395,10 @@
         $('#table_pesanan').DataTable({
             "paging": true,
             "lengthChange": true,
-            "searching": false,
+            "searching": true,
             "ordering": true,
             "info": true,
-            "autoWidth": false,
+            "autoWidth": true,
             "responsive": true,
         });
 
