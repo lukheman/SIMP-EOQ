@@ -23,11 +23,17 @@
     <body class="register-page">
         <div class="register-box">
             <div class="register-logo">
-                <a href=""><b>Registrasi</b></a>
+            <p>
+                UD Toko Diva Mowewe
+            </p>
             </div>
 
             <div class="card">
                 <div class="card-body register-card-body">
+
+                    <p class="register-box-msg">
+                        Sudah punya akun, silahkan <a href="{{ route('login')}}">Login</a>
+                    </p>
 
                     <form action="{{ route('signup') }}"  method="post">
                     @csrf
