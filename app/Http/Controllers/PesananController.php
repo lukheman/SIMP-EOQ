@@ -118,8 +118,9 @@ class PesananController extends Controller
             'jumlah' => 'required|numeric'
         ]);
 
-        $pesanan = Pesanan::find($id);
+        $pesanan = Pesanan::with('produk')->find($id);
         $pesanan->jumlah = $request->jumlah;
+        $pesanan->total_harga = $request->jumlah * $pesanan->produk->harga_jual;
         $pesanan->save();
 
         return response()->json([
