@@ -199,11 +199,11 @@
 
         $('#table_persediaan').DataTable({
             "paging": true,
-            "lengthChange": false,
-            "searching": false,
+            "lengthChange": true,
+            "searching": true,
             "ordering": true,
             "info": true,
-            "autoWidth": false,
+            "autoWidth": true,
             "responsive": true,
         });
 
@@ -394,7 +394,7 @@ function startScanner() {
                                 $('#id-produk').val(data.id);
 
                             } else {
-                                showToast(data.message, icon='error');
+                                showToast(data.message, icon='error', reload=false);
                             }
                         },
                         error: function (xhr) {
