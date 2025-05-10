@@ -221,7 +221,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="kode-produk">Kode Produk</label>
-                                <input type="text" class="form-control" name="kode_produk" id="kode-produk" readonly>
+                                <input type="text" class="form-control" name="kode_produk" id="kode-produk">
                             </div>
 
                             <div class="form-group">
