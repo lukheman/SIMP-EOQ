@@ -63,7 +63,7 @@ class RestockController extends Controller
         if(!$produk) {
             return response()->json([
                 'success' => false,
-                'message' => 'Produk tidak ditemukan'
+                'message' => "Produk dengan barcode {$kode_produk} tidak ditemukan"
             ]);
         }
 
