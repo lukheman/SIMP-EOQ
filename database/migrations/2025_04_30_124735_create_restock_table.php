@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('restock', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_produk')->constrained('produk');
+            $table->foreignId('id_produk')->constrained('produk')->cascadeOnDelete();
             $table->date('tanggal_pesan')->default(now()->toDateString());
             $table->date('tanggal_selesai')->nullable();
             $table->timestamps();
