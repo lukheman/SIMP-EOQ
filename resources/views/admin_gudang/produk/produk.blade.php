@@ -127,7 +127,9 @@
             <form id="form-add-produk">
                 @csrf
                 <div class="modal-body">
-                    <div class="row">
+
+                    <div class="row input-produk-main">
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="kode-produk">Barcode Produk</label>
@@ -140,11 +142,28 @@
                                     placeholder="Nama Produk">
                             </div>
 
+                            <div class="form-group">
+                                <label for="harga-beli">Harga Beli</label>
+                                <input type="number" class="form-control" name="harga_beli" id="harga-beli"
+                                    placeholder="Harga Beli" min="0">
+                            </div>
 
                             <div class="form-group">
                                 <label for="harga-jual">Harga Jual</label>
                                 <input type="number" class="form-control" name="harga_jual" id="harga-jual"
                                     placeholder="Harga Jual" min="0">
+                            </div>
+
+
+
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label for="tanggal-kadaluarsa">Tanggal Kadaluarsa</label>
+                                <input type="date" class="form-control" name="exp" id="tanggal-kadaluarsa" min="{{ date('Y-m-d') }}">
                             </div>
 
                             <div class="form-group">
@@ -153,53 +172,55 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="tanggal-kadaluarsa">Tanggal Kadaluarsa</label>
-                                <input type="date" class="form-control" name="exp" id="tanggal-kadaluarsa" min="{{ date('Y-m-d') }}">
+                                <label for="deskripsi">Deskripsi</label>
+                                <textarea style="height: 123px;" class="form-control" name="deskripsi" id="deskripsi" placeholder="Deskripsi Produk"></textarea>
                             </div>
+
 
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="biaya-penyimpanan">Biaya Penyimpanan</label>
-                                <input type="number" class="form-control" name="biaya_penyimpanan"
-                                    id="biaya-penyimpanan" placeholder="Biaya Penyimpanan" min="0">
-                            </div>
 
+                    </div>
+
+                    <div class="row d-none input-produk-biaya">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label for="biaya-pemesanan">Biaya Pemesanan</label>
                                 <input type="number" class="form-control" name="biaya_pemesanan" id="biaya-pemesanan"
                                     placeholder="Biaya Pemesanan" min="0">
                             </div>
+                        </div>
 
-
-
+                        <div class="col-12">
                             <div class="form-group">
-                                <label for="harga-beli">Harga Beli</label>
-                                <input type="number" class="form-control" name="harga_beli" id="harga-beli"
-                                    placeholder="Harga Beli" min="0">
+                                <label for="biaya-penyimpanan">Biaya Penyimpanan</label>
+                                <input type="number" class="form-control" name="biaya_penyimpanan"
+                                    id="biaya-penyimpanan" placeholder="Biaya Penyimpanan" min="0">
                             </div>
-
-                            <div class="form-group">
-                                <label for="deskripsi">Deskripsi</label>
-                                <textarea class="form-control" name="deskripsi" id="deskripsi"
-                                    placeholder="Deskripsi Produk"></textarea>
-                            </div>
-
                         </div>
                     </div>
+
                 </div>
+
+
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i>
-                    Simpan</button>
+
+                    <div class="row btn-group-biaya" style="display: none;">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary btn-back-to-main-input">  <i class="fas fa-arrow-left"></i> Kembali</button>
+                            <button type="submit" class="btn btn-primary"> <i class="fas fa-save"></i> Simpan</button>
+                        </div>
+                    </div>
+
+
+                    <button type="button" class="btn btn-primary btn-show-form-biaya"> Lanjut <i class="fas fa-arrow-right"></i> </button>
+
                 </div>
             </form>
         </div>
     </div>
 </div>
 <!-- end modal-add-produk -->
-
 
 <!-- modal-update-produk - modal untuk menampilkan form tambah data produk -->
 <div class="modal fade show" id="modal-update-produk" style="display: none;" aria-modal="true" role="dialog">
@@ -217,10 +238,12 @@
                 <input type="hidden" id="id-produk" disabled>
 
                 <div class="modal-body">
-                    <div class="row">
+
+                    <div class="row input-produk-main">
+
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="kode-produk">Kode Produk</label>
+                                <label for="kode-produk">Barcode Produk</label>
                                 <input type="text" class="form-control" name="kode_produk" id="kode-produk">
                             </div>
 
@@ -230,7 +253,6 @@
                                     placeholder="Nama Produk">
                             </div>
 
-
                             <div class="form-group">
                                 <label for="harga-beli">Harga Beli</label>
                                 <input type="number" class="form-control" name="harga_beli" id="harga-beli"
@@ -238,56 +260,72 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="gambar">Gambar</label>
-                                <input type="file" class="form-control" name="gambar" id="gambar">
+                                <label for="harga-jual">Harga Jual</label>
+                                <input type="number" class="form-control" name="harga_jual" id="harga-jual"
+                                    placeholder="Harga Jual" min="0">
                             </div>
 
+
+
+
+                        </div>
+
+                        <div class="col-md-6">
 
                             <div class="form-group">
                                 <label for="tanggal-kadaluarsa">Tanggal Kadaluarsa</label>
                                 <input type="date" class="form-control" name="exp" id="tanggal-kadaluarsa" min="{{ date('Y-m-d') }}">
                             </div>
 
-
-                        </div>
-                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="biaya-penyimpanan">Biaya Penyimpanan</label>
-                                <input type="number" class="form-control" name="biaya_penyimpanan"
-                                    id="biaya-penyimpanan" placeholder="Biaya Penyimpanan" min="0">
+                                <label for="gambar">Gambar</label>
+                                <input type="file" class="form-control" name="gambar" id="gambar">
                             </div>
 
+                            <div class="form-group">
+                                <label for="deskripsi">Deskripsi</label>
+                                <textarea style="height: 123px;" class="form-control" name="deskripsi" id="deskripsi" placeholder="Deskripsi Produk"></textarea>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                    <div class="row d-none input-produk-biaya">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label for="biaya-pemesanan">Biaya Pemesanan</label>
                                 <input type="number" class="form-control" name="biaya_pemesanan" id="biaya-pemesanan"
                                     placeholder="Biaya Pemesanan" min="0">
                             </div>
+                        </div>
 
-
+                        <div class="col-12">
                             <div class="form-group">
-                                <label for="harga-jual">Harga Jual</label>
-                                <input type="number" class="form-control" name="harga_jual" id="harga-jual"
-                                    placeholder="Harga Jual" min="0">
+                                <label for="biaya-penyimpanan">Biaya Penyimpanan</label>
+                                <input type="number" class="form-control" name="biaya_penyimpanan"
+                                    id="biaya-penyimpanan" placeholder="Biaya Penyimpanan" min="0">
                             </div>
-
-                            <div class="form-group">
-                                <label for="deskripsi">Deskripsi</label>
-                                <textarea class="form-control" name="deskripsi" id="deskripsi"
-                                    placeholder="Deskripsi Produk"></textarea>
-                            </div>
-
-
-
-
                         </div>
                     </div>
 
                 </div>
+
+
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="text-white btn btn-warning">
-                    <i class="fas fa-save"></i>
-                    Simpan Perubahan</button>
+
+                    <div class="row btn-group-biaya" style="display: none;">
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary btn-back-to-main-input" >  <i class="fas fa-arrow-left"></i> Kembali</button>
+                            <button type="submit" class="btn btn-primary"> <i class="fas fa-save"></i> Simpan</button>
+                        </div>
+                    </div>
+
+
+                    <button type="button" class="btn btn-primary btn-show-form-biaya"> Lanjut <i class="fas fa-arrow-right"></i> </button>
+
                 </div>
             </form>
         </div>
@@ -408,6 +446,29 @@
 
     $(document).ready(function () {
 
+        $('.btn-show-form-biaya').click(function() {
+            $('.input-produk-biaya').addClass('d-block');
+
+            $('.input-produk-main').removeClass('d-flex');
+            $('.input-produk-main').addClass('d-none');
+
+            $(this).removeClass('d-block');
+            $(this).addClass('d-none');
+            $('.btn-group-biaya').addClass('d-block');
+        })
+
+        $('.btn-back-to-main-input').click(function() {
+            $('.input-produk-main').addClass('d-flex');
+
+            $('.input-produk-biaya').removeClass('d-block');
+            $('.input-produk-biaya').addClass('d-none');
+
+            $('.btn-show-form-biaya').addClass('d-block');
+
+            $('.btn-group-biaya').removeClass('d-block');
+            $('.btn-group-biaya').addClass('d-none');
+        })
+
         // handler untuk menambahkan data
         $('#form-add-produk').on('submit', function (e) {
             e.preventDefault();
@@ -434,10 +495,15 @@
                     }
                 },
                 error: function (error) {
-                    Swal.fire({
-                        title: 'Produk gagal ditambahkan',
-                        icon: "error",
-                    }).then(() => window.location.reload());
+                    if (error.responseJSON && error.responseJSON.message) {
+                        message = error.responseJSON.message;
+                    } else if (error.responseText) {
+                        message = error.responseText;
+                    } else if (error.statusText) {
+                        message = error.statusText;
+                    }
+
+                    showToast(message, 'warning', false);
                 }
             });
         });
@@ -464,8 +530,16 @@
                     showToast(data.message);
                 },
                 error: function (error) {
-                    console.log(error);
-                    showToast('Produk gagal diperbarui', icon='danger', reload=false);
+                    // Coba ambil message dari server (jika ada)
+                    if (error.responseJSON && error.responseJSON.message) {
+                        message = error.responseJSON.message;
+                    } else if (error.responseText) {
+                        message = error.responseText;
+                    } else if (error.statusText) {
+                        message = error.statusText;
+                    }
+
+                    showToast(message, 'warning', false);
                 }
             });
         });
@@ -540,6 +614,7 @@
 
                 },
                 error: function (error) {
+                    console.log(error);
                     Swal.fire({
                         title: 'Produk gagal dihapus',
                         icon: "error",
