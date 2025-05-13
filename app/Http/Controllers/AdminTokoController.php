@@ -132,7 +132,7 @@ class AdminTokoController extends Controller
     }
 
     public function pesanan() {
-        $pesanan = Transaksi::with('user')->get();
+        $pesanan = Transaksi::with('user')->whereHas('user')->get();
         $kurir = User::query()->where('role', Role::KURIR)->get();
 
         return view('admin_toko.pesanan', [
