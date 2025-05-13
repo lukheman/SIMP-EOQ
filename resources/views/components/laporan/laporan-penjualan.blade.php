@@ -41,7 +41,7 @@
                         <thead>
                             <tr class="text-center">
                                 <th>Tanggal </th>
-                                <th>Jenis Produk </th>
+                                <th>Nama Produk </th>
                                 <th>Jumlah Terjual</th>
                                 <th>Harga Satuan (Rp.)</th>
                                 <th>Total Harga (Rp.)</th>
@@ -130,11 +130,11 @@ $(function () {
 
     $('#table_pesanan').DataTable({
         "paging": true,
-        "lengthChange": false,
-        "searching": false,
+        "lengthChange": true,
+        "searching": true,
         "ordering": true,
         "info": true,
-        "autoWidth": false,
+        "autoWidth": true,
         "responsive": true,
     });
 
