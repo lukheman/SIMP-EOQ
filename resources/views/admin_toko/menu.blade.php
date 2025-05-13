@@ -7,11 +7,13 @@
 
 <x-nav-link
     :href="route('admintoko.kasir')"
-    icon="fas fa-money"
+    icon="fas fa-cash-register"
     :active="$page === 'Kasir'"
 >
 Kasir
 </x-nav-link>
+
+<li class="nav-header">PRODUK</li>
 
 <x-nav-link
     :href="route('admintoko.persediaan')"
@@ -34,4 +36,11 @@ Kasir
     icon="fas fa-chart-bar"
     :active="$page === 'Laporan Penjualan'">
     Penjualan
+</x-nav-link>
+
+<x-nav-link
+    :href="route('admintoko.laporan-eoq')"
+    icon="fas fa-chart-bar"
+    :active="$page === 'Laporan EOQ'">
+    Laporan EOQ
 </x-nav-link>
