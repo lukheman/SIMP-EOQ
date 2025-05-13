@@ -150,8 +150,8 @@ class ProdukController extends Controller
         ], 500);
     }
 
-    public function kodeProduk($code) {
-        $produk = Produk::where('kode_produk', $code)->first();
+    public function kodeProduk($barcode) {
+        $produk = Produk::where('kode_produk', $barcode)->first();
 
         if($produk) {
             return response()->json([
