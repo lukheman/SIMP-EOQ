@@ -112,7 +112,7 @@ Route::middleware(['role:kurir', 'auth'])->group(function() {
 Route::resource('produk', ProdukController::class)->only(['store', 'update', 'destroy', 'show', 'index']);
 Route::controller(ProdukController::class)->group(function() {
     /* Route::get('produk/all', 'all')->name('produk.all'); */
-    Route::get('produk/kode-produk/{code}', 'kodeProduk')->name('produk.kode-produk');
+    Route::get('produk/kode-produk/{barcode}', 'kodeProduk')->name('produk.kode-produk');
 });
 
 Route::resource('pesanan', PesananController::class)->only(['store', 'update', 'destroy', 'show']);
