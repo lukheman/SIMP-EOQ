@@ -45,6 +45,10 @@ Route::middleware(['role:admintoko', 'auth'])->group(function() {
     Route::controller(AdminTokoController::class)->group(function() {
         Route::get('admintoko', 'index')->name('admintoko.index');
         Route::get('admintoko/dashboard', 'index')->name('admintoko.dashboard');
+
+        Route::get('admintoko/kasir', 'kasir')->name('admintoko.kasir');
+        Route::post('admintoko/transaksi', 'transaksi')->name('admintoko.transaksi');
+
         Route::get('admintoko/pesanan', 'pesanan')->name('admintoko.pesanan');
         Route::get('admintoko/persediaan', 'persediaan')->name('admintoko.persediaan');
         Route::post('admintoko/nota', 'nota')->name('admintoko.nota');
