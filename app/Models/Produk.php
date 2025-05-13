@@ -40,23 +40,6 @@ class Produk extends Model
         return $this->persediaan->jumlah >= $permintaan;
     }
 
-    public function economicOrderQuantity() {
-
-        $periode = Carbon::now()->subMonth(); // bulan lalu
-
-        $D = Mutasi::where('id_produk', $this->id)
-            ->whereYear('tanggal', $periode->year)
-            ->whereMonth('tanggal', $periode->month)
-            ->where('jenis', 'keluar')
-            ->sum('jumlah');
-
-        $S = $this->biayaPemesanan->biaya;
-        $H = $this->biayaPenyimpanan->biaya;
-
-        return round(sqrt((2 * $D * $S) / $H), 2);
-
-    }
-
     public static function EOQPerBulan($periode) {
         $result = [];
 
@@ -158,6 +141,23 @@ class Produk extends Model
         }
 
         return $result;
+    }
+
+    public function economicOrderQuantity() {
+
+        $periode = Carbon::now()->subMonth(); // bulan lalu
+
+        $D = Mutasi::where('id_produk', $this->id)
+            ->whereYear('tanggal', $periode->year)
+            ->whereMonth('tanggal', $periode->month)
+            ->where('jenis', 'keluar')
+            ->sum('jumlah');
+
+        $S = $this->biayaPemesanan->biaya;
+        $H = $this->biayaPenyimpanan->biaya;
+
+        return round(sqrt((2 * $D * $S) / $H), 2);
+
     }
 
 
