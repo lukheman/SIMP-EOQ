@@ -6,6 +6,14 @@
 </x-nav-link>
 
 <x-nav-link
+    :href="route('admintoko.kasir')"
+    icon="fas fa-money"
+    :active="$page === 'Kasir'"
+>
+Kasir
+</x-nav-link>
+
+<x-nav-link
     :href="route('admintoko.persediaan')"
     icon="fas fa-boxes"
     :active="$page === 'Persediaan'">
