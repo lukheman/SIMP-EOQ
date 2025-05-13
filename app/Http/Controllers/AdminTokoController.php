@@ -22,6 +22,18 @@ use App\Constants\MetodePembayaran;
 class AdminTokoController extends Controller
 {
 
+    public function laporanEOQ() {
+
+        $data_eoq = Produk::EOQSemuaProdukAllTime();
+        /* dd($produk->economicOrderQuantityAllTime()); */
+
+        return view('admin_toko.laporan-eoq', [
+            'page' => 'Laporan EOQ',
+            'data_eoq' => $data_eoq
+        ]);
+
+    }
+
     public function transaksi(Request $request) {
 
 
