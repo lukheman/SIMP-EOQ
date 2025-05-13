@@ -10,6 +10,18 @@ use App\Models\Transaksi;
 class PemilikTokoController extends Controller
 {
 
+    public function laporanEOQ() {
+
+        $data_eoq = Produk::EOQSemuaProdukAllTime();
+        /* dd($produk->economicOrderQuantityAllTime()); */
+
+        return view('pemilik_toko.laporan-eoq', [
+            'page' => 'Laporan EOQ',
+            'data_eoq' => $data_eoq
+        ]);
+
+    }
+
     public function index() {
         $transaksi = Transaksi::where('status', 'selesai')->count();
         $persediaan_barang = Produk::with('persediaan')->get()->sum('persediaan.jumlah');

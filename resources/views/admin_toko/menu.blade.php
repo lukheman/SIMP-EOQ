@@ -37,10 +37,3 @@ Kasir
     :active="$page === 'Laporan Penjualan'">
     Penjualan
 </x-nav-link>
-
-<x-nav-link
-    :href="route('admintoko.laporan-eoq')"
-    icon="fas fa-chart-bar"
-    :active="$page === 'Laporan EOQ'">
-    Laporan EOQ
-</x-nav-link>

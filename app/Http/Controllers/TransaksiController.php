@@ -52,6 +52,7 @@ class TransaksiController extends Controller
             'message' => 'Berhasil melakukan pemesanan barang',
             'transaksi' => $transaksi
         ], 200);
+
     }
 
     public function buktiPembayaran(Request $request, $id) {
@@ -272,6 +273,7 @@ class TransaksiController extends Controller
         ], 200);
 
     }
+
     private function handleResellerActions(Request $request, Transaksi $transaksi) {
 
         if (StatusTransaksi::from($request->status) === StatusTransaksi::DITERIMA) {

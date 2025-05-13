@@ -54,7 +54,6 @@ Route::middleware(['role:admintoko', 'auth'])->group(function() {
         Route::post('admintoko/nota', 'nota')->name('admintoko.nota');
 
         Route::get('admintoko/laporan-penjualan', 'laporanPenjualan')->name('admintoko.laporan-penjualan');
-        Route::get('admintoko/laporan-eoq', 'laporanEOQ')->name('admintoko.laporan-eoq');
     });
 });
 
@@ -97,6 +96,8 @@ Route::middleware(['role:pemiliktoko', 'auth'])->group(function() {
         Route::get('pemiliktoko/laporan-persediaan-produk', 'laporanPersediaanProduk')->name('pemiliktoko.laporan-persediaan-produk');
 
         Route::get('pemiliktoko/laporan-barang-masuk', 'laporanBarangMasuk')->name('pemiliktoko.laporan-barang-masuk');
+
+        Route::get('pemiliktoko/laporan-eoq', 'laporanEOQ')->name('pemiliktoko.laporan-eoq');
     });
 });
 

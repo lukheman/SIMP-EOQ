@@ -28,3 +28,10 @@
     icon="fa-box-open">
     Barang Masuk
 </x-nav-link>
+
+<x-nav-link
+    :href="route('pemiliktoko.laporan-eoq')"
+    icon="fas fa-chart-bar"
+    :active="$page === 'Laporan EOQ'">
+    Laporan EOQ
+</x-nav-link>

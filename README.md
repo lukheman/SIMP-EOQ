@@ -64,3 +64,8 @@ php artisan serve
 - [x] admin gudang eoq: tambahkan stok saat ini berapa dan harga
 - [x] tambahkan pencarian di bagian admin gudang eoq
 - [x] tambahkan tombol tambah pesanan di keranjang reseller
+
+## Revisi
+
+- tambahkan penjualan langsung pada admintoko (kasir) 50
+- tambahkan laporan eoq tiap bulan di admintoko (f)
