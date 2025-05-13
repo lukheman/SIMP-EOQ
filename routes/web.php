@@ -54,6 +54,7 @@ Route::middleware(['role:admintoko', 'auth'])->group(function() {
         Route::post('admintoko/nota', 'nota')->name('admintoko.nota');
 
         Route::get('admintoko/laporan-penjualan', 'laporanPenjualan')->name('admintoko.laporan-penjualan');
+        Route::get('admintoko/laporan-eoq', 'laporanEOQ')->name('admintoko.laporan-eoq');
     });
 });
 
@@ -143,3 +144,4 @@ Route::controller(RestockController::class)->group(function() {
 Route::post('/laporan/laporan-penjualan', [LaporanController::class, 'laporanPenjualan'])->name('laporan-penjualan');
 Route::post('/laporan/laporan-barang-masuk', [LaporanController::class, 'laporanBarangMasuk'])->name('laporan-barang-masuk');
 Route::get('/laporan/laporan-persediaan-produk', [LaporanController::class, 'laporanPersediaanProduk'])->name('laporan-persediaan-produk');
+Route::post('/laporan/laporan-eoq', [LaporanController::class, 'laporanEOQ'])->name('laporan-eoq');
