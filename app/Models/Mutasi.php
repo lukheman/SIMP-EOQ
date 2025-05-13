@@ -46,8 +46,8 @@ class Mutasi extends Model
     public static function rataRataPenjualan($id_produk, Carbon $periode) {
 
         $penjualan = self::where('id_produk', $id_produk)
-            ->whereYear('tanggal', $periode->subMonth()->year)
-            ->whereMonth('tanggal', $periode->subMonth()->month)
+            ->whereYear('tanggal', $periode->year)
+            ->whereMonth('tanggal', $periode->month)
             ->where('jenis', 'keluar')
             ->sum('jumlah');
 
