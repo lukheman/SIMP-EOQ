@@ -12,12 +12,12 @@
 
 <div class="row">
 
-    <div class="col-md-7">
-        <div id="reader">
+    <div class="col-12 col-md-7">
+        <div id="scanner">
         </div>
     </div>
 
-    <div class="col-md-5">
+    <div class="col-12 col-md-5">
 
         <div class="row">
 
@@ -61,28 +61,34 @@
 @endsection
 
 @section('custom-script')
-<script src="https://unpkg.com/html5-qrcode"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
 
 <script>
-
-    const scanner = new Html5Qrcode("reader");
 
     let pesanan = {};
 
     function startScanner() {
-        Html5Qrcode.getCameras().then(cameras => {
-            if(cameras && cameras.length) {
-                scanner.start(
-                    { facingMode: 'environment'},
-                    { fps: 10, qrbox: 450},
-                    onScanSuccess
-                )
-            } else {
-                alert('Kamera tidak ditemukan');
+
+        Quagga.init({
+            inputStream: {
+                type: "LiveStream",
+                target: document.querySelector('#scanner'), // Menampilkan stream kamera di elemen ini
+                constraints: {
+                    facingMode: "environment" // Menggunakan kamera belakang (untuk perangkat mobile)
+                }
+            },
+            decoder: {
+                readers: ["code_128_reader", "ean_reader", "upc_reader"]
             }
-        }).catch(err => {
-                console.log('Camera error: ', err);
+        }, function(err) {
+                if (err) {
+                    console.error(err);
+                    return;
+                }
+                Quagga.start(); // Memulai pemindaian
             });
+
     }
 
     function tambahDaftarPesanan(produk) {
@@ -120,9 +126,11 @@
 
     }
 
-    function onScanSuccess(barcode) {
+    function onScanSuccess(result) {
 
-        scanner.stop();
+        Quagga.stop();
+        let barcode = result.codeResult.code;
+
 
         if(barcode in pesanan) {
             pesanan[barcode]['jumlah'] += 1;
@@ -136,6 +144,8 @@
                 method: 'GET',
                 success: function(data) {
                     if(data.success) {
+
+                        showToast(`${data.data.kode_produk} - ${data.data.nama_produk}`, icon='success', reload=false);
 
                         pesanan[barcode] = { jumlah: 1, harga_jual: data.data.harga_jual};
                         tambahDaftarPesanan(data.data);
@@ -153,9 +163,8 @@
 
         }
 
-        console.log(pesanan);
-
         setTimeout(() => {
+
             startScanner();
         }, 500);
 
@@ -190,6 +199,7 @@
 
         });
 
+        Quagga.onDetected(onScanSuccess);
 
 
     });
