@@ -430,15 +430,16 @@
 @section('custom-script')
 <script>
 
-    const tableProduk = $('#table_produk').DataTable({
-        "paging": true,
-        "lengthChange": true,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-    });
+const tableProduk = $('#table_produk').DataTable({
+    paging: true,
+    lengthChange: true,
+    searching: true,
+    ordering: true,
+    info: true,
+    autoWidth: true,
+    responsive: false,
+    scrollX: true
+});
 
 </script>
 
