@@ -157,21 +157,38 @@
             <form id="form-checkout">
             <div class="modal-body">
 
+                    <input type="hidden" name="metode_pembayaran" id="selected-method">
+
                 <div class="form-group">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="metode_pembayaran" value="cod">
-                        <label class="form-check-label">Cash On Delivery (COD)</label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="metode_pembayaran" value="transfer">
-                        <label class="form-check-label">Transfer</label>
-                    </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="info-box mb-3 payment-method" data-method="transfer">
+                                    <span class="info-box-icon bg-warning elevation-1"><i class="fas text-light fa-money-bill-wave"></i></span>
+
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Transfer</span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="info-box mb-3 payment-method" data-method="cod">
+                                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-hand-holding-usd"></i></span>
+
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">COD</span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                            </div>
+                        </div>
+
                 </div>
             </div>
 
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Tutup</button>
-                <button type="submit" class="btn btn-primary"></i>Checkout</button>
+                <button type="submit" class="btn btn-primary">Pesan</button>
             </div>
             </form>
         </div>
@@ -182,6 +199,7 @@
 @section('custom-script')
 
 <script>
+
 
     function getSelectedItem() {
 
@@ -197,6 +215,26 @@
     }
 
     $(document).ready(() => {
+          $('.payment-method').on('click', function () {
+            // Reset semua box ke style awal
+            $('.payment-method').css({
+                'border': 'none',
+                'box-shadow': 'none',
+                'transition': 'all 0.2s ease-in-out'
+            });
+
+            // Tambahkan style ke elemen yang dipilih
+            $(this).css({
+                'border': '2px solid #007bff',
+                'box-shadow': '0 0 10px rgba(0, 123, 255, 0.5)',
+                'transition': 'all 0.2s ease-in-out',
+                'cursor': 'pointer'
+            });
+
+            // Ambil metode (opsional)
+            const method = $(this).data('method');
+            $('#selected-method').val(method); // jika pakai input hidden
+        });
 
         $('#select-all').click(function() {
             $('.select-row').prop('checked', this.checked);
@@ -355,10 +393,9 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(data) {
-                    showToast( data.message);
+                    showToast(data.message);
                 },
                 error: function (error) {
-                    console.log(error)
                     showToast( 'Gagal melakukan transaksi', icon='error', reload=false);
                 }
 
@@ -401,6 +438,8 @@
             "autoWidth": true,
             "responsive": true,
         });
+
+
 
     });
 
