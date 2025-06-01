@@ -41,7 +41,7 @@
 
                             @foreach ($pesanan as $item)
                             <tr>
-                                <td> {{ $item->tanggal_pesan }}</td>
+                                <td> {{ $item->created_at }}</td>
                                 <td class="text-center"> {{ $item->produk->kode_produk }}</td>
                                 <td> {{ $item->produk->nama_produk }}</td>
                                 <td class="text-center">
