@@ -4,7 +4,7 @@
 
 @section('sidebar-menu')
 
-@include('admin_toko.menu')
+@include('pemilik_toko.menu')
 
 @endsection
 
