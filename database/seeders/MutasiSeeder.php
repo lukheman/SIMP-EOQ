@@ -16,37 +16,6 @@ class MutasiSeeder extends Seeder
         date_default_timezone_set("Asia/Jakarta");
 
         DB::table('mutasi')->insert([
-            [
-                'id_produk' => 1,
-                'tanggal' => "2025-02-01",
-                'jumlah' => 50,
-                'jenis' => 'keluar'
-            ],
-            [
-                'id_produk' => 1,
-                'tanggal' => "2025-02-10",
-                'jumlah' => 50,
-                'jenis' => 'keluar'
-            ],
-            [
-                'id_produk' => 1,
-                'tanggal' => "2025-02-20",
-                'jumlah' => 20,
-                'jenis' => 'keluar'
-            ],
-            [
-                'id_produk' => 1,
-                'tanggal' => "2025-03-8",
-                'jumlah' => 65,
-                'jenis' => 'keluar'
-            ],
-            [
-                'id_produk' => 1,
-                'tanggal' => "2025-03-10",
-                'jumlah' => 65,
-                'jenis' => 'keluar'
-            ],
-
             // tepung terigu
             [
                 'id_produk' => 2,
