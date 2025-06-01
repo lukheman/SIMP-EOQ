@@ -50,58 +50,79 @@ class MutasiSeeder extends Seeder
             // tepung terigu
             [
                 'id_produk' => 2,
-                'tanggal' => "2025-02-01",
+                'tanggal' => "2025-05-01",
                 'jumlah' => 30,
-                'jenis' => 'keluar'
+                'jenis' => 'masuk'
             ],
+
             [
                 'id_produk' => 2,
-                'tanggal' => "2025-02-10",
-                'jumlah' => 20,
+                'tanggal' => "2025-05-01",
+                'jumlah' => 3,
                 'jenis' => 'keluar'
             ],
-            [
-                'id_produk' => 2,
-                'tanggal' => "2025-02-20",
-                'jumlah' => 35,
-                'jenis' => 'keluar'
-            ],
-            [
-                'id_produk' => 2,
-                'tanggal' => "2025-03-8",
-                'jumlah' => 10,
-                'jenis' => 'keluar'
-            ],
-            [
-                'id_produk' => 2,
-                'tanggal' => "2025-03-1",
-                'jumlah' => 20,
-                'jenis' => 'keluar'
-            ],
-            [
-                'id_produk' => 2,
-                'tanggal' => "2025-03-10",
-                'jumlah' => 30,
-                'jenis' => 'keluar'
-            ],
-            [
-                'id_produk' => 2,
-                'tanggal' => "2025-04-1",
-                'jumlah' => 10,
-                'jenis' => 'keluar'
-            ],
-            [
-                'id_produk' => 2,
-                'tanggal' => "2025-04-8",
-                'jumlah' => 20,
-                'jenis' => 'keluar'
-            ],
-            [
-                'id_produk' => 2,
-                'tanggal' => "2025-04-16",
-                'jumlah' => 30,
-                'jenis' => 'keluar'
-            ],
+
+            /* [ */
+            /*     'id_produk' => 2, */
+            /*     'tanggal' => "2025-02-01", */
+            /*     'jumlah' => 30, */
+            /*     'jenis' => 'keluar' */
+            /* ], */
+
+            /* [ */
+            /*     'id_produk' => 2, */
+            /*     'tanggal' => "2025-02-01", */
+            /*     'jumlah' => 30, */
+            /*     'jenis' => 'keluar' */
+            /* ], */
+            /* [ */
+            /*     'id_produk' => 2, */
+            /*     'tanggal' => "2025-02-10", */
+            /*     'jumlah' => 20, */
+            /*     'jenis' => 'keluar' */
+            /* ], */
+            /* [ */
+            /*     'id_produk' => 2, */
+            /*     'tanggal' => "2025-02-20", */
+            /*     'jumlah' => 35, */
+            /*     'jenis' => 'keluar' */
+            /* ], */
+            /* [ */
+            /*     'id_produk' => 2, */
+            /*     'tanggal' => "2025-03-8", */
+            /*     'jumlah' => 10, */
+            /*     'jenis' => 'keluar' */
+            /* ], */
+            /* [ */
+            /*     'id_produk' => 2, */
+            /*     'tanggal' => "2025-03-1", */
+            /*     'jumlah' => 20, */
+            /*     'jenis' => 'keluar' */
+            /* ], */
+            /* [ */
+            /*     'id_produk' => 2, */
+            /*     'tanggal' => "2025-03-10", */
+            /*     'jumlah' => 30, */
+            /*     'jenis' => 'keluar' */
+            /* ], */
+            /* [ */
+            /*     'id_produk' => 2, */
+            /*     'tanggal' => "2025-04-1", */
+            /*     'jumlah' => 10, */
+            /*     'jenis' => 'keluar' */
+            /* ], */
+            /* [ */
+            /*     'id_produk' => 2, */
+            /*     'tanggal' => "2025-04-8", */
+            /*     'jumlah' => 20, */
+            /*     'jenis' => 'keluar' */
+            /* ], */
+            /* [ */
+            /*     'id_produk' => 2, */
+            /*     'tanggal' => "2025-04-16", */
+            /*     'jumlah' => 30, */
+            /*     'jenis' => 'keluar' */
+            /* ], */
 
         ]);
 
