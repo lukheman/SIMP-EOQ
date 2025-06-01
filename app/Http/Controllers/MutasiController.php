@@ -29,11 +29,11 @@ class MutasiController extends Controller
         if ($request->jenis === 'masuk') {
             $restock = Restock::where('id_produk', $request->id_produk)->first();
 
-            $tanggalPesan = Carbon::parse($restock->tanggal_pesan);
+            $tanggalPesan = Carbon::parse($restock->created_at);
             $tanggalSelesai = Carbon::now();
 
             // Hitung selisih hari
-            $leadTime = $tanggalPesan->diffInDays($tanggalSelesai);
+            $leadTime = max(1, $tanggalPesan->diffInDays($tanggalSelesai));
 
             $produk->persediaan->jumlah += $request->jumlah;
 
