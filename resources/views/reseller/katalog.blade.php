@@ -28,7 +28,7 @@
 <div class="row">
 
     @foreach ($produk as $item)
-    <div class="col-3">
+    <div class="col-12 col-md-3">
         <div class="card">
             <div class="card-body">
                 <div class="position-relative" style="height: 180px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; overflow: hidden;">
