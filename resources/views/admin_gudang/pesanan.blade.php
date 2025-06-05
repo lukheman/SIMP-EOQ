@@ -88,9 +88,16 @@
                 @csrf
                 <div class="modal-body">
 
+                    <input type="hidden" name="id_produk" id="id-produk">
+
+                    <div class="form-group">
+                        <label for="kode-produk">Kode Produk</label>
+                        <input type="text" class="form-control" name="kode_produk" id="kode-produk">
+                    </div>
+
                     <div class="form-group">
                         <label for="nama-produk">Nama Produk</label>
-                        <select class="form-control select2" name="id_produk" id="nama-produk"></select>
+                        <input type="text" class="form-control" name="nama_produk" id="nama-produk">
                     </div>
 
                 </div>
@@ -274,6 +281,32 @@ $(document).ready(function () {
             }
         });
 
+    });
+
+    $('#kode-produk').on('input', function () {
+        const kode = $(this).val();
+        const url = `{{ route('produk.kode-produk', ':code') }}`.replace(':code', kode);
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    $('#nama-produk').val(response.data.nama_produk);
+                    $('#id-produk').val(response.data.id);
+                } else {
+                    $('#nama-produk').val('');
+                    $('#id-produk').val('');
+                    showToast(response.message, 'warning', false);
+                }
+            },
+            error: function (xhr, status, error) {
+                $('#nama-produk').val('');
+                console.error('AJAX error:', error);
+                showToast('Terjadi kesalahan saat mengambil data produk.', 'error', false);
+            }
+        });
     });
 
 
