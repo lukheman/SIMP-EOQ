@@ -18,16 +18,44 @@ class MutasiSeeder extends Seeder
         DB::table('mutasi')->insert([
             // tepung terigu
             [
-                'id_produk' => 2,
-                'tanggal' => "2025-05-01",
-                'jumlah' => 30,
+                'id_produk' => 1,
+                'tanggal' => "2025-04-01",
+                'jumlah' => 60,
                 'jenis' => 'masuk'
             ],
 
             [
-                'id_produk' => 2,
+                'id_produk' => 1,
+                'tanggal' => "2025-04-01",
+                'jumlah' => 50,
+                'jenis' => 'keluar'
+            ],
+
+            [
+                'id_produk' => 1,
                 'tanggal' => "2025-05-01",
-                'jumlah' => 3,
+                'jumlah' => 50,
+                'jenis' => 'masuk'
+            ],
+
+            [
+                'id_produk' => 1,
+                'tanggal' => "2025-05-10",
+                'jumlah' => 20,
+                'jenis' => 'masuk'
+            ],
+
+            [
+                'id_produk' => 1,
+                'tanggal' => "2025-05-05",
+                'jumlah' => 25,
+                'jenis' => 'keluar'
+            ],
+
+            [
+                'id_produk' => 1,
+                'tanggal' => "2025-05-15",
+                'jumlah' => 30,
                 'jenis' => 'keluar'
             ],
 
