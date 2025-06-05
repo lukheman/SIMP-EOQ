@@ -163,8 +163,8 @@ class ProdukController extends Controller
 
         return response()->json([
             'success' => false,
-            'message' => 'Gagal mendapatkan produk'
-        ], 404);
+            'message' => 'Tidak dapat mendapatkan data produk'
+        ], 200);
 
     }
 }
