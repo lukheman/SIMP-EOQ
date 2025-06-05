@@ -9,20 +9,27 @@
 @endsection
 
 @section('content')
+
+<div class="card card-outline card-warning">
+    <div class="card-header">
+        <h3 class="card-title">Perhatian</h3>
+        <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+            </button>
+        </div>
+        <!-- /.card-tools -->
+    </div>
+    <div class="card-body">
+        Data dari bulan <b>{{ \Carbon\Carbon::now()->subMonth(2)->format('F') }}</b> dan <b>{{ \Carbon\Carbon::now()->subMonth()->format('F') }}</b> akan dipakai buat hitung kebutuhan barang (EOQ), stok pengaman (Safety Stock), dan kapan harus restok (Reorder Point).
+    </div>
+</div>
+
 <div class="card">
     <div class="card-header">
-
     </div>
     <div class="card-body">
         <div id="table_eoq_wrapper" class="dataTables_wrapper dt-bootstrap4">
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
-
-                </div>
-                <div class="col-sm-12 col-md-6">
-
-                </div>
-            </div>
             <div class="row">
                 <div class="col-sm-12">
                     <table id="table_eoq" class="table table-bordered table-striped dataTable dtr-inline"
