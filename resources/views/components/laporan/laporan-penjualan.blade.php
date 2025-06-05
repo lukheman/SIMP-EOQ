@@ -11,7 +11,7 @@
     </div>
     <!-- /.card-header -->
     <div class="card-body">
-        Log penjualan dibuat secara otomatis ketika pesanan diterima.
+        Catatan penjualan dibuat secara otomatis ketika pesanan diterima.
     </div>
     <!-- /.card-body -->
 </div>
