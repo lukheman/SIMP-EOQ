@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Mutasi;
 use App\Providers\PerhitunganEOQServices;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Produk extends Model
 {
@@ -39,12 +40,63 @@ class Produk extends Model
         return $this->persediaan->jumlah >= $permintaan;
     }
 
+    public static function EOQSemuaProdukAllTime() {
+        $result = [];
+
+        // Ambil tanggal keluar pertama dari semua produk
+        $firstDate = Mutasi::where('jenis', 'keluar')
+            ->orderBy('tanggal', 'asc')
+            ->value('tanggal');
+
+        if (!$firstDate) {
+            return []; // Tidak ada data keluar
+        }
+
+        $start = Carbon::parse($firstDate)->startOfMonth();
+        $end = Carbon::now()->startOfMonth();
+        $current = $start->copy();
+
+        // Ambil semua produk (gunakan model Produk)
+        $produkList = Produk::with(['biayaPemesanan', 'biayaPenyimpanan'])->get();
+
+        // Loop semua bulan dari awal sampai sekarang
+        while ($current <= $end) {
+            foreach ($produkList as $produk) {
+
+                // cek apakah data mencukupi
+                if(!PerhitunganEOQServices::hasSufficientSalesData($produk->id, $current)) {
+                    $result[] = [
+                        'nama_produk' => $produk->nama_produk,
+                        'periode' => $current->format('Y-m')
+                    ];
+                    continue;
+                }
+
+                $EOQ  = PerhitunganEOQServices::economicOrderQuantity($produk->id, $current);
+                $SS  = PerhitunganEOQServices::safetyStock($produk->id, $current);
+                $ROP  = PerhitunganEOQServices::reorderPoint($produk->id, $current);
+
+                $result[] = [
+                    'nama_produk' => $produk->nama_produk,
+                    'eoq' => $EOQ,
+                    'safety_stock' => $SS,
+                    'reorder_point' => $ROP,
+                    'periode' => $current->format('Y-m')
+                ];
+            }
+
+            $current->addMonth();
+        }
+
+        return $result;
+    }
+
     public static function EOQPerBulan($periode)
     {
         $result = [];
 
         try {
-            $tanggal = Carbon::createFromFormat('Y-m', $periode)->startOfMonth();
+            $periode = Carbon::createFromFormat('Y-m', $periode);
         } catch (\Exception $e) {
             return ['error' => 'Format periode tidak valid. Gunakan format Y-m (contoh: 2024-05).'];
         }
@@ -52,25 +104,18 @@ class Produk extends Model
         $produkList = self::with(['biayaPemesanan', 'biayaPenyimpanan'])->get();
 
         foreach ($produkList as $produk) {
-            $D = Mutasi::where('id_produk', $produk->id)
-                ->where('jenis', 'keluar')
-                ->whereYear('tanggal', $tanggal->year)
-                ->whereMonth('tanggal', $tanggal->month)
-                ->sum('jumlah');
 
-            $S = optional($produk->biayaPemesanan)->biaya ?? 0;
-            $H = optional($produk->biayaPenyimpanan)->biaya ?? 1;
+            // cek apakah data mencukupi
+            if(!PerhitunganEOQServices::hasSufficientSalesData($produk->id, $periode)) {
+                $result[] = [
+                    'produk' => $produk,
+                ];
+                continue;
+            }
 
-            $EOQ = PerhitunganEOQServices::hitungEOQ($D, $S, $H);
-
-            $PM = Mutasi::penjualanMaksimum($produk->id, $tanggal);
-            $PRR = $D / 4;
-            $LT = $produk->lead_time;
-
-            $SS = PerhitunganEOQServices::hitungSafetyStock($PM, $PRR, $LT);
-
-            $Q = Mutasi::rataRataPenjualan($produk->id, $tanggal) ?? 0;
-            $ROP = PerhitunganEOQServices::hitungROP($SS, $Q, $LT);
+            $EOQ  = PerhitunganEOQServices::economicOrderQuantity($produk->id, $periode);
+            $SS  = PerhitunganEOQServices::safetyStock($produk->id, $periode);
+            $ROP  = PerhitunganEOQServices::reorderPoint($produk->id, $periode);
 
             $result[] = [
                 'produk' => $produk,
@@ -83,45 +128,23 @@ class Produk extends Model
         return $result;
     }
 
-    public function economicOrderQuantity(): float
+    public function getEconomicOrderQuantityAttribute(): float
     {
-        $periode1 = Carbon::now()->subMonth(2);
-        $periode2 = Carbon::now()->subMonth(1);
-
-        $D = PerhitunganEOQServices::penjualanBulanan($this->id, $periode1) +
-            PerhitunganEOQServices::penjualanBulanan($this->id, $periode2);
-
-        $S = optional($this->biayaPemesanan)->biaya ?? 0;
-        $H = optional($this->biayaPenyimpanan)->biaya ?? 1;
-
-        return PerhitunganEOQServices::hitungEOQ($D, $S, $H);
+        return PerhitunganEOQServices::economicOrderQuantity($this->id);
     }
 
-    public function safetyStock(): float
+    public function getSafetyStockAttribute(): float
     {
-        $periode1 = Carbon::now()->subMonth(2);
-        $periode2 = Carbon::now()->subMonth(1);
-
-        $jumlah1 = PerhitunganEOQServices::penjualanBulanan($this->id, $periode1);
-        $jumlah2 = PerhitunganEOQServices::penjualanBulanan($this->id, $periode2);
-
-        $D = $jumlah1 + $jumlah2;
-        $PM = max($jumlah1, $jumlah2);
-        $PRR = $D / 2;
-        $LT = $this->lead_time;
-
-        return PerhitunganEOQServices::hitungSafetyStock($PM, $PRR, $LT);
+        return PerhitunganEOQServices::safetyStock($this->id);
     }
 
-    public function reorderPoint(): float
+    public function getReorderPointAttribute(): float
     {
-        $periode1 = Carbon::now()->subMonth(2);
-        $periode2 = Carbon::now()->subMonth(1);
-        $LT = $this->lead_time;
-        $SS = $this->safetyStock();
+        return PerhitunganEOQServices::reorderPoint($this->id);
 
-        $Q = PerhitunganEOQServices::penjualanRataRataHarian($this->id, $periode1, $periode2);
+    }
 
-        return PerhitunganEOQServices::hitungROP($SS, $Q, $LT);
+    public function getFrekuensiPemesananAttribute(): int {
+        return PerhitunganEOQServices::frekuensiPemesanan($this->id);
     }
 }
