@@ -197,68 +197,8 @@ $(document).ready(function () {
     });
 
 
-    // handler untuk mengupdate data
-    $('#form-update-mutasi').on('submit', function (e) {
-        e.preventDefault();
-
-        let idMutasi = $('#id-mutasi').val();
-
-        $.ajax({
-            url: `{{ route('mutasi.update', '') }}/${idMutasi}`,
-            method: 'PUT',
-            data: $(this).serialize(),
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (data) {
-                Swal.fire({
-                    title: data.message,
-                    icon: "success",
-                }).then(() => window.location.reload());
-            },
-            error: function (error) {
-                Swal.fire({
-                    title: 'persediaan gagal diperbarui',
-                    icon: "error",
-                }).then(() => window.location.reload());
-            }
-        });
-    });
-
-    // handle untuk update persediaan
-    $('.btn-update-mutasi').click(function () {
-
-        let idMutasi = $(this).data('id-mutasi');
-
-        let formUpdateMutasi = $('#form-update-mutasi');
-
-        $.ajax({
-            url: `{{ route('mutasi.show', '') }}/${idMutasi}`,
-            method: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (data) {
-                let mutasi = data.data;
-
-                formUpdateMutasi.find('#id-mutasi').val(mutasi.id);
-                formUpdateMutasi.find('#tanggal').val(mutasi.tanggal);
-                formUpdateMutasi.find('#jumlah').val(mutasi.jumlah);
-
-            },
-            error: function (error) {
-                Swal.fire({
-                    title: 'Produk gagal dihapus',
-                    icon: "error",
-                }).then(() => window.location.reload());
-            }
-        });
-
-    });
-
-
     // handler untuk menghapus data
-    $('.btn-delete-pesanan').click(function () {
+    $('#table_pesanan').on('click', '.btn-delete-pesanan', function() {
 
         let idRestock = $(this).data('id-pesanan');
 

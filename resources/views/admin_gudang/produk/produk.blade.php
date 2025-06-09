@@ -546,7 +546,8 @@ const tableProduk = $('#table_produk').DataTable({
         });
 
         // handler untuk menghapus data
-        $('.btn-delete-produk').click(function () {
+
+        $('#table_produk').on('click', '.btn-delete-produk', function () {
 
             let idProduk = $(this).data('id-produk');
 
@@ -587,7 +588,7 @@ const tableProduk = $('#table_produk').DataTable({
         });
 
         // handle untuk update data
-        $('.btn-update-produk').click(function () {
+        $('#table_produk').on('click', '.btn-update-produk', function() {
 
             let idProduk = $(this).data('id-produk');
 
@@ -626,14 +627,12 @@ const tableProduk = $('#table_produk').DataTable({
         });
 
         // handle untuk info data
-        $('.btn-info-produk').click(function () {
-
+        $('#table_produk').on('click', '.btn-info-produk', function () {
             let idProduk = $(this).data('id-produk');
-
             let modalInfoProduk = $('#modal-info-produk');
 
             $.ajax({
-                url: `{{ route('produk.show', '') }}/${idProduk}`,
+                url: `{{ route('produk.show', ':id') }}`.replace(':id', idProduk),
                 method: 'GET',
                 success: function (data) {
                     let produk = data.data;
@@ -661,7 +660,6 @@ const tableProduk = $('#table_produk').DataTable({
                     }).then(() => window.location.reload());
                 }
             });
-
         });
 
     });

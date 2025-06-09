@@ -266,7 +266,8 @@
         });
 
         // handle untuk update persediaan
-        $('.btn-update-mutasi').click(function () {
+
+        $('#table_persediaan').on('click', '.btn-update-mutasi', function() {
 
             let idMutasi = $(this).data('id-mutasi');
 
@@ -298,7 +299,7 @@
 
 
         // handler untuk menghapus data
-        $('.btn-delete-mutasi').click(function () {
+        $('#table_persediaan').on('click', '.btn-delete-mutasi', function() {
 
             let idMutasi = $(this).data('id-mutasi');
 
