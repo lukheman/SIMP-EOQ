@@ -21,7 +21,7 @@
         <!-- /.card-tools -->
     </div>
     <div class="card-body">
-        Data dari bulan <b>{{ \Carbon\Carbon::now()->subMonth(2)->format('F') }}</b> dan <b>{{ \Carbon\Carbon::now()->subMonth()->format('F') }}</b> akan dipakai buat hitung kebutuhan barang (EOQ), stok pengaman (Safety Stock), dan kapan harus restok (Reorder Point).
+        Data dari dua bulan lalu akan dipakai buat hitung kebutuhan barang (EOQ), stok pengaman (Safety Stock), dan kapan harus restok (Reorder Point).
     </div>
 </div>
 
@@ -42,6 +42,7 @@
                                 <th>ROP</th>
                                 <th>Persediaan Saat Ini</th>
                                 <th>Jumlah yang harus dipesan (EOQ)</th>
+                                <th>Frekuensi Pemesanan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,11 +51,11 @@
                             <tr>
                                 <td class="text-center">{{ $item->kode_produk }}</td>
                                 <td>{{ $item->nama_produk }}</td>
-                                <td class="text-center">{{ $item->safetyStock() }}</td>
-                                <td class="text-center">{{ $item->reorderPoint() }}</td>
+                                <td class="text-center">{{ $item->safety_stock }}</td>
+                                <td class="text-center">{{ $item->reorder_point }}</td>
                                 <td class="text-center">{{ $item->persediaan->jumlah }}</td>
-                                <td class="text-center">{{ $item->economicOrderQuantity() }}</td>
-
+                                <td class="text-center">{{ $item->economic_order_quantity }}</td>
+                                <td class="text-center">{{ $item->frekuensi_pemesanan}}</td>
                             </tr>
                             @endforeach
                         </tbody>
