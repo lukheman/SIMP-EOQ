@@ -48,11 +48,19 @@
 
                                     @foreach ($data_eoq as $item)
                                     <tr>
+                                        @if (count($item) < 3)
+                                            <td> {{ $item['periode']}}</td>
+                                            <td> {{ $item['nama_produk']}}</td>
+                                            <td colspan="3" class="text-danger text-center">Data penjualan tidak mencukupi</td>
+                                        @else
+
                                         <td> {{ $item['periode']}}</td>
                                         <td> {{ $item['nama_produk']}}</td>
                                         <td> {{ $item['safety_stock']}}</td>
                                         <td> {{ $item['reorder_point']}}</td>
                                         <td> {{ $item['eoq']}}</td>
+
+                                        @endif
                                     </tr>
                                     @endforeach
 
