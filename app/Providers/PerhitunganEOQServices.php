@@ -129,7 +129,7 @@ class PerhitunganEOQServices extends ServiceProvider
 
         $D = self::getDemand($produk_id, $periode1, $periode2);
 
-        $EOQ = self::economicOrderQuantity($produk_id, $periode);
+        $EOQ = self::economicOrderQuantity($produk_id, $periode) ?: 1;
 
         return round($D/ $EOQ);
 
