@@ -372,6 +372,8 @@ function startScanner() {
     Quagga.onDetected(function(result) {
         const barcode = result.codeResult.code;
 
+        Quagga.stop();
+
         // cek apakah produk telah di pesan dan ada di table restock
         $.ajax({
             url: `{{ route('restock.exist', ':code') }}`.replace(':code', barcode), // Dynamically insert barcode
@@ -411,6 +413,11 @@ function startScanner() {
                 console.log('Request failed:', xhr.responseJSON);
             }
         });
+
+        setTimeout(() => {
+
+            startScanner();
+        }, 500);
 
 
     });
