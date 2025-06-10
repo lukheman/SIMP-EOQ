@@ -88,12 +88,15 @@
                 @csrf
                 <div class="modal-body">
 
-                    <input type="hidden" name="id_produk" id="id-produk">
+                    <!-- <input type="hidden" name="id_produk" id="id-produk"> -->
 
                     <div class="form-group">
                         <label for="kode-produk">Kode Produk</label>
-                        <input type="text" class="form-control" name="kode_produk" id="kode-produk">
+                        <select class="form-control" name="id_produk" id="kode-produk" width="100%">
+
+                        </select>
                     </div>
+
 
                     <div class="form-group">
                         <label for="nama-produk">Nama Produk</label>
@@ -117,9 +120,8 @@
 
 @section('custom-script')
 <script>
-$(function () {
 
-
+$(document).ready(function () {
 
     $('#table_pesanan').DataTable({
         "paging": true,
@@ -131,15 +133,15 @@ $(function () {
         "responsive": true,
     });
 
+$('#kode-produk').select2({
+    dropdownParent: $('#modal-pesanan'),
+    placeholder: 'Pilih Produk',
+    allowClear: true,
+    width: '100%'
 });
-</script>
 
-<script>
-
-$(document).ready(function () {
 
     $('#btn-modal-pesanan').click(function() {
-
 
         $.ajax({
             url: "{{ route('produk.index') }}",
@@ -150,21 +152,26 @@ $(document).ready(function () {
             success: function (data) {
 
                 // Kosongkan dulu isi <select> sebelum menambahkan opsi baru
-                $('#nama-produk').empty().append('<option disabled selected>Pilih Produk</option>');
+                $('#kode-produk').empty().append('<option disabled selected>Pilih Produk</option>');
 
                 $.each(data.data, function(index, produk) {
-                    $('#nama-produk').append(
+                    $('#kode-produk').append(
                         $('<option>', {
                             value: produk.id,
-                            text: `${produk.kode_produk} | ${produk.nama_produk}`
+                            text: `${produk.kode_produk}`
                         })
                     );
                 });
 
                 // Jika pakai Select2, refresh tampilannya
-                if ($.fn.select2) {
-                    $('#nama-produk').trigger('change.select2');
-                }
+            if ($.fn.select2) {
+                $('#kode-produk').select2({
+                    dropdownParent: $('#modal-pesanan'),
+                    placeholder: 'Pilih Produk',
+                    allowClear: true,
+                    width: '100%'
+                });
+            }
 
             },
             error: function (error) {
@@ -224,8 +231,8 @@ $(document).ready(function () {
     });
 
     $('#kode-produk').on('input', function () {
-        const kode = $(this).val();
-        const url = `{{ route('produk.kode-produk', ':code') }}`.replace(':code', kode);
+        const id = $(this).val();
+        const url = `{{ route('produk.show', ':id') }}`.replace(':id', id);
 
         $.ajax({
             url: url,
