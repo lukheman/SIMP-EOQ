@@ -99,7 +99,7 @@
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
-            <form action="{{ route('laporan-eoq') }}" method="post">
+            <form action="{{ route('laporan.laporan-eoq') }}" method="post">
                 <input type="hidden" name="ttd" value="Admin Toko">
                 @csrf
                 <div class="modal-body">
