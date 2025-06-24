@@ -158,11 +158,13 @@ class TransaksiController extends Controller
 
         $transaksi = Transaksi::findOrFail($id);
 
-        if (Role::from(Auth::user()->role) === Role::ADMINTOKO) {
+        $user_role = Auth::guard('reseller')->user()->role ?? Auth::user()->role;
+
+        if (Role::from($user_role) === Role::ADMINTOKO) {
             return $this->handleAdminTokoActions($request, $transaksi);
-        } elseif (Role::from(Auth::user()->role) === Role::KURIR) {
+        } elseif (Role::from($user_role) === Role::KURIR) {
             return $this->handleKurirActions($request, $transaksi);
-        } elseif (Role::from(Auth::user()->role) === Role::RESELLER) {
+        } elseif (Role::from($user_role) === Role::RESELLER) {
             return $this->handleResellerActions($request, $transaksi);
         }
 
