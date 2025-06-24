@@ -269,7 +269,7 @@
             updateTransactionStatus(idTransaksi, 'ditolak', 'Pesanan berhasil ditolak');
         });
 
-        $('.btn-detail-transaksi').click(function () {
+        $('.btn-detail-transaksi').on('click', function () {
 
             let idTransaksi = $(this).data('id-transaksi');
 

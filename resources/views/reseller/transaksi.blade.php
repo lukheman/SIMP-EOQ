@@ -25,8 +25,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <!-- TODO: buat menjadi lebih estetik -->
-                    <table id="table_pesanan" class="table table-bordered table-striped dataTable dtr-inline"
-                        aria-describedby="table_pesanan_info">
+                    <table id="table_pesanan" class="table table-bordered table-striped dataTable dtr-inline">
                         <thead>
                             <tr>
                                 <th>Tanggal</th>
@@ -292,7 +291,7 @@
             });
         });
 
-        $('.btn-detail-transaksi').click(function () {
+        $('.btn-detail-transaksi').on('click', function () {
 
             let idTransaksi = $(this).data('id-transaksi');
 
@@ -307,6 +306,8 @@
                 },
                 success: function (data) {
                     if (data.success) {
+
+                        console.log(data);
 
                         $("#table-detail-transaksi tbody").empty();
                         data.data.forEach((item, index) => {
@@ -337,13 +338,14 @@
     $(function () {
 
         $('#table_pesanan').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: true,
+            responsive: false,
+            scrollX: true
         });
 
     });
