@@ -8,32 +8,36 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Reseller;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
 
-    public function signup(Request $request) {
+    public function signup(Request $request)
+    {
+    // Validate input based on role
+    $validated = $request->validate([
+        'role' => ['required', 'in:reseller,kurir'],
+        'name' => ['required', 'string', 'max:100'],
+        'email' => ['required', 'email', 'max:100', Rule::unique($request->role === 'reseller' ? 'reseller' : 'users', 'email')],
+        'phone' => [$request->role === 'reseller' ? 'nullable' : 'required', 'string', 'max:15', Rule::unique('users', 'phone')->when($request->role !== 'reseller', fn($query) => $query)],
+        'password' => ['required', 'string', 'min:4', 'confirmed'],
+    ]);
 
-        $request->validate([
-            'role'     => ['required', 'exists:users,role'],
-            'name'     => 'required|string|max:100',
-            'email'    => 'required|email|max:100|unique:users,email',
-            'phone'    => 'nullable|string|max:15|unique:users,phone',
-            'password' => 'nullable|string|min:4|confirmed',
-        ]);
+    // Determine model and table based on role
+    $model = $request->role === 'reseller' ? \App\Models\Reseller::class : \App\Models\User::class;
 
+    // Create user or reseller
+    $model::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'password' => bcrypt($validated['password']),
+        'role' => $validated['role'],
+        'phone' => $request->role === 'reseller' ? null : $validated['phone'],
+    ]);
 
-        $user = User::query()->create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'role' => $request->role,
-            'phone' => $request->phone,
-        ]);
-
+        flash('Registrasi berhasil, silakan login.', 'success');
         return to_route('login');
-
-
     }
 
     public function registrasi() {

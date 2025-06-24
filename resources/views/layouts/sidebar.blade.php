@@ -14,7 +14,7 @@
 <img src="{{ Auth::guard('reseller')->check() ? (Auth::guard('reseller')->user()->foto ? asset('storage/' . Auth::guard('reseller')->user()->foto) : asset('dist/img/avatar5.png')) : (Auth::guard('web')->user()->foto ? asset('storage/' . Auth::guard('web')->user()->foto) : asset('dist/img/avatar5.png')) }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{ Auth::guard('reseller')->name ?? Auth::guard('web')->name }}</a>
+                <a href="#" class="d-block">{{ Auth::guard('reseller')->user()->name ?? Auth::guard('web')->user()->name }}</a>
             </div>
         </div>
 

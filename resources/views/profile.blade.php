@@ -78,7 +78,7 @@
                             <div class="row">
                                 <div class="col-6">
 
-                                    <a href="{{ route('home') }}" class="btn btn-primary">Kembali</a>
+                                    <a href="{{ Auth::guard('reseller')->check() ? route(Auth::guard('reseller')->user()->role . '.index') : (Auth::guard('web')->check() ? route(Auth::guard('web')->user()->role . '.index') : route('home')) }}" class="btn btn-primary">Kembali</a>
 
                                 </div>
                                 <div class="col-6">
