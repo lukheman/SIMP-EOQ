@@ -21,6 +21,22 @@
             <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">UD Toko Diva Mowewe</h2>
             <p class="text-center text-gray-600 mb-6">Login ke akun Anda</p>
 
+             @if (flash()->message)
+            <div class="alert mb-4 p-4 rounded-lg text-sm
+                @if(flash()->class == 'success')
+                    bg-green-100 text-green-800 border border-green-300
+                @elseif(flash()->class == 'danger')
+                    bg-red-100 text-red-800 border border-red-300
+                @elseif(flash()->class == 'warning')
+                    bg-yellow-100 text-yellow-800 border border-yellow-300
+                @else
+                    bg-blue-100 text-blue-800 border border-blue-300
+                @endif
+                " role="alert">
+                {{ flash()->message }}
+            </div>
+            @endif
+
             <form action="{{ url('/login') }}" method="POST">
                 @csrf
                 <div class="mb-4">
