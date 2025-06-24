@@ -9,7 +9,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>
-        {{ auth()->check() ? Auth::user()->role . ' | '. Auth::user()->name : '' }}
+            {{ config('app.name') ?? 'UD Toko Diva'}} | {{ auth()->check() ? Auth::user()->role  : Auth::guard('reseller')->user()->role }}
     </title>
 
 

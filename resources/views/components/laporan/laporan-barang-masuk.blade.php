@@ -19,8 +19,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <table id="datatable" class="table table-bordered table-striped dataTable dtr-inline"
-                        aria-describedby="datatable_info">
+                    <table id="datatable" class="table table-bordered table-striped dataTable dtr-inline">
                         <thead>
                             <tr>
                                 <th>Tanggal </th>
