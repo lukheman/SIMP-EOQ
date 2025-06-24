@@ -41,7 +41,7 @@ class MutasiController extends Controller
             $restock->delete();
 
         } else {
-            $produk->persediaan -= $request->jumlah;
+            $produk->persediaan->jumlah -= $request->jumlah;
             $produk->save();
         }
 
