@@ -19,12 +19,5 @@ class User extends Authenticatable
         return $this->hasMany(Transaksi::class, 'id_kurir');
     }
 
-    public function reseller_detail() {
-        return $this->hasOne(ResellerDetail::class, 'id_user');
-    }
-
-    public function keranjang() {
-        return $this->hasOne(Keranjang::class);
-    }
 
 }

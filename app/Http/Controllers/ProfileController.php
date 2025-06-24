@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+
+use App\Models\User;
+use App\Models\Reseller;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
 
     public function index() {
 
-        $user = User::find(auth()->user()->id);
-
         return view('profile', [
             'page' => 'Profile',
-            'user' => $user
+            'user' => Auth::guard('reseller')->user() ?? Auth::guard('web')->user()
         ]);
 
     }
@@ -24,16 +26,22 @@ class ProfileController extends Controller
 
     public function update(Request $request, $id)
     {
+        // Determine the guard and model based on authenticated user
+        $guard = Auth::guard('reseller')->check() ? 'reseller' : 'web';
+        $model = $guard === 'reseller' ? Reseller::class : User::class;
+
+        // Validate input based on the model
         $validated = $request->validate([
-            'email'    => 'required|email|max:100|unique:users,email,' . $id,
-            'password' => 'nullable|string|min:4|confirmed',
-            'name'     => 'required|string|max:100',
-            'phone'    => 'nullable|string|max:15',
-            'alamat'   => 'nullable|string',
-            'foto'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'email' => ['required', 'email', 'max:100', Rule::unique($guard === 'reseller' ? 'reseller' : 'users', 'email')->ignore($id)],
+            'password' => ['nullable', 'string', 'min:4', 'confirmed'],
+            'name' => ['required', 'string', 'max:100'],
+            'phone' => [$guard === 'reseller' ? 'nullable' : 'required', 'string', 'max:15', Rule::unique($guard === 'reseller' ? 'reseller' : 'users', 'phone')->ignore($id)],
+            'alamat' => ['nullable', 'string'],
+            'foto' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ]);
 
-        $user = User::find($id);
+        // Find the user or reseller
+        $user = $model::find($id);
 
         if (!$user) {
             return back()->with([
@@ -43,28 +51,26 @@ class ProfileController extends Controller
         }
 
         // Update basic fields
-        $user->email  = $validated['email'];
-        $user->name   = $validated['name'];
-        $user->phone  = $validated['phone'] ?? null;
-        $user->alamat = $validated['alamat'] ?? null;
+        $user->email = $validated['email'];
+        $user->name = $validated['name'];
 
-        // Jika password diisi, hash dan simpan
+            $user->phone = $validated['phone'] ?? null;
+            $user->alamat = $validated['alamat'] ?? null;
+
+            // Handle photo upload
+            if ($request->hasFile('foto')) {
+                // Delete old photo if exists
+                if ($user->foto && Storage::disk('public')->exists($user->foto)) {
+                    Storage::disk('public')->delete($user->foto);
+                }
+
+                $user->foto = $request->file('foto')->store('foto', 'public');
+            }
+
+        // Update password if provided
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
-
-        // Handle upload foto
-        if ($request->hasFile('foto')) {
-
-            // Hapus foto lama jika ada
-            if ($user->foto && Storage::disk('public')->exists($user->foto)) {
-                Storage::disk('public')->delete($user->foto);
-            }
-
-            $user->foto = $request->file('foto')->store('foto', 'public');
-
-        }
-
 
         $user->save();
 

@@ -69,3 +69,7 @@ php artisan serve
 
 - tambahkan penjualan langsung pada admintoko (kasir) 50
 - tambahkan laporan eoq tiap bulan di admintoko (f)
+
+# Revisi
+
+- ganti perhitungan

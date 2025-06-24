@@ -9,18 +9,13 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
-    public function handle(Request $request, Closure $next, ...$roles): Response
+    public function handle(Request $request, Closure $next, $guard, ...$roles): Response
     {
-        if(!Auth::check()) {
-            return redirect()->route('login')->with('error', 'Silahkan login terlebih dahulu.');
+        if (!Auth::guard($guard)->check()) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
-        if (!in_array(Auth::user()->role, $roles)) {
+        if (!in_array(Auth::guard($guard)->user()->role, $roles)) {
             abort(403, 'Anda tidak memiliki izin untuk mengakses halaman ini.');
         }
 

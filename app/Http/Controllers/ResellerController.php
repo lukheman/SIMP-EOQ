@@ -19,18 +19,17 @@ class ResellerController extends Controller
 
 
     public function index() {
-        $keranjang = Keranjang::where('id_user', Auth::id())->first();
+        $reseller = Auth::guard('reseller')->user();
 
-        // buat keranjang ketika keranjang reseller belum ada
-        if($keranjang == null) {
-            $keranjang = Keranjang::create([
-                'id_user' => Auth::id()
+        $keranjang = Keranjang::where('id_reseller', Auth::guard('reseller')->id())->first() ??
+            Keranjang::create([
+                'id_reseller' => $reseller->id
             ]);
-        }
+;
 
-        $keranjang = Pesanan::where('id_keranjang', $keranjang->id)->count();
+        $keranjang = Pesanan::where('id_keranjang_belanja', $keranjang->id)->count();
 
-        $pesanan = Transaksi::where('id_user', Auth::id())->where('status', '!=', 'selesai')->count();
+        $pesanan = Transaksi::where('id_reseller', Auth::guard('reseller')->id())->where('status', '!=', 'selesai')->count();
 
         return view('reseller.index', [
             'page' => 'Dashboard',
@@ -57,10 +56,10 @@ class ResellerController extends Controller
     }
 
     public function keranjang() {
-        $keranjang = Keranjang::where('id_user', Auth::id())->first();
+        $keranjang = Keranjang::where('id_reseller', Auth::guard('reseller')->id())->first();
 
         if($keranjang) {
-            $pesanan = Pesanan::with(['produk'])->where('id_keranjang', $keranjang->id)->get();
+            $pesanan = Pesanan::with(['produk'])->where('id_keranjang_belanja', $keranjang->id)->get();
 
             return view('reseller.keranjang', [
                 'page' => 'Keranjang',
@@ -84,7 +83,7 @@ class ResellerController extends Controller
         $dikirim = $request->query('dikirim');
         $selesai = $request->query('selesai');
 
-        $transaksi = Transaksi::where('id_user', Auth::id());
+        $transaksi = Transaksi::where('id_reseller', Auth::guard('reseller')->id());
 
         if($belumbayar === '0') {
 

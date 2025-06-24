@@ -19,7 +19,7 @@ return new class extends Migration
 
         Schema::create('transaksi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_user')->nullable()->constrained('users')->onDelete('cascade');
+            $table->foreignId('id_reseller')->nullable()->constrained('reseller')->onDelete('cascade');
             $table->foreignId('id_kurir')->nullable()->constrained('users')->cascadeOnDelete();
             $table->enum('status', StatusTransaksi::values())->default('pending'); // Status pesanan
             $table->enum('status_pembayaran', StatusPembayaran::values())->default('belum_bayar');

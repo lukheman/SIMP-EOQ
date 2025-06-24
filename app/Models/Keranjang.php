@@ -10,7 +10,7 @@ class Keranjang extends Model
     protected $guarded = [];
 
     public function user() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Reseller::class, 'id', 'id_reseller');
     }
 
     public function pesanan() {

@@ -67,9 +67,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a
-                                        href="{{ route(str_replace('_', '', Auth::user()->role) . '.' . 'dashboard')}}">Home</a>
-                                </li>
+<li class="breadcrumb-item">
+    <a href="{{ route((Auth::guard('reseller')->check() ? str_replace('_', '', Auth::guard('reseller')->user()->role) : str_replace('_', '', Auth::guard('web')->user()->role)) . '.dashboard') }}">Home</a>
+</li>
                                 <li class="breadcrumb-item active">{{ $page }}</li>
                             </ol>
                         </div><!-- /.col -->

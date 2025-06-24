@@ -31,20 +31,20 @@ class TransaksiController extends Controller
         $pesanan_dipilih = $request->input('pesanan_dipilih');
         $pesanan_dipilih = explode(',', $pesanan_dipilih);
 
-        $keranjang = Keranjang::where('id_user', Auth::id())->first();
+        $keranjang = Keranjang::where('id_reseller', Auth::guard('reseller')->id())->first();
 
         $transaksi = Transaksi::create([
-            'id_user' => Auth::id(),
+            'id_reseller' => Auth::guard('reseller')->id(),
             'metode_pembayaran' => $request->metode_pembayaran,
             'status' => MetodePembayaran::from($validated['metode_pembayaran']) === MetodePembayaran::COD ? StatusTransaksi::DIPROSES : StatusTransaksi::PENDING
         ]);
 
         // Update pesanan terkait
         Pesanan::whereIn('id', $pesanan_dipilih)
-            ->where('id_keranjang', $keranjang->id)
+            ->where('id_keranjang_belanja', $keranjang->id)
             ->update([
                 'id_transaksi' => $transaksi->id,
-                'id_keranjang' => null
+                'id_keranjang_belanja' => null
             ]);
 
         return response()->json([

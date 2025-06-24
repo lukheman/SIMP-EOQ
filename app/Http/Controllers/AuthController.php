@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Reseller;
 
 class AuthController extends Controller
 {
@@ -52,40 +53,48 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
-        $user = User::where('email', $credentials['email'])->first();
-
-        if ($user && Hash::check($credentials['password'], $user->password)) {
-            Auth::login($user);
-
+        // Coba login sebagai User (guard: web)
+        if (Auth::guard('web')->attempt($credentials)) {
             $request->session()->regenerate();
+            $user = Auth::guard('web')->user();
 
             return match(Role::from($user->role)) {
-                 Role::ADMINGUDANG => redirect()->route('admingudang.index'),
-                 Role::ADMINTOKO => redirect()->route('admintoko.index'),
-                 Role::RESELLER => redirect()->route('reseller.index'),
-                 Role::PEMILIKTOKO => redirect()->route('pemiliktoko.index'),
-                 Role::KURIR => redirect()->route('kurir.index'),
-                default => redirect()->route('login')
+                Role::ADMINGUDANG => redirect()->route('admingudang.index'),
+                Role::ADMINTOKO => redirect()->route('admintoko.index'),
+                Role::PEMILIKTOKO => redirect()->route('pemiliktoko.index'),
+                Role::KURIR => redirect()->route('kurir.index'),
+                default => redirect()->route('login'),
             };
-
         }
 
-        flash('Password atau email salah', 'danger');
+        // Coba login sebagai Reseller (guard: reseller)
+        if (Auth::guard('reseller')->attempt($credentials)) {
+            $request->session()->regenerate();
+            $reseller = Auth::guard('reseller')->user();
+
+            if ($reseller->role === Role::RESELLER->value) {
+                return redirect()->route('reseller.index');
+            }
+        }
+
+        flash('Email atau password salah', 'danger');
         return back();
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        Auth::guard('web')->logout();
+        Auth::guard('reseller')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        return redirect()->route('login');
     }
 
 }

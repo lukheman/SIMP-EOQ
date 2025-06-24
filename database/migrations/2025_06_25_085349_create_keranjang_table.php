@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('keranjang_belanja', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
+            $table->foreignId('id_reseller')->constrained('reseller')->onDelete('cascade');
             $table->timestamps();
         });
     }

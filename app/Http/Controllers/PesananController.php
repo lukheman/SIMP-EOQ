@@ -23,16 +23,16 @@ class PesananController extends Controller
             'jumlah' => 'required|numeric|min:1',
         ]);
 
-        $id_user = Auth::user()->id;
+        $id_reseller = Auth::guard('reseller')->id();
 
         // cari Keranjang reseller/user
-        if(!Keranjang::where('id_user', $id_user)->first()) {
+        if(!Keranjang::where('id_reseller', $id_reseller)->first()) {
             $keranjang = Keranjang::create([
-              'id_user' => $id_user
+              'id_reseller' => $id_reseller
             ]);
         }
 
-        $keranjang = Keranjang::where('id_user', $id_user)->first();
+        $keranjang = Keranjang::where('id_reseller', $id_reseller)->first();
 
         $produk = Produk::find($request->id_produk);
 
@@ -49,9 +49,9 @@ class PesananController extends Controller
 
         // buat pesanan
         $pesanan = Pesanan::create([
-            'id_user' => $id_user,
+            'id_reseller' => $id_reseller,
             'id_produk' => $request->id_produk,
-            'id_keranjang' => $keranjang->id,
+            'id_keranjang_belanja' => $keranjang->id,
             'jumlah' => $request->jumlah,
             'total_harga' => $total_harga,
         ]);

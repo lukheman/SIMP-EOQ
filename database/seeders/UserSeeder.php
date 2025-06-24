@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Reseller;
 
 class UserSeeder extends Seeder
 {
@@ -16,8 +17,6 @@ class UserSeeder extends Seeder
     {
         // Daftar role dengan nama berbeda untuk setiap role
         $roles = [
-            'Reseller 1' => 'reseller',
-            'Reseller 2' => 'reseller',
             'admin toko' => 'admintoko',
             'admin gudang' => 'admingudang',
             'pemilik toko' => 'pemiliktoko',
@@ -34,9 +33,22 @@ class UserSeeder extends Seeder
                 'role' => $role,
                 'name' => $name, // Nama sesuai dengan role
                 'phone' => '0820' . sprintf('%08d', mt_rand(0, 99999999)),
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
         }
+
+        Reseller::create([
+            'name' => 'Reseller 1',
+            'email' => 'reseller1@gmail.com',
+            'password' => bcrypt('password123'),
+            'role' => 'reseller'
+        ]);
+
+        Reseller::create([
+            'name' => 'Reseller 2',
+            'email' => 'reseller2@gmail.com',
+            'password' => bcrypt('password123'),
+            'role' => 'reseller'
+        ]);
+
     }
 }
