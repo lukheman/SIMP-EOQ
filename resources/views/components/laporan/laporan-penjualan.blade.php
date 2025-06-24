@@ -144,9 +144,8 @@ $(function () {
 <script>
 
 $(document).ready(() => {
-
-    $('.btn-delete-penjualan').click(function () {
-
+    // Gunakan event delegation untuk .btn-delete-penjualan
+    $(document).on('click', '.btn-delete-penjualan', function () {
         let idPenjualan = $(this).data('id-penjualan');
 
         // Confirm deletion with SweetAlert
@@ -160,33 +159,29 @@ $(document).ready(() => {
             confirmButtonText: 'Ya, hapus!',
             cancelButtonText: 'Batal'
         }).then((result) => {
-
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: `{{ route('mutasi.destroy', '') }}/${idPenjualan}`,
-                        method: 'DELETE',
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function (data) {
-                            Swal.fire({
-                                title: data.message,
-                                icon: "success",
-                            }).then(() => window.location.reload());
-                        },
-                        error: function (error) {
-                            Swal.fire({
-                                title: 'Log penjualan gagal dihapus',
-                                icon: "error",
-                            }).then(() => window.location.reload());
-                        }
-
-                    });
-                }
-            });
-
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `https://udtokodiva.cyou/mutasi/${idPenjualan}`,
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data) {
+                        Swal.fire({
+                            title: data.message,
+                            icon: "success",
+                        }).then(() => window.location.reload());
+                    },
+                    error: function (error) {
+                        Swal.fire({
+                            title: 'Log penjualan gagal dihapus',
+                            icon: "error",
+                        }).then(() => window.location.reload());
+                    }
+                });
+            }
+        });
     });
-
 });
 
 </script>
