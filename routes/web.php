@@ -14,7 +14,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ResellerController;
 use App\Http\Controllers\RestockController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\InputDataMutasiController;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/input-data-mutasi', [InputDataMutasiController::class, 'index'])->name('input-data-mutasi');
 
 // Public Routes (tanpa autentikasi)
 Route::get('/', [AuthController::class, 'showLoginForm'])->name('home');
