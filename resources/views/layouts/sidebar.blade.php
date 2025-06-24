@@ -1,9 +1,8 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-        <img src="{{ asset('dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo"
-            class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">SIMP</span>
+        <i class="fas fa-home brand-image elevation-3" style="opacity: .8; font-size: 24px; margin-left: 10px;"></i>
+        <span class="brand-text font-weight-light">{{ config('app.name') ?? 'UD Toko Diva'}}</span>
     </a>
 
     <!-- Sidebar -->
