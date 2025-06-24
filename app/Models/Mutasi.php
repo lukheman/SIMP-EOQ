@@ -3,30 +3,34 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-
 use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Support\Facades\DB;
 
 class Mutasi extends Model
 {
     protected $table = 'mutasi';
+
     protected $guarded = [];
+
     protected $appends = ['total_harga_jual', 'total_harga_beli'];
 
-    public function produk() {
+    public function produk()
+    {
         return $this->belongsTo(Produk::class, 'id_produk');
     }
 
-    public function getTotalHargaJualAttribute() {
+    public function getTotalHargaJualAttribute()
+    {
         return $this->produk->harga_jual * $this->jumlah;
     }
 
-    public function getTotalHargaBeliAttribute() {
+    public function getTotalHargaBeliAttribute()
+    {
         return $this->produk->harga_beli * $this->jumlah;
     }
 
-    public static function penjualanMaksimum($id_produk, $periode) {
+    public static function penjualanMaksimum($id_produk, $periode)
+    {
 
         $maxMingguan = self::where('id_produk', $id_produk)
             ->where('jenis', 'keluar')
@@ -39,11 +43,11 @@ class Mutasi extends Model
 
         return $maxMingguan->total ?? 0;
 
-
     }
 
     // rata-rata penjualan harian
-    public static function rataRataPenjualan($id_produk, Carbon $periode) {
+    public static function rataRataPenjualan($id_produk, Carbon $periode)
+    {
 
         $penjualan = self::where('id_produk', $id_produk)
             ->whereYear('tanggal', $periode->year)
@@ -57,7 +61,8 @@ class Mutasi extends Model
 
     }
 
-    public static function rataRataPenjualanSemua($periode) {
+    public static function rataRataPenjualanSemua($periode)
+    {
 
         $jumlahHari = $periode->daysInMonth;
 
@@ -71,6 +76,4 @@ class Mutasi extends Model
         return $rataRataPerProduk;
 
     }
-
-
 }

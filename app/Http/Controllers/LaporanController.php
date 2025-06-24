@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Produk;
-use Illuminate\Http\Request;
 use App\Models\Mutasi;
-use Illuminate\Support\Facades\DB;
+use App\Models\Produk;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class LaporanController extends Controller {
-
-    public function laporanEOQ(Request $request) {
-
+class LaporanController extends Controller
+{
+    public function laporanEOQ(Request $request)
+    {
 
         $request->validate([
             'periode' => ['required', 'date_format:Y-m'],
@@ -25,9 +25,8 @@ class LaporanController extends Controller {
         return view('invoices.laporan-eoq', [
             'periode' => $periode->format('Y-m'),
             'ttd' => $request->ttd,
-            'data_eoq' => $data_eoq
+            'data_eoq' => $data_eoq,
         ]);
-
 
     }
 
@@ -80,14 +79,15 @@ class LaporanController extends Controller {
         ]);
     }
 
-    public function laporanBarangMasuk(Request $request) {
+    public function laporanBarangMasuk(Request $request)
+    {
 
         $request->validate([
             'periode' => 'required',
-            'ttd' => 'required'
+            'ttd' => 'required',
         ]);
 
-        list($tahun, $bulan) = explode('-', $request->periode);
+        [$tahun, $bulan] = explode('-', $request->periode);
 
         $barang_masuk = Mutasi::select(
             'id_produk',
@@ -104,18 +104,18 @@ class LaporanController extends Controller {
         return view('invoices.laporan-barang-masuk', [
             'barang_masuk' => $barang_masuk,
             'periode' => $request->periode,
-            'ttd' => $request->ttd
+            'ttd' => $request->ttd,
         ]);
     }
 
-    public function laporanPersediaanProduk() {
+    public function laporanPersediaanProduk()
+    {
 
         $produk = Produk::with('persediaan')->get();
 
         return view('invoices.laporan-persediaan-produk', [
             'produk' => $produk,
-            'ttd' => 'Pemilik Toko'
+            'ttd' => 'Pemilik Toko',
         ]);
     }
-
 }

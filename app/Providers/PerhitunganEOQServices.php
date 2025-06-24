@@ -2,11 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-
-use Carbon\Carbon;
 use App\Models\Mutasi;
 use App\Models\Produk;
+use Carbon\Carbon;
+use Illuminate\Support\ServiceProvider;
 
 class PerhitunganEOQServices extends ServiceProvider
 {
@@ -54,22 +53,26 @@ class PerhitunganEOQServices extends ServiceProvider
     {
         $jumlah = self::penjualanBulanan($produkId, $periode1) + self::penjualanBulanan($produkId, $periode2);
         $hari = $periode1->daysInMonth + $periode2->daysInMonth;
+
         return $hari > 0 ? round($jumlah / $hari, 2) : 0;
     }
 
-    public static function penjualanMaksimum($produk_id, Carbon $periode1, Carbon $periode2) {
+    public static function penjualanMaksimum($produk_id, Carbon $periode1, Carbon $periode2)
+    {
         $jumlah1 = self::penjualanBulanan($produk_id, $periode1);
         $jumlah2 = self::penjualanBulanan($produk_id, $periode2);
+
         return max($jumlah1, $jumlah2);
     }
 
-    public static function getDemand($produk_id, Carbon $periode1, Carbon $periode2) {
+    public static function getDemand($produk_id, Carbon $periode1, Carbon $periode2)
+    {
         return self::penjualanBulanan($produk_id, $periode1) +
            self::penjualanBulanan($produk_id, $periode2);
     }
 
-
-    public static function economicOrderQuantity($produk_id, ?Carbon $periode = null): float {
+    public static function economicOrderQuantity($produk_id, ?Carbon $periode = null): float
+    {
         $periode = $periode ?? Carbon::now();
 
         $periode1 = (clone $periode)->subMonth(2);
@@ -86,7 +89,7 @@ class PerhitunganEOQServices extends ServiceProvider
 
     }
 
-    public static function safetyStock($produk_id, ?Carbon $periode = null ): float
+    public static function safetyStock($produk_id, ?Carbon $periode = null): float
     {
 
         $periode = $periode ?? Carbon::now();
@@ -104,7 +107,7 @@ class PerhitunganEOQServices extends ServiceProvider
         return self::hitungSafetyStock($PM, $PRR, $LT);
     }
 
-    public static function reorderPoint($produk_id, ?Carbon $periode = null ): float
+    public static function reorderPoint($produk_id, ?Carbon $periode = null): float
     {
         $periode = $periode ?? Carbon::now();
 
@@ -121,7 +124,8 @@ class PerhitunganEOQServices extends ServiceProvider
         return self::hitungROP($SS, $Q, $LT);
     }
 
-    public static function frekuensiPemesanan($produk_id, ?Carbon $periode = null): int {
+    public static function frekuensiPemesanan($produk_id, ?Carbon $periode = null): int
+    {
         $periode = $periode ?? Carbon::now();
 
         $periode1 = (clone $periode)->subMonth(2);
@@ -131,11 +135,12 @@ class PerhitunganEOQServices extends ServiceProvider
 
         $EOQ = self::economicOrderQuantity($produk_id, $periode) ?: 1;
 
-        return round($D/ $EOQ);
+        return round($D / $EOQ);
 
     }
 
-    public static function hasSufficientSalesData($produk_id, ?Carbon $periode = null): bool {
+    public static function hasSufficientSalesData($produk_id, ?Carbon $periode = null): bool
+    {
         $periode = $periode ?? Carbon::now();
 
         $periode1 = (clone $periode)->subMonth(2);
@@ -146,5 +151,4 @@ class PerhitunganEOQServices extends ServiceProvider
 
         return $jumlah1 !== 0 && $jumlah2 !== 0;
     }
-
 }

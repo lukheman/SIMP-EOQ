@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 class StatusTransaksi extends Component
 {
     public $status;
+
     /**
      * Create a new component instance.
      */

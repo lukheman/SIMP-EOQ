@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Reseller;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Reseller;
 
 class UserSeeder extends Seeder
 {
@@ -28,11 +27,11 @@ class UserSeeder extends Seeder
         foreach ($roles as $name => $role) {
             DB::table('users')->insert([
                 /* 'username' => $role, */
-                'email' => str_replace(' ', '', strtolower($name)) . '@example.com',
+                'email' => str_replace(' ', '', strtolower($name)).'@example.com',
                 'password' => Hash::make('password123'), // Gunakan hashing untuk keamanan
                 'role' => $role,
                 'name' => $name, // Nama sesuai dengan role
-                'phone' => '0820' . sprintf('%08d', mt_rand(0, 99999999)),
+                'phone' => '0820'.sprintf('%08d', mt_rand(0, 99999999)),
             ]);
         }
 
@@ -40,14 +39,14 @@ class UserSeeder extends Seeder
             'name' => 'Reseller 1',
             'email' => 'reseller1@gmail.com',
             'password' => bcrypt('password123'),
-            'role' => 'reseller'
+            'role' => 'reseller',
         ]);
 
         Reseller::create([
             'name' => 'Reseller 2',
             'email' => 'reseller2@gmail.com',
             'password' => bcrypt('password123'),
-            'role' => 'reseller'
+            'role' => 'reseller',
         ]);
 
     }

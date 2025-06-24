@@ -2,47 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Mutasi;
 use App\Models\Produk;
 use App\Models\Transaksi;
 
 class PemilikTokoController extends Controller
 {
-
-    public function laporanEOQ() {
+    public function laporanEOQ()
+    {
 
         $data_eoq = Produk::EOQSemuaProdukAllTime();
         /* dd($produk->economicOrderQuantityAllTime()); */
 
         return view('pemilik_toko.laporan-eoq', [
             'page' => 'Laporan EOQ',
-            'data_eoq' => $data_eoq
+            'data_eoq' => $data_eoq,
         ]);
 
     }
 
-    public function index() {
+    public function index()
+    {
         $transaksi = Transaksi::where('status', 'selesai')->count();
         $persediaan_barang = Produk::with('persediaan')->get()->sum('persediaan.jumlah');
 
         return view('pemilik_toko.index', [
             'page' => 'Dashboard',
             'transaksi' => $transaksi,
-            'persediaan_barang' => $persediaan_barang
+            'persediaan_barang' => $persediaan_barang,
         ]);
     }
 
-    public function laporanPenjualan() {
+    public function laporanPenjualan()
+    {
         $penjualan = Mutasi::where('jenis', 'keluar')->get();
 
         return view('pemilik_toko.laporan-penjualan', [
             'page' => 'Laporan Penjualan',
-            'penjualan' => $penjualan
+            'penjualan' => $penjualan,
         ]);
     }
 
-    public function laporanPersediaanProduk() {
+    public function laporanPersediaanProduk()
+    {
         $produk = Produk::with('persediaan')->get();
 
         return view('pemilik_toko.laporan-persediaan-produk', [
@@ -51,17 +53,17 @@ class PemilikTokoController extends Controller
         ]);
     }
 
-    public function persediaan() {
+    public function persediaan()
+    {
         return view('pemilik_toko.persediaan', [
-            'page' => 'Persediaan Produk'
+            'page' => 'Persediaan Produk',
         ]);
     }
 
-    public function laporanBarangMasuk() {
+    public function laporanBarangMasuk()
+    {
         return view('pemilik_toko.laporan-barang-masuk', [
             'page' => 'Laporan Barang Masuk',
         ]);
     }
-
-
 }

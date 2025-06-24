@@ -1,13 +1,11 @@
 <?php
 
+use App\Constants\MetodePembayaran;
+use App\Constants\StatusPembayaran;
+use App\Constants\StatusTransaksi;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
-
-use App\Constants\StatusTransaksi;
-use App\Constants\MetodePembayaran;
-use App\Constants\StatusPembayaran;
 
 return new class extends Migration
 {

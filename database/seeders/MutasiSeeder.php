@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,50 +12,50 @@ class MutasiSeeder extends Seeder
      */
     public function run(): void
     {
-        date_default_timezone_set("Asia/Jakarta");
+        date_default_timezone_set('Asia/Jakarta');
 
         DB::table('mutasi')->insert([
             // tepung terigu
             [
                 'id_produk' => 1,
-                'tanggal' => "2025-04-01",
+                'tanggal' => '2025-04-01',
                 'jumlah' => 60,
-                'jenis' => 'masuk'
+                'jenis' => 'masuk',
             ],
 
             [
                 'id_produk' => 1,
-                'tanggal' => "2025-04-01",
+                'tanggal' => '2025-04-01',
                 'jumlah' => 50,
-                'jenis' => 'keluar'
+                'jenis' => 'keluar',
             ],
 
             [
                 'id_produk' => 1,
-                'tanggal' => "2025-05-01",
+                'tanggal' => '2025-05-01',
                 'jumlah' => 50,
-                'jenis' => 'masuk'
+                'jenis' => 'masuk',
             ],
 
             [
                 'id_produk' => 1,
-                'tanggal' => "2025-05-10",
+                'tanggal' => '2025-05-10',
                 'jumlah' => 20,
-                'jenis' => 'masuk'
+                'jenis' => 'masuk',
             ],
 
             [
                 'id_produk' => 1,
-                'tanggal' => "2025-05-05",
+                'tanggal' => '2025-05-05',
                 'jumlah' => 25,
-                'jenis' => 'keluar'
+                'jenis' => 'keluar',
             ],
 
             [
                 'id_produk' => 1,
-                'tanggal' => "2025-05-15",
+                'tanggal' => '2025-05-15',
                 'jumlah' => 30,
-                'jenis' => 'keluar'
+                'jenis' => 'keluar',
             ],
 
             /* [ */

@@ -8,15 +8,16 @@ use Illuminate\View\Component;
 
 class NavLink extends Component
 {
-
     public $href;
+
     public $icon;
+
     public $active;
 
     /**
      * Create a new component instance.
      */
-    public function __construct($href, $icon, $active=false)
+    public function __construct($href, $icon, $active = false)
     {
         $this->href = $href;
         $this->icon = $icon;

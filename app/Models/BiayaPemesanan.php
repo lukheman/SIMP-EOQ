@@ -10,8 +10,8 @@ class BiayaPemesanan extends Model
 
     protected $guarded = [];
 
-    public function produk() {
+    public function produk()
+    {
         return $this->belongsTo(Produk::class, 'id_produk');
     }
-
 }

@@ -9,6 +9,7 @@ use Illuminate\View\Component;
 class StatusPembayaran extends Component
 {
     public $status;
+
     /**
      * Create a new component instance.
      */

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\Persediaan;
 use App\Models\Produk;
+use Illuminate\Http\Request;
 
 class PersediaanController extends Controller
 {
@@ -28,7 +27,7 @@ class PersediaanController extends Controller
         ]);
 
         $persediaan = Persediaan::create($data);
-        if($persediaan) {
+        if ($persediaan) {
 
             // setiap pembelian produk maka persediaan produk bertambah
             $produk = Produk::find($request->id_produk);
@@ -38,31 +37,32 @@ class PersediaanController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Persediaan berhasil ditambahkan',
-                'data' => $persediaan
+                'data' => $persediaan,
             ], 201);
         }
 
         return response()->json([
             'success' => false,
-            'message' => 'Persediaan gagal ditambahkan'
+            'message' => 'Persediaan gagal ditambahkan',
         ], 500);
 
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $persediaan = Persediaan::with('produk')->findOrFail($id);
 
-        if($persediaan) {
+        if ($persediaan) {
             return response()->json([
                 'success' => true,
                 'message' => 'Persediaan berhasil didapatkan',
-                'data' => $persediaan
+                'data' => $persediaan,
             ], 201);
         }
 
         return response()->json([
             'success' => false,
-            'message' => 'Gagal mendapatkan persediaan'
+            'message' => 'Gagal mendapatkan persediaan',
         ], 500);
     }
 
@@ -85,21 +85,20 @@ class PersediaanController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Persediaan berhasil diperbarui',
-            'data' => $persediaan
+            'data' => $persediaan,
         ], 200);
 
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $persediaan = Persediaan::findOrFail($id);
 
         $persediaan->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Persediaan berhasil dihapus'
+            'message' => 'Persediaan berhasil dihapus',
         ]);
     }
-
-
 }

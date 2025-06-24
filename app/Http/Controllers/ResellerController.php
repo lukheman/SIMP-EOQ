@@ -2,30 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Keranjang;
-use App\Models\Pesanan;
-use App\Models\User;
-use Illuminate\Http\Request;
-
-use App\Models\Produk;
-use App\Models\Transaksi;
-use Illuminate\Support\Facades\Auth;
-
 use App\Constants\MetodePembayaran;
 use App\Constants\StatusTransaksi;
+use App\Models\Keranjang;
+use App\Models\Pesanan;
+use App\Models\Produk;
+use App\Models\Transaksi;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ResellerController extends Controller
 {
-
-
-    public function index() {
+    public function index()
+    {
         $reseller = Auth::guard('reseller')->user();
 
         $keranjang = Keranjang::where('id_reseller', Auth::guard('reseller')->id())->first() ??
             Keranjang::create([
-                'id_reseller' => $reseller->id
+                'id_reseller' => $reseller->id,
             ]);
-;
 
         $keranjang = Pesanan::where('id_keranjang_belanja', $keranjang->id)->count();
 
@@ -34,11 +29,12 @@ class ResellerController extends Controller
         return view('reseller.index', [
             'page' => 'Dashboard',
             'keranjang' => $keranjang,
-            'pesanan' => $pesanan
+            'pesanan' => $pesanan,
         ]);
     }
 
-    public function katalog(Request $request) {
+    public function katalog(Request $request)
+    {
         $query = $request->input('q');
 
         $produk = Produk::query()
@@ -47,35 +43,35 @@ class ResellerController extends Controller
             })
             ->get(); // atau ->get() jika tidak ingin pagination
 
-
         return view('reseller.katalog', [
             'page' => 'Katalog',
             'produk' => $produk,
-            'query' => $query
+            'query' => $query,
         ]);
     }
 
-    public function keranjang() {
+    public function keranjang()
+    {
         $keranjang = Keranjang::where('id_reseller', Auth::guard('reseller')->id())->first();
 
-        if($keranjang) {
+        if ($keranjang) {
             $pesanan = Pesanan::with(['produk'])->where('id_keranjang_belanja', $keranjang->id)->get();
 
             return view('reseller.keranjang', [
                 'page' => 'Keranjang',
-                'pesanan' => $pesanan
+                'pesanan' => $pesanan,
             ]);
         }
 
-            return view('reseller.keranjang', [
-                'page' => 'Keranjang',
-                'pesanan' => []
-            ]);
+        return view('reseller.keranjang', [
+            'page' => 'Keranjang',
+            'pesanan' => [],
+        ]);
 
     }
 
-
-    public function transaksi(Request $request) {
+    public function transaksi(Request $request)
+    {
 
         $belumbayar = $request->query('belumbayar');
         $pending = $request->query('pending');
@@ -85,19 +81,19 @@ class ResellerController extends Controller
 
         $transaksi = Transaksi::where('id_reseller', Auth::guard('reseller')->id());
 
-        if($belumbayar === '0') {
+        if ($belumbayar === '0') {
 
             $transaksi = $transaksi
                 ->where('metode_pembayaran', MetodePembayaran::TRANSFER)
                 ->where('status', StatusTransaksi::PENDING);
 
-        } else if ($pending === '1') {
+        } elseif ($pending === '1') {
             $transaksi = $transaksi->where('status', StatusTransaksi::PENDING);
-        } else if($diproses === '1') {
+        } elseif ($diproses === '1') {
             $transaksi = $transaksi->where('status', StatusTransaksi::DIPROSES);
-        } else if($dikirim === '1') {
+        } elseif ($dikirim === '1') {
             $transaksi = $transaksi->where('status', StatusTransaksi::DIKIRIM);
-        } else if($selesai === '1') {
+        } elseif ($selesai === '1') {
             $transaksi = $transaksi->whereIn('status', [
                 StatusTransaksi::DITERIMA,
                 StatusTransaksi::SELESAI,
@@ -110,18 +106,17 @@ class ResellerController extends Controller
 
         $transaksi = $transaksi->get();
 
-
         return view('reseller.transaksi', [
             'page' => 'Transaksi',
-            'transaksi' => $transaksi
+            'transaksi' => $transaksi,
         ]);
 
     }
 
-    public function pengiriman() {
+    public function pengiriman()
+    {
         return view('reseller.pengiriman.show', [
-            'page' => 'Pengiriman'
+            'page' => 'Pengiriman',
         ]);
     }
-
 }

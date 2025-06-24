@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 
 class Reseller extends Authenticatable
 {
@@ -11,9 +10,8 @@ class Reseller extends Authenticatable
 
     protected $guarded = [];
 
-    public function keranjang() {
+    public function keranjang()
+    {
         return $this->hasOne(Keranjang::class);
     }
-
-
 }

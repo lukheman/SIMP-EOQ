@@ -2,27 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reseller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-
-use App\Models\User;
-use App\Models\Reseller;
 use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
-
-    public function index() {
+    public function index()
+    {
 
         return view('profile', [
             'page' => 'Profile',
-            'user' => Auth::guard('reseller')->user() ?? Auth::guard('web')->user()
+            'user' => Auth::guard('reseller')->user() ?? Auth::guard('web')->user(),
         ]);
 
     }
-
 
     public function update(Request $request, $id)
     {
@@ -43,10 +41,10 @@ class ProfileController extends Controller
         // Find the user or reseller
         $user = $model::find($id);
 
-        if (!$user) {
+        if (! $user) {
             return back()->with([
                 'success' => false,
-                'message' => 'User tidak ditemukan.'
+                'message' => 'User tidak ditemukan.',
             ]);
         }
 
@@ -54,21 +52,21 @@ class ProfileController extends Controller
         $user->email = $validated['email'];
         $user->name = $validated['name'];
 
-            $user->phone = $validated['phone'] ?? null;
-            $user->alamat = $validated['alamat'] ?? null;
+        $user->phone = $validated['phone'] ?? null;
+        $user->alamat = $validated['alamat'] ?? null;
 
-            // Handle photo upload
-            if ($request->hasFile('foto')) {
-                // Delete old photo if exists
-                if ($user->foto && Storage::disk('public')->exists($user->foto)) {
-                    Storage::disk('public')->delete($user->foto);
-                }
-
-                $user->foto = $request->file('foto')->store('foto', 'public');
+        // Handle photo upload
+        if ($request->hasFile('foto')) {
+            // Delete old photo if exists
+            if ($user->foto && Storage::disk('public')->exists($user->foto)) {
+                Storage::disk('public')->delete($user->foto);
             }
 
+            $user->foto = $request->file('foto')->store('foto', 'public');
+        }
+
         // Update password if provided
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
 
@@ -78,7 +76,4 @@ class ProfileController extends Controller
 
         return redirect()->route('profile.index');
     }
-
-
-
 }

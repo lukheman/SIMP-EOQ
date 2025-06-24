@@ -4,8 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Produk;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class ProdukSeeder extends Seeder
 {
@@ -41,13 +39,12 @@ class ProdukSeeder extends Seeder
 
         ];
 
-        foreach($data as $item) {
+        foreach ($data as $item) {
             $produk = Produk::create($item);
             $produk->persediaan()->create(['jumlah' => 30]);
             $produk->biayaPemesanan()->create(['biaya' => 900000.00]);
             $produk->biayaPenyimpanan()->create(['biaya' => 100000.00]);
         }
-
 
     }
 }

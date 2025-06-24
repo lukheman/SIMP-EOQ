@@ -1,19 +1,19 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AdminTokoController;
 use App\Http\Controllers\AdminGudangController;
-use App\Http\Controllers\ResellerController;
-use App\Http\Controllers\PemilikTokoController;
+use App\Http\Controllers\AdminTokoController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KurirController;
-use App\Http\Controllers\ProdukController;
-use App\Http\Controllers\PesananController;
-use App\Http\Controllers\PersediaanController;
-use App\Http\Controllers\TransaksiController;
-use App\Http\Controllers\MutasiController;
-use App\Http\Controllers\RestockController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\MutasiController;
+use App\Http\Controllers\PemilikTokoController;
+use App\Http\Controllers\PersediaanController;
+use App\Http\Controllers\PesananController;
+use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ResellerController;
+use App\Http\Controllers\RestockController;
+use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes (tanpa autentikasi)

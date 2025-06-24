@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use App\Models\Mutasi;
 use App\Models\Produk;
 use App\Models\Restock;
-
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class MutasiController extends Controller
 {
-
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
 
         $validated = $request->validate([
             'id_produk' => 'required|exists:produk,id',
@@ -23,8 +21,7 @@ class MutasiController extends Controller
 
         $produk = Produk::query()->with('persediaan')->find($request->id_produk);
 
-        $mutasi =  Mutasi::create($validated);
-
+        $mutasi = Mutasi::create($validated);
 
         if ($request->jenis === 'masuk') {
             $restock = Restock::where('id_produk', $request->id_produk)->first();
@@ -50,48 +47,51 @@ class MutasiController extends Controller
 
         $message = $request->jenis == 'masuk' ? 'Berhasil menambahkan data barang masuk' : 'Berhasil menambahkan data barang keluar';
 
-        if($mutasi) {
+        if ($mutasi) {
             return response()->json([
                 'success' => true,
                 'message' => $message,
-                'data' => $mutasi
+                'data' => $mutasi,
             ], 201);
         }
 
         return response()->json([
             'success' => false,
-            'message' => 'Gagal menambahkan data mutasi'
+            'message' => 'Gagal menambahkan data mutasi',
         ], 500);
 
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $penjualan = Mutasi::find($id)?->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Log mutasi berhasil dihapus'
+            'message' => 'Log mutasi berhasil dihapus',
         ], 200);
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $mutasi = Mutasi::with('produk')->find($id);
 
-        if($mutasi) {
+        if ($mutasi) {
             return response()->json([
                 'success' => true,
                 'message' => 'Data mutasi berhasil didapatkan.',
-                'data' => $mutasi
+                'data' => $mutasi,
             ], 200);
         }
 
         return response()->json([
             'success' => false,
-            'message' => 'Data mutasi gagal didapatkan.'
+            'message' => 'Data mutasi gagal didapatkan.',
         ], 500);
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
 
         $data = $request->validate([
             'jumlah' => 'required',
@@ -105,9 +105,8 @@ class MutasiController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data mutasi berhasil diperbarui',
-            'data' => $mutasi
+            'data' => $mutasi,
         ], 200);
 
     }
-
 }

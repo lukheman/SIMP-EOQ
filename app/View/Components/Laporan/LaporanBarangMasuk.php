@@ -10,6 +10,7 @@ use Illuminate\View\Component;
 class LaporanBarangMasuk extends Component
 {
     public $barang_masuk;
+
     /**
      * Create a new component instance.
      */

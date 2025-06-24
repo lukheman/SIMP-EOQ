@@ -2,44 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\MetodePembayaran;
+use App\Constants\Role;
+use App\Constants\StatusTransaksi;
+use App\Helpers\QrcodeHelper;
 use App\Models\Mutasi;
 use App\Models\Pesanan;
+use App\Models\Produk;
+use App\Models\Transaksi;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\Transaksi;
-use App\Helpers\QrcodeHelper;
-
 use Illuminate\Support\Facades\Auth;
-
-use App\Models\Produk;
-
-use App\Constants\StatusTransaksi;
-use App\Constants\Role;
-use App\Constants\MetodePembayaran;
-
-
 
 class AdminTokoController extends Controller
 {
-
-
-    public function transaksi(Request $request) {
-
+    public function transaksi(Request $request)
+    {
 
         $transaksi = Transaksi::create([
             'metode_pembayaran' => MetodePembayaran::TUNAI,
-            'status' => StatusTransaksi::SELESAI
+            'status' => StatusTransaksi::SELESAI,
         ]);
 
-        foreach($request->pesanan as $barcode => $value) {
+        foreach ($request->pesanan as $barcode => $value) {
 
             $produk = Produk::query()->where('kode_produk', $barcode)->first();
 
             // cek persediaan produk
-            if(!$produk->isPersediaanMencukupi($value['jumlah'])) {
+            if (! $produk->isPersediaanMencukupi($value['jumlah'])) {
                 return response()->json([
                     'success' => false,
-                    'message' => $produk->nama_produk . ' tidak cukup di persediaan'
+                    'message' => $produk->nama_produk.' tidak cukup di persediaan',
                 ], 200);
             }
 
@@ -51,7 +44,7 @@ class AdminTokoController extends Controller
                 'id_produk' => $produk->id,
                 'jumlah' => $value['jumlah'],
                 'total_harga' => $total_harga,
-                'id_transaksi' => $transaksi->id
+                'id_transaksi' => $transaksi->id,
             ]);
 
         }
@@ -61,17 +54,18 @@ class AdminTokoController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Transaksi berhasil dilakukan',
-            'transaksi' => $transaksi
+            'transaksi' => $transaksi,
         ], 200);
 
     }
 
-    private function kurangiPersediaan(Transaksi $transaksi) {
+    private function kurangiPersediaan(Transaksi $transaksi)
+    {
         $pesanan = Pesanan::with(['produk', 'produk.persediaan'])->where('id_transaksi', $transaksi->id)->get();
 
         foreach ($pesanan as $item) {
 
-            if(!$item->produk->isPersediaanMencukupi($item->jumlah)) {
+            if (! $item->produk->isPersediaanMencukupi($item->jumlah)) {
                 return response()->json([
                     'success' => false,
                     'message' => "Persediaan {$item->produk->nama_produk} tidak mencukupi",
@@ -87,7 +81,7 @@ class AdminTokoController extends Controller
                 'id_produk' => $item->produk->id,
                 'jumlah' => $item->jumlah,
                 'jenis' => 'keluar',
-                'keterangan' => 'Pembelian langsung'
+                'keterangan' => 'Pembelian langsung',
             ]);
 
         }
@@ -98,16 +92,17 @@ class AdminTokoController extends Controller
         ], 200);
     }
 
-
-    public function kasir() {
+    public function kasir()
+    {
 
         return view('admin_toko.kasir', [
-            'page' => 'Kasir'
+            'page' => 'Kasir',
         ]);
 
     }
 
-    public function index() {
+    public function index()
+    {
         $pesanan = Transaksi::where('status', StatusTransaksi::PENDING)->count();
         $total_penjualan = Transaksi::where('status', StatusTransaksi::SELESAI)->count();
         $persediaan_barang = Produk::with('persediaan')->get()->sum('persediaan.jumlah');
@@ -116,34 +111,37 @@ class AdminTokoController extends Controller
             'page' => 'Dashboard',
             'pesanan' => $pesanan,
             'total_penjualan' => $total_penjualan,
-            'persediaan_barang' => $persediaan_barang
+            'persediaan_barang' => $persediaan_barang,
         ]);
     }
 
-    public function pesanan() {
+    public function pesanan()
+    {
         $pesanan = Transaksi::with('user')->whereHas('user')->get();
         $kurir = User::query()->where('role', Role::KURIR)->get();
 
         return view('admin_toko.pesanan', [
             'page' => 'Pesanan',
             'pesanan' => $pesanan,
-            'kurir' => $kurir
+            'kurir' => $kurir,
         ]);
     }
 
-    public function persediaan() {
+    public function persediaan()
+    {
         $produk = Produk::all();
 
         return view('admin_toko.persediaan', [
             'page' => 'Persediaan',
-            'produk' => $produk
+            'produk' => $produk,
         ]);
     }
 
-    public function nota(Request $request) {
+    public function nota(Request $request)
+    {
 
         $request->validate([
-            'id_transaksi' => 'required|exists:transaksi,id'
+            'id_transaksi' => 'required|exists:transaksi,id',
         ]);
 
         $pesanan = Pesanan::with(['produk'])->where('id_transaksi', $request->id_transaksi)->get();
@@ -160,10 +158,10 @@ class AdminTokoController extends Controller
         ]);
     }
 
-    public function laporanPenjualan() {
+    public function laporanPenjualan()
+    {
         return view('admin_toko.laporan-penjualan', [
             'page' => 'Laporan Penjualan',
         ]);
     }
-
 }

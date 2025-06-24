@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Produk;
-use Illuminate\Validation\Rule;
-
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ProdukController extends Controller
 {
-
-    public function index() {
+    public function index()
+    {
         $produk = Produk::all();
 
         return response()->json([
             'success' => true,
             'message' => 'Produk berhasil ditambahkan',
-            'data' => $produk
+            'data' => $produk,
         ], 200);
 
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
 
         $validated = $request->validate([
             'nama_produk' => 'required',
@@ -33,7 +33,7 @@ class ProdukController extends Controller
             'biaya_penyimpanan' => 'required|numeric|min:0',
             'biaya_pemesanan' => 'required|numeric|min:0',
             'deskripsi' => 'nullable|string',
-            'exp' => 'required'
+            'exp' => 'required',
         ]);
 
         $data = $request->all();
@@ -45,38 +45,38 @@ class ProdukController extends Controller
         $produk = Produk::create(collect($data)->except(['biaya_penyimpanan', 'biaya_pemesanan'])->all());
 
         $produk->biayaPenyimpanan()->create([
-            'biaya' => $validated['biaya_penyimpanan']
+            'biaya' => $validated['biaya_penyimpanan'],
         ]);
 
         $produk->biayaPemesanan()->create([
-            'biaya' => $validated['biaya_pemesanan']
+            'biaya' => $validated['biaya_pemesanan'],
         ]);
 
         $produk->persediaan()->create();
 
-        if($produk) {
+        if ($produk) {
             return response()->json([
                 'success' => true,
                 'message' => 'Produk berhasil ditambahkan',
-                'data' => $produk
+                'data' => $produk,
             ], 201);
         }
 
         return response()->json([
             'success' => false,
-            'message' => 'Gagal menambahkan produk'
+            'message' => 'Gagal menambahkan produk',
         ], 500);
-
 
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
 
         // validasi data
         $validated = $request->validate([
             'kode_produk' => [
                 'required',
-                Rule::unique('produk', 'kode_produk')->ignore($id)
+                Rule::unique('produk', 'kode_produk')->ignore($id),
             ],
             'nama_produk' => 'required',
             'harga_beli' => 'required|numeric:min:0',
@@ -85,9 +85,8 @@ class ProdukController extends Controller
             'biaya_penyimpanan' => 'required|numeric:min:0',
             'biaya_pemesanan' => 'required|numeric:min:0',
             'deskripsi' => 'nullable|string',
-            'exp' => 'required'
+            'exp' => 'required',
         ]);
-
 
         $data = $request->all();
 
@@ -96,7 +95,7 @@ class ProdukController extends Controller
         if ($request->hasFile('gambar')) {
 
             // hapus file lama
-            if($produk->gambar && Storage::disk('public')->exists($produk->gambar)) {
+            if ($produk->gambar && Storage::disk('public')->exists($produk->gambar)) {
                 Storage::disk('public')->delete($produk->gambar);
             }
 
@@ -107,63 +106,66 @@ class ProdukController extends Controller
         $produk->update(collect($data)->except(['biaya_penyimpanan', 'biaya_pemesanan'])->all());
 
         $produk->biayaPenyimpanan()->update([
-            'biaya' => $validated['biaya_penyimpanan']
+            'biaya' => $validated['biaya_penyimpanan'],
         ]);
 
         $produk->biayaPemesanan()->update([
-            'biaya' => $validated['biaya_pemesanan']
+            'biaya' => $validated['biaya_pemesanan'],
         ]);
 
         return response()->json([
             'success' => true,
             'message' => 'Produk berhasil diperbarui',
-            'data' => $produk
+            'data' => $produk,
         ], 200);
 
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $produk = Produk::findOrFail($id);
 
         $produk->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Produk berhasil dihapus'
+            'message' => 'Produk berhasil dihapus',
         ]);
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $produk = Produk::query()->with(['biayaPenyimpanan', 'biayaPemesanan'])->find($id);
 
-        if($produk) {
+        if ($produk) {
             return response()->json([
                 'success' => true,
                 'message' => 'Produk berhasil didapatkan',
-                'data' => $produk
+                'data' => $produk,
             ], 200);
         }
 
         return response()->json([
             'success' => false,
-            'message' => 'Gagal mendapatkan produk'
+            'message' => 'Gagal mendapatkan produk',
         ], 500);
     }
 
-    public function kodeProduk($barcode) {
+    public function kodeProduk($barcode)
+    {
         $produk = Produk::where('kode_produk', $barcode)->first();
 
-        if($produk) {
+        if ($produk) {
             return response()->json([
                 'success' => true,
                 'message' => 'Produk berhasil didapatkan',
-                'data' => $produk
+                'data' => $produk,
             ], 200);
         }
 
         return response()->json([
             'success' => false,
-            'message' => 'Tidak dapat mendapatkan data produk'
+            'message' => 'Tidak dapat mendapatkan data produk',
         ], 200);
 
     }
