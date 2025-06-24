@@ -51,10 +51,10 @@
                             <tr>
                                 <td class="text-center">{{ $item->kode_produk }}</td>
                                 <td>{{ $item->nama_produk }}</td>
-                                <td class="text-center">{{ $item->safety_stock }}</td>
-                                <td class="text-center">{{ $item->reorder_point }}</td>
+                                <td class="text-center">{{ round($item->safety_stock) }}</td>
+                                <td class="text-center">{{ round($item->reorder_point) }}</td>
                                 <td class="text-center">{{ $item->persediaan->jumlah }}</td>
-                                <td class="text-center">{{ $item->economic_order_quantity }}</td>
+                                <td class="text-center">{{ round($item->economic_order_quantity) }}</td>
                                 <td class="text-center">{{ $item->frekuensi_pemesanan}}</td>
                             </tr>
                             @endforeach
