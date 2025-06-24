@@ -26,7 +26,7 @@
 
     </div>
     <div class="card-body">
-        <div id="table_pesanan_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div id="datatable_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="row">
                 <div class="col-sm-12 col-md-6">
                 </div>
@@ -36,8 +36,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <table id="table_pesanan" class="table table-bordered table-striped dataTable dtr-inline"
-                        aria-describedby="table_pesanan_info">
+                    <table id="datatable" class="table table-bordered table-striped dataTable dtr-inline"
+                        aria-describedby="datatable_info">
                         <thead>
                             <tr class="text-center">
                                 <th>Tanggal </th>
@@ -77,7 +77,7 @@
                 <div class="col-sm-12 col-md-5">
                 </div>
                 <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate paging_simple_numbers" id="table_pesanan_paginate">
+                    <div class="dataTables_paginate paging_simple_numbers" id="datatable_paginate">
                         <ul class="pagination">
                         </ul>
                     </div>
@@ -126,22 +126,6 @@
 @push('scripts')
 
 <script>
-$(function () {
-
-    $('#table_pesanan').DataTable({
-        "paging": true,
-        "lengthChange": true,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "autoWidth": true,
-        "responsive": true,
-    });
-
-});
-</script>
-
-<script>
 
 $(document).ready(() => {
     // Gunakan event delegation untuk .btn-delete-penjualan
@@ -161,16 +145,13 @@ $(document).ready(() => {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `https://udtokodiva.cyou/mutasi/${idPenjualan}`,
+                    url: "{{ route('mutasi.destroy', ':id') }}".replace(':id', idPenjualan),
                     method: 'DELETE',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function (data) {
-                        Swal.fire({
-                            title: data.message,
-                            icon: "success",
-                        }).then(() => window.location.reload());
+                        showToast(data.message);
                     },
                     error: function (error) {
                         Swal.fire({

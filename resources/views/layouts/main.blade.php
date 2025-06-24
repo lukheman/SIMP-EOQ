@@ -205,7 +205,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
         });
         </script>
 
+
     @yield('custom-script')
+
+    <script>
+    $(document).ready(function() {
+
+        $('#datatable').DataTable({
+            paging: true,
+            lengthChange: true,
+            searching: true,
+            ordering: true,
+            info: true,
+            autoWidth: false,
+            responsive: false,
+            scrollX: true
+        });
+    });
+    </script>
 
 
 @stack('scripts')

@@ -29,11 +29,11 @@
     <div class="card-header">
     </div>
     <div class="card-body">
-        <div id="table_eoq_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div id="datatable_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="row">
                 <div class="col-sm-12">
-                    <table id="table_eoq" class="table table-bordered table-striped dataTable dtr-inline"
-                        aria-describedby="table_eoq_info">
+                    <table id="datatable" class="table table-bordered table-striped dataTable dtr-inline"
+                        aria-describedby="datatable_info">
                         <thead>
                             <tr class="text-center">
                                 <th>Kode Produk</th>
@@ -69,7 +69,7 @@
                 <div class="col-sm-12 col-md-5">
                 </div>
                 <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate paging_simple_numbers" id="table_eoq_paginate">
+                    <div class="dataTables_paginate paging_simple_numbers" id="datatable_paginate">
                         <ul class="pagination">
                         </ul>
                     </div>
@@ -126,21 +126,6 @@
 @endsection
 
 @section('custom-script')
-<script>
-    $(function () {
-
-        $('#table_eoq').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
-        });
-
-    });
-</script>
 
 <script>
 

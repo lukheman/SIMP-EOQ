@@ -3,7 +3,7 @@
 
     </div>
     <div class="card-body">
-        <div id="table_persediaan_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div id="datatable_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="row">
                 <div class="col-sm-12 col-md-6">
 
@@ -14,8 +14,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <table id="table_persediaan" class="table table-bordered table-striped dataTable dtr-inline"
-                        aria-describedby="table_persediaan_info">
+                    <table id="datatable" class="table table-bordered table-striped dataTable dtr-inline"
+                        aria-describedby="datatable_info">
                         <thead>
                             <tr class="text-center">
 
@@ -50,7 +50,7 @@
                 <div class="col-sm-12 col-md-5">
                 </div>
                 <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate paging_simple_numbers" id="table_persediaan_paginate">
+                    <div class="dataTables_paginate paging_simple_numbers" id="datatable_paginate">
                         <ul class="pagination">
                         </ul>
                     </div>
@@ -60,21 +60,3 @@
     </div>
 
 </div>
-
-@push('scripts')
-<script>
-$(document).ready(function() {
-
-    $('#table_persediaan').DataTable({
-        "paging": true,
-        "lengthChange": true,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "autoWidth": true,
-        "responsive": true,
-    });
-
-});
-</script>
-@endpush

@@ -25,7 +25,7 @@
 
     </div>
     <div class="card-body">
-        <div id="table_produk_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div id="datatable_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="row">
                 <div class="col-sm-12 col-md-6">
 
@@ -37,8 +37,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <table id="table_produk" class="table table-bordered table-striped dataTable dtr-inline"
-                        aria-describedby="table_produk_info">
+                    <table id="datatable" class="table table-bordered table-striped dataTable dtr-inline"
+                        aria-describedby="datatable_info">
                         <thead>
                             <tr class="text-center">
 
@@ -87,7 +87,7 @@
                 <div class="col-sm-12 col-md-5">
                 </div>
                 <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate paging_simple_numbers" id="table_produk_paginate">
+                    <div class="dataTables_paginate paging_simple_numbers" id="datatable_paginate">
                         <ul class="pagination">
                         </ul>
                     </div>
@@ -428,20 +428,6 @@
 @endsection
 
 @section('custom-script')
-<script>
-
-const tableProduk = $('#table_produk').DataTable({
-    paging: true,
-    lengthChange: true,
-    searching: true,
-    ordering: true,
-    info: true,
-    autoWidth: true,
-    responsive: false,
-    scrollX: true
-});
-
-</script>
 
 <script>
 
@@ -547,7 +533,7 @@ const tableProduk = $('#table_produk').DataTable({
 
         // handler untuk menghapus data
 
-        $('#table_produk').on('click', '.btn-delete-produk', function () {
+        $('#datatable').on('click', '.btn-delete-produk', function () {
 
             let idProduk = $(this).data('id-produk');
 
@@ -588,7 +574,7 @@ const tableProduk = $('#table_produk').DataTable({
         });
 
         // handle untuk update data
-        $('#table_produk').on('click', '.btn-update-produk', function() {
+        $('#datatable').on('click', '.btn-update-produk', function() {
 
             let idProduk = $(this).data('id-produk');
 
@@ -627,7 +613,7 @@ const tableProduk = $('#table_produk').DataTable({
         });
 
         // handle untuk info data
-        $('#table_produk').on('click', '.btn-info-produk', function () {
+        $('#datatable').on('click', '.btn-info-produk', function () {
             let idProduk = $(this).data('id-produk');
             let modalInfoProduk = $('#modal-info-produk');
 

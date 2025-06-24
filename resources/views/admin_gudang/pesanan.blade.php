@@ -16,7 +16,7 @@
 
     </div>
     <div class="card-body">
-        <div id="table_pesanan_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div id="datatable_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="row">
                 <div class="col-sm-12 col-md-6">
 
@@ -27,8 +27,8 @@
             </div>
             <div class="row">
                 <div class="col-sm-12">
-                    <table id="table_pesanan" class="table table-bordered table-striped dataTable dtr-inline"
-                        aria-describedby="table_pesanan_info">
+                    <table id="datatable" class="table table-bordered table-striped dataTable dtr-inline"
+                        aria-describedby="datatable_info">
                         <thead>
                             <tr class="text-center">
                                 <th>Tanggal Pesan</th>
@@ -64,7 +64,7 @@
                 <div class="col-sm-12 col-md-5">
                 </div>
                 <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate paging_simple_numbers" id="table_pesanan_paginate">
+                    <div class="dataTables_paginate paging_simple_numbers" id="datatable_paginate">
                         <ul class="pagination">
                         </ul>
                     </div>
@@ -122,16 +122,6 @@
 <script>
 
 $(document).ready(function () {
-
-    $('#table_pesanan').DataTable({
-        "paging": true,
-        "lengthChange": true,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-    });
 
 $('#kode-produk').select2({
     dropdownParent: $('#modal-pesanan'),
@@ -205,7 +195,7 @@ $('#kode-produk').select2({
 
 
     // handler untuk menghapus data
-    $('#table_pesanan').on('click', '.btn-delete-pesanan', function() {
+    $('#datatable').on('click', '.btn-delete-pesanan', function() {
 
         let idRestock = $(this).data('id-pesanan');
 

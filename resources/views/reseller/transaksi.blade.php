@@ -10,7 +10,7 @@
 <div class="card">
     <div class="card-header"></div>
     <div class="card-body">
-        <div id="table_pesanan_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div id="datatable_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="row">
                 <div class="col-sm-12 col-md-6">
 
@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <!-- TODO: buat menjadi lebih estetik -->
-                    <table id="table_pesanan" class="table table-bordered table-striped dataTable dtr-inline">
+                    <table id="datatable" class="table table-bordered table-striped dataTable dtr-inline">
                         <thead>
                             <tr>
                                 <th>Tanggal</th>
@@ -108,7 +108,7 @@
                 <div class="col-sm-12 col-md-5">
                 </div>
                 <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate paging_simple_numbers" id="table_pesanan_paginate">
+                    <div class="dataTables_paginate paging_simple_numbers" id="datatable_paginate">
                         <ul class="pagination">
                         </ul>
                     </div>
@@ -332,23 +332,6 @@
 
     });
 
-</script>
-
-<script>
-    $(function () {
-
-        $('#table_pesanan').DataTable({
-            paging: true,
-            lengthChange: true,
-            searching: true,
-            ordering: true,
-            info: true,
-            autoWidth: true,
-            responsive: false,
-            scrollX: true
-        });
-
-    });
 </script>
 
 @endsection

@@ -17,7 +17,7 @@
         <i class="fas fa-trash"></i>Hapus</button>
     </div>
     <div class="card-body">
-        <div id="table_pesanan_wrapper" class="dataTables_wrapper dt-bootstrap4">
+        <div id="datatable_wrapper" class="dataTables_wrapper dt-bootstrap4">
             <div class="row">
                 <div class="col-sm-12 col-md-6">
 
@@ -29,8 +29,8 @@
             <div class="row">
                 <div class="col-sm-12">
                     <!-- TODO: buat menjadi lebih estetik -->
-                    <table id="table_pesanan" class="table table-bordered table-striped dataTable dtr-inline"
-                        aria-describedby="table_pesanan_info">
+                    <table id="datatable" class="table table-bordered table-striped dataTable dtr-inline"
+                        aria-describedby="datatable_info">
                         <thead>
                             <tr>
                                 <!-- TODO: ganti jadi select all -->
@@ -51,7 +51,7 @@
                                 <td> {{ $item->jumlah }}</td>
                                 <td> {{ number_format($item->produk->harga_jual, 0, ',', '.')}}</td>
                                 <td> {{ number_format($item->total_harga, 0, ',', '.')}}</td>
-                                <td class="column-aksi text-right">
+                                <td class="text-right">
                                     <button class="btn btn-outline-danger btn-sm btn-delete-pesanan" data-id-pesanan="{{ $item->id }}">
                                         <i class="fas fa-trash"></i>
                                         Hapus</button>
@@ -75,7 +75,7 @@
                 <div class="col-sm-12 col-md-5">
                 </div>
                 <div class="col-sm-12 col-md-7">
-                    <div class="dataTables_paginate paging_simple_numbers" id="table_pesanan_paginate">
+                    <div class="dataTables_paginate paging_simple_numbers" id="datatable_paginate">
                         <ul class="pagination">
                         </ul>
                     </div>
@@ -422,27 +422,6 @@
         });
 
     });
-
-</script>
-
-<script>
-    $(document).ready(function() {
-
-
-        $('#table_pesanan').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
-        });
-
-
-
-    });
-
 
 </script>
 
