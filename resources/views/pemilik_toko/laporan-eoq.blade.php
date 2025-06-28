@@ -48,9 +48,9 @@
 
                                         <td> {{ $item['periode']}}</td>
                                         <td> {{ $item['nama_produk']}}</td>
-                                        <td> {{ $item['safety_stock']}}</td>
-                                        <td> {{ $item['reorder_point']}}</td>
-                                        <td> {{ $item['eoq']}}</td>
+                                        <td> {{ round($item['safety_stock'])}}</td>
+                                        <td> {{ round($item['reorder_point'])}}</td>
+                                        <td> {{ round($item['eoq'])}}</td>
 
                                         @endif
                                     </tr>

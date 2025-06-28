@@ -116,9 +116,9 @@ class Produk extends Model
 
             // cek apakah data mencukupi
             if (! PerhitunganEOQServices::hasSufficientSalesData($produk->id, $periode)) {
-                $result[] = [
-                    'produk' => $produk,
-                ];
+                // $result[] = [
+                //     'produk' => $produk,
+                // ];
 
                 continue;
             }

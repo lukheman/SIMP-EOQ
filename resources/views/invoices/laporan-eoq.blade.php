@@ -26,8 +26,8 @@
         .text-center {
             text-align: center;
         }
-        
-        .text-danger { 
+
+        .text-danger {
             color: red;
         }
 
@@ -95,16 +95,11 @@
                 <tbody>
                                 @foreach ($data_eoq as $item)
                                 <tr>
-                                    @if (count($item) < 1)
                                         <td> {{ $item['produk']->nama_produk}}</td>
-                                        <td class="text-center"> {{ $item['safety_stock']}}</td>
-                                        <td class="text-center"> {{ $item['reorder_point']}}</td>
-                                        <td class="text-center"> {{ $item['eoq']}}</td>
+                                        <td class="text-center"> {{ round($item['safety_stock'])}}</td>
+                                        <td class="text-center"> {{ round($item['reorder_point'])}}</td>
+                                        <td class="text-center"> {{ round($item['eoq'])}}</td>
 
-                                    @else
-                                        <td> {{ $item['produk']->nama_produk}}</td>
-                                        <td class="text-center text-danger" colspan="3">Data tidak mencukupi</td>
-                                    @endif
                                 </tr>
                                 @endforeach
                 </tbody>
