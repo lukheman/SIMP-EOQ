@@ -31,4 +31,8 @@ class Pesanan extends Model
     {
         return $this->produk ? $this->produk->isPersediaanMencukupi($this->jumlah) : false;
     }
+
+    public function getJumlahPcsAttribtue() {
+        return $this->jumlah * $this->produk->pcs_per_bal;
+    }
 }

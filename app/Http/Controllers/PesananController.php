@@ -33,8 +33,11 @@ class PesananController extends Controller
 
         $produk = Produk::find($request->id_produk);
 
+        // konversi dari bal ke pcs
+        $jumlah_pcs = $request->jumlah * $produk->pcs_per_bal;
+
         // cek persediaan produk
-        if (! $produk->isPersediaanMencukupi($request->jumlah)) {
+        if (! $produk->isPersediaanMencukupi($jumlah_pcs)) {
             return response()->json([
                 'success' => false,
                 'message' => $produk->nama_produk.' tidak cukup di persediaan',

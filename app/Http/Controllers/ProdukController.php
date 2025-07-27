@@ -34,6 +34,8 @@ class ProdukController extends Controller
             'biaya_pemesanan' => 'required|numeric|min:0',
             'deskripsi' => 'nullable|string',
             'exp' => 'required',
+            'harga_jual_pcs' => 'required|numeric|min:0',
+            'pcs_per_bal' => 'required|numeric|min:0',
         ]);
 
         $data = $request->all();

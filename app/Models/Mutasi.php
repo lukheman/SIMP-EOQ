@@ -21,7 +21,11 @@ class Mutasi extends Model
 
     public function getTotalHargaJualAttribute()
     {
-        return $this->produk->harga_jual * $this->jumlah;
+        if($this->unit === 'bal') {
+            return $this->produk->harga_jual * $this->jumlah;
+        }
+
+        return $this->produk->harga_jual_pcs * $this->jumlah;
     }
 
     public function getTotalHargaBeliAttribute()
