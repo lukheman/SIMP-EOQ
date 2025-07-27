@@ -11,51 +11,48 @@
 @section('content')
 
 <div class="row">
-
-    <div class="col-12 col-md-7">
-        <div id="scanner">
+    <!-- Bagian Scanner -->
+    <div class="col-12 col-md-7 mb-3 mb-md-0">
+        <div id="scanner" class="border rounded p-3 bg-light" style="min-height: 300px;">
+            <!-- Tempat pemindai (scanner) -->
         </div>
     </div>
 
+    <!-- Bagian Transaksi -->
     <div class="col-12 col-md-5">
-
         <div class="row">
-
-            <div class="col-12">
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Total Harga</h3>
+            <!-- Total Harga -->
+            <div class="col-12 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white border-bottom">
+                        <h5 class="card-title mb-0">Total Harga</h5>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <input type="text" value="Rp. 0" class="form-control" readonly id="total-harga">
+                    <div class="card-body pt-3">
+                        <div class="form-group mb-0">
+                            <input type="text" value="Rp. 0" class="form-control form-control-lg text-right font-weight-bold" readonly id="total-harga">
                         </div>
                     </div>
                 </div>
-
             </div>
+
+            <!-- Daftar Pembelian -->
             <div class="col-12">
-
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Daftar Pembelian</h3>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white border-bottom">
+                        <h5 class="card-title mb-0">Daftar Pembelian</h5>
                     </div>
-                    <div class="card-body">
-
+                    <div class="card-body pt-3">
                         <form id="form-daftar-pesanan">
-
+                            <!-- List produk akan dimasukkan di sini -->
                         </form>
-
-                    <button class="btn btn-primary btn-block" id="btn-simpan-transaksi">Simpan Transaksi</button>
+                        <button class="btn btn-primary btn-block mt-3" id="btn-simpan-transaksi">
+                            <i class="fas fa-save mr-1"></i> Simpan Transaksi
+                        </button>
                     </div>
-
                 </div>
             </div>
         </div>
-
     </div>
-
 </div>
 
 @endsection
@@ -95,20 +92,33 @@
 
         $('#form-daftar-pesanan').append(`
 
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-6">
-                        <input type="text" class="form-control" value="${produk.nama_produk}" readonly>
+<div class="form-group">
+    <div class="row align-items-center">
+        <div class="col-6">
+            <input type="text" class="form-control form-control-sm" value="${produk.nama_produk}" readonly>
+        </div>
 
-                    </div>
-                    <div class="col-3">
-                        <input type="text" class="form-control" value="${produk.harga_jual}" readonly>
-                    </div>
-                    <div class="col-3">
-                        <input type="number" class="form-control jumlah" min="1" id="jumlah-${produk.kode_produk}" value="1">
-                    </div>
+        <div class="col-3">
+            <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Rp</span>
+                </div>
+                <input type="text" class="form-control text-right" value="${produk.harga_jual_pcs}" readonly>
+            </div>
+        </div>
+
+        <div class="col-3">
+            <div class="input-group input-group-sm">
+                <input type="number" class="form-control jumlah text-center" 
+                       min="1" id="jumlah-${produk.kode_produk}" value="1"
+                       title="Jumlah dalam satuan pcs">
+                <div class="input-group-append">
+                    <span class="input-group-text">pcs</span>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
         `);
 
     }
@@ -147,7 +157,7 @@
 
                         showToast(`${data.data.kode_produk} - ${data.data.nama_produk}`, icon='success', reload=false);
 
-                        pesanan[barcode] = { jumlah: 1, harga_jual: data.data.harga_jual};
+                        pesanan[barcode] = { jumlah: 1, harga_jual: data.data.harga_jual_pcs};
                         tambahDaftarPesanan(data.data);
 
                         updateTotalHarga();
