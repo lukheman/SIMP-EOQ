@@ -18,12 +18,6 @@ class PersediaanController extends Controller
             'biaya_penyimpanan' => 'required|numeric|min:0',
             'biaya_pemesanan' => 'required|numeric|min:0',
             'pembelian' => 'required|numeric|min:0',
-            // 'penggunaan' => 'required|numeric|min:0',
-            // 'stock' => 'required|numeric|min:0',
-            // 'reorder_point' => 'required|integer',
-            // 'safety_stock' => 'required|integer',
-            // 'stock_min' => 'required|numeric|min:0',
-            // 'stock_max' => 'required|numeric|min:0',
         ]);
 
         $persediaan = Persediaan::create($data);
