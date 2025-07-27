@@ -364,7 +364,6 @@ $(document).ready(function() {
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                // data: {'status': '{{ \App\Constants\StatusTransaksi::DIKIRIM }}'},
                 data: { 'id_kurir': $(this).val() },
                 success: function (data) {
                     showToast(data.success ? data.message : 'Pesanan gagal diserahkan kepada kurir', icon = data.success ? 'success' : 'warning');
