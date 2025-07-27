@@ -36,8 +36,8 @@
                                 <!-- TODO: ganti jadi select all -->
                                 <th><input type="checkbox" id="select-all" style="width: 25px; height: 25px;"></th>
                                 <th>Nama Produk</th>
-                                <th>Jumlah</th>
-                                <th>Harga Satuan (Rp.)</th>
+                                <th>Jumlah (bal)</th>
+                                <th>Harga/bal (Rp.)</th>
                                 <th>Total Harga (Rp.)</th>
                                 <th class="column-aksi text-right">Aksi</th>
                             </tr>
