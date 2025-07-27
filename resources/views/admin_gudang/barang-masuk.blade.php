@@ -34,7 +34,7 @@
                                 <th>Tanggal </th>
                                 <th>Jenis Produk </th>
                                 <th>Jumlah Dipesan</th>
-                                <th>Harga Satuan (Rp.)</th>
+                                <th>Harga/bal (Rp.)</th>
                                 <th>Total Harga (Rp.)</th>
                                 <th>Aksi</th> </tr>
                         </thead>
@@ -44,7 +44,7 @@
                             <tr>
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->produk->nama_produk }}</td>
-                                <td> {{ $item->jumlah }}</td>
+                                <td> {{ $item->jumlah }} pcs / {{ $item->jumlah / $item->produk->pcs_per_bal }} bal</td>
                                 <td> {{ number_format($item->produk->harga_beli, 2, ',', '.') }}</td>
                                 <td> {{ number_format($item->total_harga_beli, 2, ',', '.') }}</td>
                                 <td>
@@ -113,6 +113,8 @@
                 <div class="modal-body">
 
                     <input type="hidden" name="jenis" value="masuk">
+
+                    <input type="hidden" name="unit" value="pcs">
 
                     <input type="hidden" name="id_produk" id="id-produk">
 
