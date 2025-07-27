@@ -42,6 +42,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
             display: block;
             /* margin: 0 auto; /* Center the image */ */
         }
+       .modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
 </style>
 
 </head>
