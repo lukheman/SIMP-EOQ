@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('persediaan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_produk')->constrained('produk')->cascadeOnDelete();
-            $table->integer('jumlah')->default(0);
+            $table->integer('jumlah')->default(0); // jumlah dalam satuan pcs
             $table->timestamps();
         });
     }
