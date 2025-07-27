@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('tanggal')->default(now()->toDateString());
             $table->enum('jenis', ['masuk', 'keluar']);
             $table->string('keterangan')->nullable();
+            $table->enum('unit', ['bal', 'pcs'])->default('bal');
             $table->timestamps();
         });
     }
