@@ -24,14 +24,14 @@
 
 <x-nav-link
     :href="route('admingudang.produk.biaya-pemesanan')"
-    icon="fas fa-boxes"
+    icon="fas fa-shopping-cart"
     :active="$page === 'Biaya Pemesanan Produk'">
     Biaya Pemesanan
 </x-nav-link>
 
 <x-nav-link
     :href="route('admingudang.produk.biaya-penyimpanan')"
-    icon="fas fa-boxes"
+    icon="fas fa-dolly-flatbed"
     :active="$page === 'Biaya Penyimpanan Produk'">
     Biaya Penyimpanan
 </x-nav-link>
