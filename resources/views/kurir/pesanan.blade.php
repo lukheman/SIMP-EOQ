@@ -111,7 +111,7 @@
                         <tr>
                             <th style="width: 10px">No</th>
                             <th>Nama Produk</th>
-                            <th>Jumlah</th>
+                            <th>Jumlah (bal)</th>
                             <th>Harga Satuan</th>
                             <th>Total Harga</th>
                         </tr>

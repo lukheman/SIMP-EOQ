@@ -21,9 +21,10 @@
 
                                 <th>Kode Produk</th>
                                 <th>Nama Produk</th>
-                                <th>Harga Beli (Rp.)</th>
-                                <th>Harga Jual (Rp.)</th>
-                                <th>Persediaan</th>
+                                <th>Harga Beli/bal (Rp.)</th>
+                                <th>Harga Jual/bal (Rp.)</th>
+                                <th>Persediaan (pcs)</th>
+                                <th>Persediaan (bal)</th>
 
                             </tr>
                         </thead>
@@ -36,6 +37,7 @@
                                 <td class="text-right"> {{ number_format($item->harga_beli, 0, ',', '.') }}</td>
                                 <td class="text-right"> {{ number_format($item->harga_jual, 0, ',', '.') }}</td>
                                 <td class="text-center"> {{ $item->persediaan->jumlah }}</td>
+                                <td class="text-center"> {{ $item->persediaan->jumlah/$item->pcs_per_bal }}</td>
                             </tr>
                             @endforeach
 

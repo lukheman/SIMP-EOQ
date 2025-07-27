@@ -45,8 +45,8 @@
                                 <th>Kode Produk</th>
                                 <th>Nama Produk</th>
                                 <th>Tanggal Kadaluarsa</th>
-                                <th>Harga Beli (Rp)</th>
-                                <th>Harga Jual (Rp)</th>
+                                <th>Harga Beli/bal (Rp)</th>
+                                <th>Harga Jual/bal (Rp)</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -143,15 +143,15 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="harga-beli">Harga Beli</label>
+                                <label for="harga-beli">Harga Beli/bal (Rp.)</label>
                                 <input type="number" class="form-control" name="harga_beli" id="harga-beli"
-                                    placeholder="Harga Beli" min="0">
+                                    placeholder="Harga Beli/bal" min="0">
                             </div>
 
                             <div class="form-group">
-                                <label for="harga-jual">Harga Jual</label>
+                                <label for="harga-jual">Harga Jual/bal (Rp.)</label>
                                 <input type="number" class="form-control" name="harga_jual" id="harga-jual"
-                                    placeholder="Harga Jual" min="0">
+                                    placeholder="Harga Jual/bal" min="0">
                             </div>
 
 
@@ -172,10 +172,16 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="deskripsi">Deskripsi</label>
-                                <textarea style="height: 123px;" class="form-control" name="deskripsi" id="deskripsi" placeholder="Deskripsi Produk"></textarea>
+                                <label for="jumlah-pcs-per-bal">Jumlah pcs/bal</label>
+                                <input type="number" class="form-control" name="pcs_per_bal" id="jumlah-pcs-per-bal"
+                                    placeholder="Jumlah pcs/bal" min="0">
                             </div>
 
+                            <div class="form-group">
+                                <label for="harga-jual-pcs">Harga Jual/pcs(Rp.)</label>
+                                <input type="number" class="form-control" name="harga_jual_pcs" id="harga-jual-pcs"
+                                    placeholder="Harga Jual/pcs" min="0">
+                            </div>
 
                         </div>
 
@@ -223,8 +229,8 @@
 <!-- end modal-add-produk -->
 
 <!-- modal-update-produk - modal untuk menampilkan form tambah data produk -->
-<div class="modal fade show" id="modal-update-produk" style="display: none;" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="modal-update-produk" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Edit Produk</h4>
@@ -254,15 +260,15 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="harga-beli">Harga Beli</label>
+                                <label for="harga-beli">Harga Beli/bal (Rp.)</label>
                                 <input type="number" class="form-control" name="harga_beli" id="harga-beli"
-                                    placeholder="Harga Beli" min="0">
+                                    placeholder="Harga Beli/bal" min="0">
                             </div>
 
                             <div class="form-group">
-                                <label for="harga-jual">Harga Jual</label>
+                                <label for="harga-jual">Harga Jual/bal (Rp.)</label>
                                 <input type="number" class="form-control" name="harga_jual" id="harga-jual"
-                                    placeholder="Harga Jual" min="0">
+                                    placeholder="Harga Jual/bal" min="0">
                             </div>
 
 
@@ -283,10 +289,16 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="deskripsi">Deskripsi</label>
-                                <textarea style="height: 123px;" class="form-control" name="deskripsi" id="deskripsi" placeholder="Deskripsi Produk"></textarea>
+                                <label for="jumlah-pcs-per-bal">Jumlah pcs/bal</label>
+                                <input type="number" class="form-control" name="pcs_per_bal" id="jumlah-pcs-per-bal"
+                                    placeholder="Jumlah pcs/bal" min="0">
                             </div>
 
+                            <div class="form-group">
+                                <label for="harga-jual-pcs">Harga Jual/pcs(Rp.)</label>
+                                <input type="number" class="form-control" name="harga_jual_pcs" id="harga-jual-pcs"
+                                    placeholder="Harga Jual/pcs" min="0">
+                            </div>
 
                         </div>
 
@@ -377,10 +389,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="harga-beli">Harga Beli</label>
+                            <label for="harga-beli">Harga Beli/Bal (Rp.)</label>
                             <input type="number" class="form-control" name="harga_beli" id="harga-beli"
                                 placeholder="Harga Beli" min="0" readonly>
                         </div>
+
+                            <div class="form-group">
+                                <label for="jumlah-pcs-per-bal">Jumlah pcs/bal</label>
+                                <input type="number" class="form-control" name="pcs_per_bal" id="jumlah-pcs-per-bal"
+                                    placeholder="Jumlah pcs/bal" min="0" readonly>
+                            </div>
 
                     </div>
                     <div class="col-md-4">
@@ -397,10 +415,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="harga-jual">Harga Jual</label>
+                            <label for="harga-jual">Harga Jual/Bal (Rp.)</label>
                             <input type="number" class="form-control" name="harga_jual" id="harga-jual"
                                 placeholder="Harga Jual" min="0" readonly>
                         </div>
+
+                            <div class="form-group">
+                                <label for="harga-jual-pcs">Harga Jual/pcs(Rp.)</label>
+                                <input type="number" class="form-control" name="harga_jual_pcs" id="harga-jual-pcs"
+                                    placeholder="Harga Jual/pcs" min="0" readonly>
+                            </div>
 
 
                     </div>
@@ -599,6 +623,8 @@
                     formUpdateProduk.find('#biaya-pemesanan').val(produk.biaya_pemesanan.biaya);
                     formUpdateProduk.find('#deskripsi').val(produk.deskripsi);
                     formUpdateProduk.find('#tanggal-kadaluarsa').val(produk.exp);
+                    formUpdateProduk.find('#harga-jual-pcs').val(produk.harga_jual_pcs);
+                    formUpdateProduk.find('#jumlah-pcs-per-bal').val(produk.pcs_per_bal);
 
                 },
                 error: function (error) {
@@ -636,6 +662,8 @@
                     modalInfoProduk.find('#biaya-pemesanan').val(produk.biaya_pemesanan.biaya);
                     modalInfoProduk.find('#deskripsi').val(produk.deskripsi);
                     modalInfoProduk.find('#tanggal-kadaluarsa').val(produk.exp);
+                    modalInfoProduk.find('#harga-jual-pcs').val(produk.harga_jual_pcs);
+                    modalInfoProduk.find('#jumlah-pcs-per-bal').val(produk.pcs_per_bal);
 
                 },
                 error: function (error) {

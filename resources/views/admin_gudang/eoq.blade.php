@@ -40,7 +40,7 @@
                                 <th>Nama Produk</th>
                                 <th>Safety Stock</th>
                                 <th>ROP</th>
-                                <th>Persediaan Saat Ini</th>
+                                <th>Persediaan Saat Ini (pcs)</th>
                                 <th>Jumlah yang harus dipesan (EOQ)</th>
                                 <th>Frekuensi Pemesanan</th>
                             </tr>

@@ -96,13 +96,13 @@
                     <tr>
                         <td class="text-center">{{ $item->tanggal }}</td>
                         <td>{{ $item->produk->nama_produk }}</td>
-                        <td style="text-align: center;">{{ $item->jumlah }}</td>
+                        <td style="text-align: center;">{{ $item->jumlah }} {{ $item->unit }}</td>
                         @if ($index === 0)
                         <td rowspan="{{ $group['rowspan'] }}" style="text-align: center;">
                             {{ number_format($group['rata_rata_harian'], 2, ',', '.') }}
                         </td>
                         @endif
-                        <td style="text-align: right;">{{ number_format($item->produk->harga_jual, 2, ',', '.') }}</td>
+                        <td style="text-align: right;">{{ number_format( $item->unit === 'bal' ? $item->produk->harga_jual : $item->produk->harga_jual_pcs, 2, ',', '.') }} /{{ $item->unit}}</td>
                         <td style="text-align: right;">{{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
                     </tr>
                     @endforeach
