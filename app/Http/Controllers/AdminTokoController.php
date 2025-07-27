@@ -37,7 +37,7 @@ class AdminTokoController extends Controller
             }
 
             // kalkulasi total harga barang yang dipesan
-            $total_harga = $produk->harga_jual * $value['jumlah'];
+            $total_harga = $produk->harga_jual_pcs * $value['jumlah'];
 
             // buat pesanan
             $pesanan = Pesanan::create([
@@ -45,6 +45,7 @@ class AdminTokoController extends Controller
                 'jumlah' => $value['jumlah'],
                 'total_harga' => $total_harga,
                 'id_transaksi' => $transaksi->id,
+                'unit' => 'pcs'
             ]);
 
         }
@@ -73,8 +74,13 @@ class AdminTokoController extends Controller
             }
 
             // kurangi persediaan produk
-            $item->produk->persediaan->jumlah -= $item->jumlah;
+            if($item->unit === 'bal') {
+                $item->produk->persediaan->jumlah -= $item->jumlah * $item->produk->pcs_per_bal;
+            } elseif($item->unit === 'pcs') {
+                $item->produk->persediaan->jumlah -= $item->jumlah;
+            }
             $item->produk->persediaan->save();
+
 
             // catat log mutasi
             Mutasi::create([
@@ -82,6 +88,7 @@ class AdminTokoController extends Controller
                 'jumlah' => $item->jumlah,
                 'jenis' => 'keluar',
                 'keterangan' => 'Pembelian langsung',
+                'unit' => 'pcs'
             ]);
 
         }
