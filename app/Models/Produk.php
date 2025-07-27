@@ -158,4 +158,12 @@ class Produk extends Model
     {
         return PerhitunganEOQServices::frekuensiPemesanan($this->id);
     }
+
+    public function getPersediaanBal() {
+        if($this->pcs_per_bal > 0) {
+
+            return intdiv($this->persediaan->jumlah, $this->pcs_per_bal);
+        }
+        return 0;
+    }
 }
