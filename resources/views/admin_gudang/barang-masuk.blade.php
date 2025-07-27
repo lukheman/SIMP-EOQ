@@ -121,11 +121,6 @@
                         <input type="text" class="form-control" name="kode_produk" id="kode-produk">
                     </div>
 
-                    <!-- <div class="form-group"> -->
-                    <!--     <label for="tanggal">Tanggal</label> -->
-                    <!--     <input type="date" name="tanggal" id="tanggal" class="form-control" required> -->
-                    <!-- </div> -->
-
                     <div class="form-group">
                         <label for="nama-produk">Nama Produk</label>
                         <input type="text" class="form-control" name="nama_produk" id="nama-produk"
@@ -133,8 +128,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="jumlah">Jumlah</label>
+                        <label for="jumlah">Jumlah (pcs)</label>
                         <input type="number" name="jumlah" id="jumlah" class="form-control" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="jumlah-bal">Jumlah (bal)</label>
+                        <input type="number" name="jumlah_bal" id="jumlah-bal" class="form-control" min="1" required>
                     </div>
 
                 </div>
@@ -196,6 +196,8 @@
 @section('custom-script')
 <script>
 
+    let currentProduk;
+
     $(document).ready(function () {
         $('#form-add-mutasi').on('submit', function (e) {
             e.preventDefault();
@@ -220,6 +222,15 @@
             })
         });
 
+        $('#form-add-mutasi #jumlah').on('change', function(e) {
+            let pcs = $(this).val();
+            $('#form-add-mutasi #jumlah-bal').val(pcs/currentProduk.pcs_per_bal);
+        });
+
+        $('#form-add-mutasi #jumlah-bal').on('change', function(e) {
+            let bal = $(this).val();
+            $('#form-add-mutasi #jumlah').val(bal*currentProduk.pcs_per_bal);
+        });
 
         // handler untuk mengupdate data
         $('#form-update-mutasi').on('submit', function (e) {
@@ -373,6 +384,7 @@ function startScanner() {
                                 data = data.data;
 
 
+                                currentProduk = data;
                                 $('#modal-scan-barcode').modal('hide');
                                 $('#modal-add-mutasi').modal('show');
 
