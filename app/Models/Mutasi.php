@@ -19,19 +19,44 @@ class Mutasi extends Model
         return $this->belongsTo(Produk::class, 'id_produk');
     }
 
-    public function getTotalHargaJualAttribute()
+    public function getLabelTotalHargaJualAttribute()
     {
-        if($this->unit === 'bal') {
-            return $this->produk->harga_jual * $this->jumlah;
-        }
 
-        return $this->produk->harga_jual_unit_kecil * $this->jumlah;
+        $totalHarga = $this->satuan ?
+            $this->produk->harga_jual_unit_kecil * $this->jumlah :
+
+            $this->produk->harga_jual * $this->jumlah;
+
+        $formattedHarga = number_format($totalHarga, 0, ',', '.');
+        return "Rp. {$formattedHarga}";
+
     }
 
-    public function getTotalHargaBeliAttribute()
-    {
+    public function getTotalHargaBeliAttribute() {
         return $this->produk->harga_beli * $this->jumlah;
     }
+
+    public function getLabelTotalHargaBeliAttribute() {
+        $formattedHarga = number_format($this->getTotalHargaBeliAttribute(), 0, ',', '.');
+        return "Rp. {$formattedHarga}";
+    }
+
+
+    public function getLabelHargaJualAttribute()
+    {
+        $hargaJual = $this->satuan ? ($this->produk->harga_jual_unit_kecil ?? 0) : ($this->produk->harga_jual ?? 0);
+        $unit = $this->satuan ? ($this->produk->unit_kecil ?? 'unit') : ($this->produk->unit_besar ?? 'unit');
+
+        $formattedHarga = number_format($hargaJual, 0, ',', '.');
+
+        return "Rp. {$formattedHarga}/{$unit}";
+    }
+
+    public function getTotalHargaJualAttribute()
+    {
+        return $this->satuan ? ($this->produk->harga_jual_unit_kecil ?? 0) * $this->jumlah : ($this->produk->harga_jual ?? 0) * $this->jumlah;
+    }
+
 
     public static function penjualanMaksimum($id_produk, $periode)
     {
@@ -79,5 +104,21 @@ class Mutasi extends Model
 
         return $rataRataPerProduk;
 
+    }
+
+    public function getLabelJumlahUnitDipesanAttribute() {
+        $unitKecil = $this->produk->unit_kecil;
+        $unitBesar = $this->produk->unit_besar;
+
+        $jumlahUnitKecil = $this->jumlah;
+        $jumlahUnitBesar = $this->jumlah / $this->produk->tingkat_konversi;
+
+        return "{$jumlahUnitKecil} {$unitKecil} ({$jumlahUnitBesar} {$unitBesar})";
+    }
+
+    public function getLabelJumlahUnitTerjualAttribute() {
+        $unit = $this->satuan ? $this->produk->unit_kecil : $this->produk->unit_besar;
+
+        return "{$this->jumlah} {$unit}";
     }
 }

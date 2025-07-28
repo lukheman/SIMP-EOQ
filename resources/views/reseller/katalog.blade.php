@@ -88,6 +88,8 @@
 
                 <input type="hidden" id="id-produk" name="id_produk">
 
+                <input type="hidden" name="satuan" value="0">
+
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12 col-sm-6 text-center mb-3 mb-sm-0">

@@ -59,12 +59,28 @@ class LaporanController extends Controller
             ->setBindings([$jumlahHari, 'keluar', $year, $month])
             ->get();
 
-        // Group sales by product
-        $groupedPenjualan = $penjualan->groupBy('id_produk')->map(function ($sales) {
+        // Group sales by product and format rata_rata_harian
+        $groupedPenjualan = $penjualan->groupBy('id_produk')->map(function ($sales) use ($jumlahHari) {
+            $firstSale = $sales->first();
+            $rataRataHarian = $firstSale->rata_rata_harian;
+            $unitKecil = $firstSale->produk->unit_kecil ?? 'pcs';
+            $unitBesar = $firstSale->produk->unit_besar ?? 'dos';
+            $tingkatKonversi = $firstSale->produk->tingkat_konversi ?? 1;
+
+            // Format rata_rata_harian sebagai "X pcs (Y dos)"
+            $rataRataBesar = $tingkatKonversi > 0 ? $rataRataHarian / $tingkatKonversi : 0;
+            $formattedRataRata = sprintf(
+                '%d %s (%d %s)',
+                round($rataRataHarian),
+                $unitKecil,
+                round($rataRataBesar),
+                $unitBesar
+            );
+
             return [
                 'items' => $sales,
                 'rowspan' => $sales->count(),
-                'rata_rata_harian' => $sales->first()->rata_rata_harian,
+                'rata_rata_harian' => $formattedRataRata,
             ];
         });
 
@@ -89,16 +105,11 @@ class LaporanController extends Controller
 
         [$tahun, $bulan] = explode('-', $request->periode);
 
-        $barang_masuk = Mutasi::select(
-            'id_produk',
-            DB::raw('SUM(jumlah) as total_jumlah'),
-            DB::raw('SUM(jumlah * produk.harga_beli) as total_harga')
-        )
-            ->join('produk', 'mutasi.id_produk', '=', 'produk.id') // Gabungkan dengan tabel produk
+        $barang_masuk = Mutasi::with('produk')
+            ->where('jenis', 'masuk')
             ->whereYear('tanggal', $tahun)
             ->whereMonth('tanggal', $bulan)
             ->where('jenis', 'masuk')
-            ->groupBy('id_produk', 'produk.harga_beli') // Tambahkan harga_beli ke groupBy agar tidak error
             ->get();
 
         return view('invoices.laporan-barang-masuk', [

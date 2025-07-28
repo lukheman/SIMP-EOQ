@@ -54,6 +54,9 @@
             flex: 1;
             padding: 10px;
         }
+        .text-right {
+            text-align: end;
+        }
     </style>
 
 </head>
@@ -81,8 +84,8 @@
                     <th>No</th>
                     <th>Jenis Produk</th>
                     <th>Jumlah</th>
-                    <th>Harga Satuan</th>
-                    <th>Total Harga (Rp.)</th>
+                    <th>Harga</th>
+                    <th>Total Harga</th>
                 </tr>
 
             </thead>
@@ -97,11 +100,11 @@
                 <tr>
                     <td>{{ ++$i }}</td>
                     <td>{{ $item->produk->nama_produk }}</td>
-                    <td style="text-align: center;">{{ $item->total_jumlah}}</td>
-                    <td style="text-align: right;">{{ number_format($item->produk->harga_beli, 2, ',', '.') }}</td>
-                    <td style="text-align: right;">{{ number_format($item->total_harga, 2, ',', '.') }}</td>
+                    <td class="text-right"> {{ $item->label_jumlah_unit_dipesan}}</td>
+                    <td style="text-align: right;">{{ $item->produk->label_harga_beli }}</td>
+                    <td style="text-align: right;">{{ $item->label_total_harga_beli }}</td>
                     @php
-                    $total += $item->total_harga
+                    $total += $item->total_harga_beli
                     @endphp
                 </tr>
 
@@ -109,7 +112,7 @@
 
                 <tr>
                     <td style="text-align: center;" colspan="4">Total</td>
-                    <td style="text-align: right;">{{ number_format($total, 2, ',', '.')}}</td>
+                    <td style="text-align: right;">Rp. {{ number_format($total, 0, ',', '.')}}</td>
                 </tr>
 
             </tbody>

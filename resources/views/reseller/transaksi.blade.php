@@ -315,7 +315,7 @@
                                 <tr>
                                     <td>${index + 1}</td>
                                     <td>${item.produk.nama_produk}</td>
-                                    <td>${item.jumlah}</td>
+                                    <td>${item.jumlah} ${item.produk.unit_besar}</td>
                                     <td>${formatRupiah(item.produk.harga_jual)}</td>
                                     <td>${formatRupiah(item.total_harga)}</td>
                                 </tr>`;

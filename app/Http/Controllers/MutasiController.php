@@ -17,7 +17,6 @@ class MutasiController extends Controller
             'id_produk' => 'required|exists:produk,id',
             'jumlah' => 'required',
             'jenis' => 'required',
-            'unit' => 'required'
         ]);
 
         $produk = Produk::query()->with('persediaan')->find($request->id_produk);
@@ -94,9 +93,9 @@ class MutasiController extends Controller
     public function update(Request $request, $id)
     {
 
+        // FIX: jumlah persediaan barang ketika update mutasi barang masuk
         $data = $request->validate([
             'jumlah' => 'required',
-            'tanggal' => 'required',
         ]);
 
         $mutasi = Mutasi::find($id);

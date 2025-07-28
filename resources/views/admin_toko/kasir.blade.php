@@ -3,19 +3,14 @@
 @section('title', 'Admin Toko')
 
 @section('sidebar-menu')
-
-@include('admin_toko.menu')
-
+    @include('admin_toko.menu')
 @endsection
 
 @section('content')
-
 <div class="row">
     <!-- Bagian Scanner -->
     <div class="col-12 col-md-7 mb-3 mb-md-0">
-        <div id="scanner" class="border rounded p-3 bg-light" style="min-height: 300px;">
-            <!-- Tempat pemindai (scanner) -->
-        </div>
+        <div id="scanner" class="border rounded p-3 bg-light" style="min-height: 300px;"></div>
     </div>
 
     <!-- Bagian Transaksi -->
@@ -42,9 +37,7 @@
                         <h5 class="card-title mb-0">Daftar Pembelian</h5>
                     </div>
                     <div class="card-body pt-3">
-                        <form id="form-daftar-pesanan">
-                            <!-- List produk akan dimasukkan di sini -->
-                        </form>
+                        <form id="form-daftar-pesanan"></form>
                         <button class="btn btn-primary btn-block mt-3" id="btn-simpan-transaksi">
                             <i class="fas fa-save mr-1"></i> Simpan Transaksi
                         </button>
@@ -54,172 +47,149 @@
         </div>
     </div>
 </div>
-
 @endsection
 
 @section('custom-script')
-
 <script src="https://cdn.jsdelivr.net/npm/quagga@0.12.1/dist/quagga.min.js"></script>
-
 <script>
+let pesanan = {};
 
-    let pesanan = {};
+function formatRupiah(angka) {
+    return 'Rp. ' + Number(angka).toLocaleString('id-ID');
+}
 
-    function startScanner() {
+function startScanner() {
+    Quagga.init({
+        inputStream: {
+            type: 'LiveStream',
+            target: document.querySelector('#scanner'),
+            constraints: { facingMode: 'environment' }
+        },
+        decoder: { readers: ['code_128_reader', 'ean_reader', 'upc_reader'] }
+    }, (err) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        Quagga.start();
+    });
+}
 
-        Quagga.init({
-            inputStream: {
-                type: "LiveStream",
-                target: document.querySelector('#scanner'), // Menampilkan stream kamera di elemen ini
-                constraints: {
-                    facingMode: "environment" // Menggunakan kamera belakang (untuk perangkat mobile)
+function tambahDaftarPesanan(produk) {
+    $('#form-daftar-pesanan').append(`
+        <div class="form-group" id="item-${produk.kode_produk}">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <input type="text" class="form-control form-control-sm" value="${produk.nama_produk}" readonly>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Rp</span>
+                        </div>
+                        <input type="text" class="form-control text-right harga-jual" id="harga-${produk.kode_produk}" value="${produk.harga_jual_unit_kecil}" readonly>
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="satuan">/ ${produk.unit_kecil}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <div class="input-group input-group-sm">
+                        <input type="number" class="form-control text-center jumlah" min="1" id="jumlah-${produk.kode_produk}" value="1" title="Jumlah dalam satuan yang dipilih">
+                    </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <select class="form-control form-control-sm satuan" name="satuan-${produk.kode_produk}" id="satuan-${produk.kode_produk}">
+                        <option value="${produk.unit_kecil}" data-harga="${produk.harga_jual_unit_kecil}">${produk.unit_kecil}</option>
+                        <option value="${produk.unit_besar}" data-harga="${produk.harga_jual}">${produk.unit_besar}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    `);
+}
+
+function updateTotalHarga() {
+    let totalHarga = 0;
+    for (let barcode in pesanan) {
+        totalHarga += pesanan[barcode].jumlah * pesanan[barcode].harga_jual;
+    }
+    $('#total-harga').val(formatRupiah(totalHarga));
+}
+
+function onScanSuccess(result) {
+    Quagga.stop();
+    let barcode = result.codeResult.code;
+
+    if (barcode in pesanan) {
+        pesanan[barcode].jumlah += 1;
+        $(`#jumlah-${barcode}`).val(pesanan[barcode].jumlah);
+        updateTotalHarga();
+    } else {
+        $.ajax({
+            url: "{{ route('produk.kode-produk', ':barcode') }}".replace(':barcode', barcode),
+            method: 'GET',
+            success: (data) => {
+                if (data.success) {
+                    showToast(`${data.data.kode_produk} - ${data.data.nama_produk}`, 'success', false);
+                    pesanan[barcode] = {
+                        jumlah: 1,
+                        harga_jual: data.data.harga_jual_unit_kecil,
+                        satuan: data.data.unit_kecil,
+                        produk: data.data
+                    };
+                    tambahDaftarPesanan(data.data);
+                    updateTotalHarga();
+                } else {
+                    showToast(data.message, 'warning', false);
                 }
+                setTimeout(startScanner, 500);
             },
-            decoder: {
-                readers: ["code_128_reader", "ean_reader", "upc_reader"]
+            error: (err) => {
+                console.error(err);
+                setTimeout(startScanner, 500);
             }
-        }, function(err) {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-                Quagga.start(); // Memulai pemindaian
-            });
-
-    }
-
-    function tambahDaftarPesanan(produk) {
-
-        $('#form-daftar-pesanan').append(`
-
-<div class="form-group">
-    <div class="row align-items-center">
-        <div class="col-6">
-            <input type="text" class="form-control form-control-sm" value="${produk.nama_produk}" readonly>
-        </div>
-
-        <div class="col-3">
-            <div class="input-group input-group-sm">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Rp</span>
-                </div>
-                <input type="text" class="form-control text-right" value="${produk.harga_jual_unit_kecil}" readonly>
-            </div>
-        </div>
-
-        <div class="col-3">
-            <div class="input-group input-group-sm">
-                <input type="number" class="form-control jumlah text-center" 
-                       min="1" id="jumlah-${produk.kode_produk}" value="1"
-                       title="Jumlah dalam satuan pcs">
-                <div class="input-group-append">
-                    <span class="input-group-text">pcs</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-        `);
-
-    }
-
-    function updateTotalHarga() {
-
-        let totalHarga = 0;
-
-        for(let key in pesanan) {
-            totalHarga += pesanan[key]['jumlah'] * pesanan[key]['harga_jual'];
-        }
-
-        $('#total-harga').val(formatRupiah(totalHarga));
-
-
-    }
-
-    function onScanSuccess(result) {
-
-        Quagga.stop();
-        let barcode = result.codeResult.code;
-
-
-        if(barcode in pesanan) {
-            pesanan[barcode]['jumlah'] += 1;
-            let jumlah = $(`#jumlah-${barcode}`);
-            jumlah.val(parseInt(jumlah.val()) + 1);
-            updateTotalHarga();
-
-        } else {
-            $.ajax({
-                url: "{{ route('produk.kode-produk', ':barcode')}}".replace(':barcode', barcode),
-                method: 'GET',
-                success: function(data) {
-                    if(data.success) {
-
-                        showToast(`${data.data.kode_produk} - ${data.data.nama_produk}`, icon='success', reload=false);
-
-                        pesanan[barcode] = { jumlah: 1, harga_jual: data.data.harga_jual_unit_kecil};
-                        tambahDaftarPesanan(data.data);
-
-                        updateTotalHarga();
-
-                    } else {
-                        showToast(data.message, icon='warning');
-                    }
-                },
-                error: function(err) {
-                    console.log(err);
-                }
-            });
-
-        }
-
-        setTimeout(() => {
-
-            startScanner();
-        }, 500);
-
-    }
-
-    $(document).ready(function() {
-
-        $('#total-harga').val('Rp. 0');
-        startScanner();
-
-        $('#btn-simpan-transaksi').click(function() {
-
-            $.ajax({
-                url: "{{ route('admintoko.transaksi') }}",
-                method: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: { pesanan },
-                success: function(data) {
-                    if(data.success) {
-                        showToast(data.message, icon='success', reload=false);
-                    } else {
-                        showToast(data.message, icon='error', reload=false);
-                    }
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-
-            });
-
         });
+    }
+}
 
-        Quagga.onDetected(onScanSuccess);
+$(document).ready(function() {
+    $('#total-harga').val('Rp. 0');
+    startScanner();
+    Quagga.onDetected(onScanSuccess);
 
-
+    $('#btn-simpan-transaksi').click(function() {
+        $.ajax({
+            url: "{{ route('admintoko.transaksi') }}",
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            data: { pesanan },
+            success: (data) => {
+                showToast(data.message, data.success ? 'success' : 'error', false);
+            },
+            error: (err) => {
+                console.error(err);
+                showToast('Gagal menyimpan transaksi', 'error', false);
+            }
+        });
     });
 
-    $(document).on('click', '[id^="jumlah-"]', function() {
+    $(document).on('change', '.jumlah', function() {
         const barcode = $(this).attr('id').replace('jumlah-', '');
-        pesanan[barcode]['jumlah'] = parseInt($(this).val());
+        pesanan[barcode].jumlah = parseInt($(this).val()) || 1;
         updateTotalHarga();
     });
 
+    $(document).on('change', '.satuan', function() {
+        const barcode = $(this).attr('id').replace('satuan-', '');
+        const selectedOption = $(this).find('option:selected');
+        const harga = parseFloat(selectedOption.data('harga')) || 0;
+        pesanan[barcode].harga_jual = harga;
+        pesanan[barcode].satuan = $(this).val();
+        $(`#harga-${barcode}`).val(harga);
+        $('#satuan').text('/ ' + $(this).val());
+        updateTotalHarga();
+    });
+});
 </script>
-
 @endsection

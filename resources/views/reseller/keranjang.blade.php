@@ -36,9 +36,9 @@
                                 <!-- TODO: ganti jadi select all -->
                                 <th><input type="checkbox" id="select-all" style="width: 25px; height: 25px;"></th>
                                 <th>Nama Produk</th>
-                                <th>Jumlah (bal)</th>
-                                <th>Harga/bal (Rp.)</th>
-                                <th>Total Harga (Rp.)</th>
+                                <th>Jumlah Dipesan</th>
+                                <th>Harga</th>
+                                <th>Total Harga</th>
                                 <th class="column-aksi text-right">Aksi</th>
                             </tr>
                         </thead>
@@ -48,9 +48,9 @@
                             <tr>
                                 <td > <input type="checkbox" class="select-row" data-id-pesanan="{{ $item->id }}"  style="width: 25px; height: 25px;"> </td>
                                 <td> {{ $item->produk->nama_produk }}</td>
-                                <td> {{ $item->jumlah }}</td>
-                                <td> {{ number_format($item->produk->harga_jual, 0, ',', '.')}}</td>
-                                <td> {{ number_format($item->total_harga, 0, ',', '.')}}</td>
+                                <td> {{ $item->label_jumlah_unit_dipesan }}</td>
+                                <td> {{ $item->produk->label_harga_jual }}</td>
+                                <td> {{ $item->label_total_harga_jual }}</td>
                                 <td class="text-right">
                                     <button class="btn btn-outline-danger btn-sm btn-delete-pesanan" data-id-pesanan="{{ $item->id }}">
                                         <i class="fas fa-trash"></i>

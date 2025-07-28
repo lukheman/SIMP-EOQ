@@ -13,52 +13,54 @@ use App\Models\Transaksi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AdminTokoController extends Controller
 {
-    public function transaksi(Request $request)
-    {
+public function transaksi(Request $request)
+{
+    $transaksi = Transaksi::create([
+        'metode_pembayaran' => MetodePembayaran::TUNAI,
+        'status' => StatusTransaksi::SELESAI,
+    ]);
 
-        $transaksi = Transaksi::create([
-            'metode_pembayaran' => MetodePembayaran::TUNAI,
-            'status' => StatusTransaksi::SELESAI,
-        ]);
+    foreach ($request->pesanan as $barcode => $value) {
+        $produk = Produk::where('kode_produk', $barcode)->firstOrFail();
 
-        foreach ($request->pesanan as $barcode => $value) {
-
-            $produk = Produk::query()->where('kode_produk', $barcode)->first();
-
-            // cek persediaan produk
-            if (! $produk->isPersediaanMencukupi($value['jumlah'])) {
-                return response()->json([
-                    'success' => false,
-                    'message' => $produk->nama_produk.' tidak cukup di persediaan',
-                ], 200);
-            }
-
-            // kalkulasi total harga barang yang dipesan
-            $total_harga = $produk->harga_jual_unit_kecil * $value['jumlah'];
-
-            // buat pesanan
-            $pesanan = Pesanan::create([
-                'id_produk' => $produk->id,
-                'jumlah' => $value['jumlah'],
-                'total_harga' => $total_harga,
-                'id_transaksi' => $transaksi->id,
-                'unit' => 'pcs'
-            ]);
-
+        // Cek persediaan produk berdasarkan jumlah dan satuan
+        $permintaan = $value['satuan'] === $produk->unit_kecil ? $value['jumlah'] : $value['jumlah'] * $produk->tingkat_konversi;
+        if (!$produk->isPersediaanMencukupi($permintaan)) {
+            return response()->json([
+                'success' => false,
+                'message' => "Persediaan {$produk->nama_produk} tidak cukup untuk {$value['jumlah']} {$value['satuan']}",
+            ], 200);
         }
 
-        $this->kurangiPersediaan($transaksi);
+        // Tentukan harga berdasarkan satuan
+        $harga = $value['satuan'] === $produk->unit_kecil ? $produk->harga_jual_unit_kecil : $produk->harga_jual;
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Transaksi berhasil dilakukan',
-            'transaksi' => $transaksi,
-        ], 200);
+        // Kalkulasi total harga
+        $total_harga = $harga * $value['jumlah'];
 
+        // Buat pesanan
+        Pesanan::create([
+            'id_produk' => $produk->id,
+            'jumlah' => $value['jumlah'],
+            'total_harga' => $total_harga,
+            'id_transaksi' => $transaksi->id,
+            'satuan' => $value['satuan'] === $produk->unit_kecil ? 1 : 0,
+        ]);
     }
+
+    // Kurangi persediaan setelah semua pesanan dibuat
+    $this->kurangiPersediaan($transaksi);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Transaksi berhasil dilakukan',
+        'transaksi' => $transaksi,
+    ], 200);
+}
 
     private function kurangiPersediaan(Transaksi $transaksi)
     {
@@ -74,10 +76,10 @@ class AdminTokoController extends Controller
             }
 
             // kurangi persediaan produk
-            if($item->unit === 'bal') {
-                $item->produk->persediaan->jumlah -= $item->jumlah * $item->produk->tingkat_konversi;
-            } elseif($item->unit === 'pcs') {
+            if($item->satuan) {
                 $item->produk->persediaan->jumlah -= $item->jumlah;
+            } else {
+                $item->produk->persediaan->jumlah -= $item->jumlah * $item->produk->tingkat_konversi;
             }
             $item->produk->persediaan->save();
 
@@ -88,7 +90,7 @@ class AdminTokoController extends Controller
                 'jumlah' => $item->jumlah,
                 'jenis' => 'keluar',
                 'keterangan' => 'Pembelian langsung',
-                'unit' => 'pcs'
+                'satuan' => $item->satuan
             ]);
 
         }

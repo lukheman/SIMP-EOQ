@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('id_keranjang_belanja')->nullable()->constrained('keranjang_belanja')->onDelete('cascade');
             $table->decimal('total_harga', 12, 2);
             $table->integer('jumlah')->default(1);
-            $table->enum('unit', ['bal', 'pcs'])->default('bal');
+            $table->boolean('satuan')->default(false);
             $table->timestamps();
         });
 

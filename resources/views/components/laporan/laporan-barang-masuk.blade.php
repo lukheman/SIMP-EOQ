@@ -24,9 +24,8 @@
                             <tr>
                                 <th>Tanggal </th>
                                 <th>Jenis Produk </th>
-                                <th>Jumlah (pcs)</th>
-                                <th>Jumlah (bal)</th>
-                                <th>Total Harga (Rp.)</th>
+                                <th>Jumlah Dipesan</th>
+                                <th>Total Harga</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,9 +34,8 @@
                             <tr>
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->produk->nama_produk }}</td>
-                                <td> {{ $item->jumlah }}</td>
-                                <td> {{ $item->jumlah / $item->produk->tingkat_konversi }}</td>
-                                <td> {{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
+                                <td> {{ $item->label_jumlah_unit_dipesan}}</td>
+                                <td> {{ $item->label_total_harga_beli}}</td>
                             </tr>
                             @endforeach
 

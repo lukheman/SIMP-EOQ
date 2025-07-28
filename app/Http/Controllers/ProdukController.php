@@ -36,6 +36,8 @@ class ProdukController extends Controller
             'exp' => 'required',
             'harga_jual_unit_kecil' => 'required|numeric|min:0',
             'tingkat_konversi' => 'required|numeric|min:0',
+            'unit_kecil' =>  'required',
+            'unit_besar' =>  'required',
         ]);
 
         $data = $request->all();

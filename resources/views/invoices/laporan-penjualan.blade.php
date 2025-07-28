@@ -56,6 +56,10 @@
             flex: 1;
             padding: 10px;
         }
+
+        .text-right {
+            text-align: end;
+        }
     </style>
 
 </head>
@@ -82,9 +86,9 @@
                 <tr>
                     <th>Tanggal</th>
                     <th>Nama Produk</th>
-                    <th>Terjual</th>
+                    <th>Jumlah Terjual</th>
                     <th>Rata-rata Harian</th>
-                    <th>Harga Satuan (Rp.)</th>
+                    <th>Harga Satuan</th>
                     <th>Total Harga (Rp.)</th>
                 </tr>
 
@@ -96,20 +100,20 @@
                     <tr>
                         <td class="text-center">{{ $item->tanggal }}</td>
                         <td>{{ $item->produk->nama_produk }}</td>
-                        <td style="text-align: center;">{{ $item->jumlah }} {{ $item->unit }}</td>
+                        <td class="text-right"> {{ $item->label_jumlah_unit_terjual}} </td>
                         @if ($index === 0)
                         <td rowspan="{{ $group['rowspan'] }}" style="text-align: center;">
-                            {{ number_format($group['rata_rata_harian'], 2, ',', '.') }}
+                            {{ $group['rata_rata_harian'] }}
                         </td>
                         @endif
-                        <td style="text-align: right;">{{ number_format( $item->unit === 'bal' ? $item->produk->harga_jual : $item->produk->harga_jual_unit_kecil, 2, ',', '.') }} /{{ $item->unit}}</td>
-                        <td style="text-align: right;">{{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
+                                <td class="text-right"> {{ $item->label_harga_jual }} </td>
+                                <td class="text-right"> {{ $item->label_total_harga_jual }} </td>
                     </tr>
                     @endforeach
                     @endforeach
                     <tr>
                         <td colspan="5" style="text-align: right;"><strong>Total</strong></td>
-                        <td style="text-align: right;"><strong>{{ number_format($total, 2, ',', '.') }}</strong></td>
+                        <td style="text-align: right;"><strong>Rp. {{ number_format($total, 2, ',', '.') }}</strong></td>
                     </tr>
                 </tbody>
 
