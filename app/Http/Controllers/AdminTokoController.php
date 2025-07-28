@@ -37,7 +37,7 @@ class AdminTokoController extends Controller
             }
 
             // kalkulasi total harga barang yang dipesan
-            $total_harga = $produk->harga_jual_pcs * $value['jumlah'];
+            $total_harga = $produk->harga_jual_unit_kecil * $value['jumlah'];
 
             // buat pesanan
             $pesanan = Pesanan::create([
@@ -75,7 +75,7 @@ class AdminTokoController extends Controller
 
             // kurangi persediaan produk
             if($item->unit === 'bal') {
-                $item->produk->persediaan->jumlah -= $item->jumlah * $item->produk->pcs_per_bal;
+                $item->produk->persediaan->jumlah -= $item->jumlah * $item->produk->tingkat_konversi;
             } elseif($item->unit === 'pcs') {
                 $item->produk->persediaan->jumlah -= $item->jumlah;
             }

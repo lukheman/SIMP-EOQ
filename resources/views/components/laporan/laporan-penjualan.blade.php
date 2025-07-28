@@ -55,7 +55,7 @@
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->produk->nama_produk }}</td>
                                 <td class="text-right"> {{ $item->jumlah }} {{ $item->unit}} </td>
-                                <td class="text-right"> {{ number_format( $item->unit === 'bal' ? $item->produk->harga_jual : $item->produk->harga_jual_pcs, 2, ',', '.') }} /{{ $item->unit}}</td>
+                                <td class="text-right"> {{ number_format( $item->unit === 'bal' ? $item->produk->harga_jual : $item->produk->harga_jual_unit_kecil, 2, ',', '.') }} /{{ $item->unit}}</td>
                                 <td class="text-right"> {{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
                                 <td class="text-right">
                                     <button class="btn btn-sm btn-danger btn-delete-penjualan"

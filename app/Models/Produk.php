@@ -160,9 +160,9 @@ class Produk extends Model
     }
 
     public function getPersediaanBalAttribute() {
-        if($this->pcs_per_bal > 0) {
+        if($this->tingkat_konversi > 0) {
 
-            return intdiv($this->persediaan->jumlah, $this->pcs_per_bal);
+            return intdiv($this->persediaan->jumlah, $this->tingkat_konversi);
         }
         return 0;
     }

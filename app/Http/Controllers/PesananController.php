@@ -34,7 +34,7 @@ class PesananController extends Controller
         $produk = Produk::find($request->id_produk);
 
         // konversi dari bal ke pcs
-        $jumlah_pcs = $request->jumlah * $produk->pcs_per_bal;
+        $jumlah_pcs = $request->jumlah * $produk->tingkat_konversi;
 
         // cek persediaan produk
         if (! $produk->isPersediaanMencukupi($jumlah_pcs)) {

@@ -206,7 +206,7 @@ class TransaksiController extends Controller
 
             // kurangi persediaan produk
             if($item->unit === 'bal') {
-                $item->produk->persediaan->jumlah -= $item->jumlah * $item->produk->pcs_per_bal;
+                $item->produk->persediaan->jumlah -= $item->jumlah * $item->produk->tingkat_konversi;
             } elseif($item->unit === 'pcs') {
                 $item->produk->persediaan->jumlah -= $item->jumlah;
             }

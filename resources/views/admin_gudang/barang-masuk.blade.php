@@ -44,7 +44,7 @@
                             <tr>
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->produk->nama_produk }}</td>
-                                <td> {{ $item->jumlah }} pcs / {{ $item->jumlah / $item->produk->pcs_per_bal }} bal</td>
+                                <td> {{ $item->jumlah }} pcs / {{ $item->jumlah / $item->produk->tingkat_konversi }} bal</td>
                                 <td> {{ number_format($item->produk->harga_beli, 2, ',', '.') }}</td>
                                 <td> {{ number_format($item->total_harga_beli, 2, ',', '.') }}</td>
                                 <td>
@@ -226,12 +226,12 @@
 
         $('#form-add-mutasi #jumlah').on('change', function(e) {
             let pcs = $(this).val();
-            $('#form-add-mutasi #jumlah-bal').val(pcs/currentProduk.pcs_per_bal);
+            $('#form-add-mutasi #jumlah-bal').val(pcs/currentProduk.tingkat_konversi);
         });
 
         $('#form-add-mutasi #jumlah-bal').on('change', function(e) {
             let bal = $(this).val();
-            $('#form-add-mutasi #jumlah').val(bal*currentProduk.pcs_per_bal);
+            $('#form-add-mutasi #jumlah').val(bal*currentProduk.tingkat_konversi);
         });
 
         // handler untuk mengupdate data

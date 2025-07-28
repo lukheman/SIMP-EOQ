@@ -173,13 +173,13 @@
 
                             <div class="form-group">
                                 <label for="jumlah-pcs-per-bal">Jumlah pcs/bal</label>
-                                <input type="number" class="form-control" name="pcs_per_bal" id="jumlah-pcs-per-bal"
+                                <input type="number" class="form-control" name="tingkat_konversi" id="jumlah-pcs-per-bal"
                                     placeholder="Jumlah pcs/bal" min="0">
                             </div>
 
                             <div class="form-group">
                                 <label for="harga-jual-pcs">Harga Jual/pcs(Rp.)</label>
-                                <input type="number" class="form-control" name="harga_jual_pcs" id="harga-jual-pcs"
+                                <input type="number" class="form-control" name="harga_jual_unit_kecil" id="harga-jual-pcs"
                                     placeholder="Harga Jual/pcs" min="0">
                             </div>
 
@@ -290,13 +290,13 @@
 
                             <div class="form-group">
                                 <label for="jumlah-pcs-per-bal">Jumlah pcs/bal</label>
-                                <input type="number" class="form-control" name="pcs_per_bal" id="jumlah-pcs-per-bal"
+                                <input type="number" class="form-control" name="tingkat_konversi" id="jumlah-pcs-per-bal"
                                     placeholder="Jumlah pcs/bal" min="0">
                             </div>
 
                             <div class="form-group">
                                 <label for="harga-jual-pcs">Harga Jual/pcs(Rp.)</label>
-                                <input type="number" class="form-control" name="harga_jual_pcs" id="harga-jual-pcs"
+                                <input type="number" class="form-control" name="harga_jual_unit_kecil" id="harga-jual-pcs"
                                     placeholder="Harga Jual/pcs" min="0">
                             </div>
 
@@ -396,7 +396,7 @@
 
                             <div class="form-group">
                                 <label for="jumlah-pcs-per-bal">Jumlah pcs/bal</label>
-                                <input type="number" class="form-control" name="pcs_per_bal" id="jumlah-pcs-per-bal"
+                                <input type="number" class="form-control" name="tingkat_konversi" id="jumlah-pcs-per-bal"
                                     placeholder="Jumlah pcs/bal" min="0" readonly>
                             </div>
 
@@ -422,7 +422,7 @@
 
                             <div class="form-group">
                                 <label for="harga-jual-pcs">Harga Jual/pcs(Rp.)</label>
-                                <input type="number" class="form-control" name="harga_jual_pcs" id="harga-jual-pcs"
+                                <input type="number" class="form-control" name="harga_jual_unit_kecil" id="harga-jual-pcs"
                                     placeholder="Harga Jual/pcs" min="0" readonly>
                             </div>
 
@@ -623,8 +623,8 @@
                     formUpdateProduk.find('#biaya-pemesanan').val(produk.biaya_pemesanan.biaya);
                     formUpdateProduk.find('#deskripsi').val(produk.deskripsi);
                     formUpdateProduk.find('#tanggal-kadaluarsa').val(produk.exp);
-                    formUpdateProduk.find('#harga-jual-pcs').val(produk.harga_jual_pcs);
-                    formUpdateProduk.find('#jumlah-pcs-per-bal').val(produk.pcs_per_bal);
+                    formUpdateProduk.find('#harga-jual-pcs').val(produk.harga_jual_unit_kecil);
+                    formUpdateProduk.find('#jumlah-pcs-per-bal').val(produk.tingkat_konversi);
 
                 },
                 error: function (error) {
@@ -662,8 +662,8 @@
                     modalInfoProduk.find('#biaya-pemesanan').val(produk.biaya_pemesanan.biaya);
                     modalInfoProduk.find('#deskripsi').val(produk.deskripsi);
                     modalInfoProduk.find('#tanggal-kadaluarsa').val(produk.exp);
-                    modalInfoProduk.find('#harga-jual-pcs').val(produk.harga_jual_pcs);
-                    modalInfoProduk.find('#jumlah-pcs-per-bal').val(produk.pcs_per_bal);
+                    modalInfoProduk.find('#harga-jual-pcs').val(produk.harga_jual_unit_kecil);
+                    modalInfoProduk.find('#jumlah-pcs-per-bal').val(produk.tingkat_konversi);
 
                 },
                 error: function (error) {

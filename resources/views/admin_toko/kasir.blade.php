@@ -103,7 +103,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Rp</span>
                 </div>
-                <input type="text" class="form-control text-right" value="${produk.harga_jual_pcs}" readonly>
+                <input type="text" class="form-control text-right" value="${produk.harga_jual_unit_kecil}" readonly>
             </div>
         </div>
 
@@ -157,7 +157,7 @@
 
                         showToast(`${data.data.kode_produk} - ${data.data.nama_produk}`, icon='success', reload=false);
 
-                        pesanan[barcode] = { jumlah: 1, harga_jual: data.data.harga_jual_pcs};
+                        pesanan[barcode] = { jumlah: 1, harga_jual: data.data.harga_jual_unit_kecil};
                         tambahDaftarPesanan(data.data);
 
                         updateTotalHarga();

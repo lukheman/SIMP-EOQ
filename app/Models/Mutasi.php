@@ -25,7 +25,7 @@ class Mutasi extends Model
             return $this->produk->harga_jual * $this->jumlah;
         }
 
-        return $this->produk->harga_jual_pcs * $this->jumlah;
+        return $this->produk->harga_jual_unit_kecil * $this->jumlah;
     }
 
     public function getTotalHargaBeliAttribute()

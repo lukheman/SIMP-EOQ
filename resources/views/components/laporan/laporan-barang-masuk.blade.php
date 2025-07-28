@@ -36,7 +36,7 @@
                                 <td> {{ $item->tanggal }}</td>
                                 <td> {{ $item->produk->nama_produk }}</td>
                                 <td> {{ $item->jumlah }}</td>
-                                <td> {{ $item->jumlah / $item->produk->pcs_per_bal }}</td>
+                                <td> {{ $item->jumlah / $item->produk->tingkat_konversi }}</td>
                                 <td> {{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
                             </tr>
                             @endforeach

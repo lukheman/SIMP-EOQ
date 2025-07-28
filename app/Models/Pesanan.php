@@ -33,6 +33,6 @@ class Pesanan extends Model
     }
 
     public function getJumlahPcsAttribtue() {
-        return $this->jumlah * $this->produk->pcs_per_bal;
+        return $this->jumlah * $this->produk->tingkat_konversi;
     }
 }

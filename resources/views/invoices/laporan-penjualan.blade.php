@@ -102,7 +102,7 @@
                             {{ number_format($group['rata_rata_harian'], 2, ',', '.') }}
                         </td>
                         @endif
-                        <td style="text-align: right;">{{ number_format( $item->unit === 'bal' ? $item->produk->harga_jual : $item->produk->harga_jual_pcs, 2, ',', '.') }} /{{ $item->unit}}</td>
+                        <td style="text-align: right;">{{ number_format( $item->unit === 'bal' ? $item->produk->harga_jual : $item->produk->harga_jual_unit_kecil, 2, ',', '.') }} /{{ $item->unit}}</td>
                         <td style="text-align: right;">{{ number_format($item->total_harga_jual, 2, ',', '.') }}</td>
                     </tr>
                     @endforeach
