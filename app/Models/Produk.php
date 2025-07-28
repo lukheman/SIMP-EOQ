@@ -166,4 +166,29 @@ class Produk extends Model
         }
         return 0;
     }
+
+    public function getLabelHargaBeliAttribute() {
+        $hargaBeli = $this->harga_beli ?? 0;
+        $formattedHarga = number_format($hargaBeli, 0, ',', '.');
+        $unitBesar = $this->unit_besar ?? 'unit';
+        return "Rp. {$formattedHarga}/{$unitBesar}";
+    }
+
+    public function getLabelHargaJualAttribute() {
+        $hargaJual = $this->harga_jual ?? 0;
+        $formattedHarga = number_format($hargaJual, 0, ',', '.');
+        $unitBesar = $this->unit_besar ?? 'unit';
+        return "Rp. {$formattedHarga}/{$unitBesar}";
+    }
+
+    public function getLabelPersediaanAttribute() {
+        $persediaanKecil = $this->persediaan->jumlah;
+        $persediaanBesar = round($this->persediaan->jumlah / $this->tingkat_konversi, 2);
+        $unitBesar = $this->unit_besar ?? 'unit';
+        $unitKecil= $this->unit_kecil?? 'unit';
+        return "{$persediaanKecil} {$unitKecil} ({$persediaanBesar}/{$unitBesar})";
+
+    }
+
+
 }
