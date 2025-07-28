@@ -138,19 +138,33 @@ class Produk extends Model
         return $result;
     }
 
-    public function getEconomicOrderQuantityAttribute(): float
+    public function getEconomicOrderQuantityAttribute(): string
     {
-        return PerhitunganEOQServices::economicOrderQuantity($this->id);
+        $unitBesar = $this->unit_besar ?? 'unit';
+        $unitKecil= $this->unit_kecil?? 'unit';
+        $eoq = PerhitunganEOQServices::economicOrderQuantity($this->id);
+        $eoqBesar = $eoq / $this->tingkat_konversi;
+        return "{$eoq} {$unitKecil} ({$eoqBesar} {$unitBesar})";
     }
 
-    public function getSafetyStockAttribute(): float
+    public function getSafetyStockAttribute(): string
     {
-        return PerhitunganEOQServices::safetyStock($this->id);
+
+        $unitBesar = $this->unit_besar ?? 'unit';
+        $unitKecil= $this->unit_kecil?? 'unit';
+        $ss = PerhitunganEOQServices::safetyStock($this->id);
+        $ssBesar = $ss / $this->tingkat_konversi;
+        return "{$ss} {$unitKecil} ({$ssBesar} {$unitBesar})";
     }
 
-    public function getReorderPointAttribute(): float
+    public function getReorderPointAttribute(): string
     {
-        return PerhitunganEOQServices::reorderPoint($this->id);
+        $unitBesar = $this->unit_besar ?? 'unit';
+        $unitKecil= $this->unit_kecil?? 'unit';
+        $rop = PerhitunganEOQServices::reorderPoint($this->id);;
+        $ropBesar = $rop / $this->tingkat_konversi;
+
+        return "{$rop} {$unitKecil} ({$ropBesar} {$unitBesar})";
 
     }
 
