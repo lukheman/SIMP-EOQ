@@ -21,10 +21,9 @@
 
                                 <th>Kode Produk</th>
                                 <th>Nama Produk</th>
-                                <th>Harga Beli/bal (Rp.)</th>
-                                <th>Harga Jual/bal (Rp.)</th>
-                                <th>Persediaan (pcs)</th>
-                                <th>Persediaan (bal)</th>
+                                <th>Harga Beli</th>
+                                <th>Harga Jual</th>
+                                <th>Persediaan</th>
 
                             </tr>
                         </thead>
@@ -34,10 +33,9 @@
                             <tr>
                                 <td class="text-center"> {{ $item->kode_produk }}</td>
                                 <td> {{ $item->nama_produk }}</td>
-                                <td class="text-right"> {{ number_format($item->harga_beli, 0, ',', '.') }}</td>
-                                <td class="text-right"> {{ number_format($item->harga_jual, 0, ',', '.') }}</td>
-                                <td class="text-center"> {{ $item->persediaan->jumlah }}</td>
-                                <td class="text-center"> {{ $item->persediaan->jumlah/$item->tingkat_konversi }}</td>
+                                <td class="text-right">{{ $item->label_harga_beli}}</td>
+                                <td class="text-right">{{ $item->label_harga_jual}}</td>
+                                <td class="text-right">{{ $item->label_persediaan}}</td>
                             </tr>
                             @endforeach
 
