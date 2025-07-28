@@ -204,11 +204,10 @@ class TransaksiController extends Controller
                 ], 200);
             }
 
-            // kurangi persediaan produk
-            if($item->unit === 'bal') {
-                $item->produk->persediaan->jumlah -= $item->jumlah * $item->produk->tingkat_konversi;
-            } elseif($item->unit === 'pcs') {
+            if($item->satuan) {
                 $item->produk->persediaan->jumlah -= $item->jumlah;
+            } else {
+                $item->produk->persediaan->jumlah -= $item->jumlah * $item->produk->tingkat_konversi;
             }
 
             $item->produk->persediaan->save();
@@ -219,6 +218,7 @@ class TransaksiController extends Controller
                 'jumlah' => $item->jumlah,
                 'jenis' => 'keluar',
                 'keterangan' => 'Pengiriman pesanan',
+                'satuan' => false
             ]);
 
         }
