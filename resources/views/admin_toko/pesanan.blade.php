@@ -295,9 +295,9 @@
                                 <tr class="${rowClass}">
                                     <td>${index + 1}</td>
                                     <td>${item.produk.nama_produk}</td>
-                                    <td>${item.jumlah} ${item.produk.unit_besar}</td>
-                                    <td>${formatRupiah(item.produk.harga_jual)}</td>
-                                    <td>${formatRupiah(item.total_harga)}</td>
+                                    <td>${item.label_jumlah_pesanan}</td>
+                                    <td>${item.label_harga_satuan}</td>
+                                    <td>${item.label_total_harga_jual}</td>
                                 </tr>`;
 
                             $("#table-detail-transaksi tbody").append(newRow);

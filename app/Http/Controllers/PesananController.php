@@ -40,9 +40,6 @@ class PesananController extends Controller
             ], 200);
         }
 
-        // Hitung total harga
-        $total_harga = $produk->harga_jual * $request->jumlah;
-
         $unit = $request->satuan === $produk->unit_kecil;
 
         // Buat pesanan
@@ -51,7 +48,6 @@ class PesananController extends Controller
             'id_produk' => $request->id_produk,
             'id_keranjang_belanja' => $keranjang->id,
             'jumlah' => $request->jumlah,
-            'total_harga' => $total_harga,
             'satuan' => $unit
         ]);
 
@@ -119,7 +115,6 @@ class PesananController extends Controller
 
         $pesanan = Pesanan::with('produk')->find($id);
         $pesanan->jumlah = $request->jumlah;
-        $pesanan->total_harga = $request->jumlah * $pesanan->produk->harga_jual;
         $pesanan->save();
 
         return response()->json([
