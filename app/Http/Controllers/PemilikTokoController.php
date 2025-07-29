@@ -11,12 +11,11 @@ class PemilikTokoController extends Controller
     public function laporanEOQ()
     {
 
-        $data_eoq = Produk::EOQSemuaProdukAllTime();
-        /* dd($produk->economicOrderQuantityAllTime()); */
+        $data_eoq = Produk::with('persediaan')->get();
 
         return view('pemilik_toko.laporan-eoq', [
             'page' => 'Laporan EOQ',
-            'data_eoq' => $data_eoq,
+            'produk' => $data_eoq,
         ]);
 
     }
