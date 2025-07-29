@@ -81,6 +81,7 @@ class LaporanController extends Controller
                 'items' => $sales,
                 'rowspan' => $sales->count(),
                 'rata_rata_harian' => $formattedRataRata,
+                'rrh' => $rataRataHarian
             ];
         });
 
@@ -129,4 +130,5 @@ class LaporanController extends Controller
             'ttd' => 'Pemilik Toko',
         ]);
     }
+
 }
