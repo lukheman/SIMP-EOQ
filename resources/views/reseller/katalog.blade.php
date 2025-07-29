@@ -88,7 +88,6 @@
 
                 <input type="hidden" id="id-produk" name="id_produk">
 
-                <input type="hidden" name="satuan" value="0">
 
                 <div class="modal-body">
                     <div class="row">
@@ -99,8 +98,15 @@
                             <div class="mb-2">
                                 <h5 class="mb-1" id="nama-produk"></h5>
                                 <p class="text-muted mb-1"><small id="deskripsi-produk"></small></p>
-                                <p class="text-primary font-weight-bold mb-1" id="harga-jual"></p>
-                                <p class="text-info mb-2"><small><i class="fas fa-info-circle"></i> Pemesanan dalam satuan <strong>bal</strong></small></p>
+                                <p class="text-primary font-weight-bold mb-1" id="total-harga-display"></p> <p class="text-info mb-2"><small><i class="fas fa-info-circle"></i> Pemesanan dalam satuan <strong id="satuan-text">bal</strong></small></p>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="satuan">Satuan</label>
+                                <select name="satuan" id="satuan" class="form-control form-control-sm" style="width: 140px;">
+                                    <option id="unit-besar" selected></option>
+                                    <option id="unit-kecil"></option>
+                                </select>
                             </div>
 
                             <div class="input-group input-group-sm" style="width: 140px;">
@@ -122,94 +128,157 @@
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">
-
-                        <i class="nav-icon fas fa-cart-plus"></i> Tambah Ke Keranjang</button>
+                        <i class="nav-icon fas fa-cart-plus"></i> Tambah Ke Keranjang
+                    </button>
                 </div>
             </form>
         </div>
-        <!-- /.modal-content -->
+        </div>
     </div>
-    <!-- /.modal-dialog -->
-</div>
+
 @endsection
 
 @section('custom-script')
+
 <script>
+    function formatRupiah(angka) {
+        let number_string = angka.toString(),
+            sisa = number_string.length % 3,
+            rupiah = number_string.substr(0, sisa),
+            ribuan = number_string.substr(sisa).match(/\d{3}/g);
 
-$(document).ready(() => {
-
-    $('#form-tambah-pesanan').on('submit', function (e) {
-        e.preventDefault();
-
-        $.ajax({
-            url: "{{ route('pesanan.store') }}",
-            method: "POST",
-            data: $(this).serialize(),
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (data) {
-                if(data.success) {
-                    showToast(data.message);
-                } else {
-                    showToast(data.message, icon='warning');
-                }
-                $('#modal-tambah-pesanan').modal('hide');
-            },
-            error: function (error) {
-                showToast( 'Gagal melakukan pembelian', icon='error', reload=false);
-            }
-        });
-    });
-
-    $('.btn-tambah-pesanan').click(function () {
-
-        let modalTambahPesanan = $('#modal-tambah-pesanan');
-        let idProduk = $(this).data('id-produk');
-        let gambarProduk = $(this).data('gambar-produk');
-
-        const baseUrl = "{{ asset('storage') }}";
-        $('#img-gambar-produk').attr('src', `${baseUrl}/${gambarProduk}`);
-
-        $.ajax({
-            url: `{{ route('produk.show', '') }}/${idProduk}`,
-            method: 'GET',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function (data) {
-                let produk = data.data;
-
-                modalTambahPesanan.find('#id-produk').val(produk.id);
-                modalTambahPesanan.find('#nama-produk').text(produk.nama_produk);
-                modalTambahPesanan.find('#harga-jual').text(formatRupiah(produk.harga_jual));
-                modalTambahPesanan.find('#deskripsi-produk').text(produk.deskripsi);
-
-            },
-            error: function (error) {
-                Swal.fire({
-                    title: 'Produk gagal dihapus',
-                    icon: "error",
-                }).then(() => window.location.reload());
-            }
-        });
-
-    });
-
-    $('#btn-tambah-jumlah').click(function () {
-        let jumlah = parseInt($('#jumlah').val())
-        $('#jumlah').val(jumlah + 1);
-    });
-
-    $('#btn-kurang-jumlah').click(function () {
-        let jumlah = parseInt($('#jumlah').val())
-        if (jumlah > 1) {
-            $('#jumlah').val(jumlah - 1);
+        if (ribuan) {
+            let separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
         }
+        return 'Rp. ' + rupiah;
+    }
+
+    $(document).ready(() => {
+
+        let selectedProduk; // This will hold the product data fetched via AJAX
+
+        // Function to update the displayed price based on quantity and selected unit
+        const updateTotalPrice = () => {
+            if (!selectedProduk) return; // Ensure product data is loaded
+
+            let quantity = parseInt($('#jumlah').val());
+            let selectedUnit = $('#satuan').val();
+            let unitPrice = 0;
+
+            if (selectedUnit === selectedProduk.unit_besar) {
+                unitPrice = selectedProduk.harga_jual;
+            } else if (selectedUnit === selectedProduk.unit_kecil) {
+                unitPrice = selectedProduk.harga_jual_unit_kecil;
+            }
+
+            let totalPrice = quantity * unitPrice;
+            $('#total-harga-display').text(formatRupiah(totalPrice));
+        };
+
+
+        // Update the satuan text and recalculate total price dynamically when the unit changes
+        $('#satuan').on('change', function() {
+            $('#satuan-text').text($(this).val());
+            updateTotalPrice(); // Recalculate price on unit change
+        });
+
+        // Listen for changes in the quantity input field
+        $('#jumlah').on('change keyup', function() {
+            // Ensure quantity is a valid number, default to 1 if not
+            let quantity = parseInt($(this).val());
+            if (isNaN(quantity) || quantity < 1) {
+                $(this).val(1);
+            }
+            updateTotalPrice(); // Recalculate price on quantity change
+        });
+
+
+        $('#form-tambah-pesanan').on('submit', function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: "{{ route('pesanan.store') }}",
+                method: "POST",
+                data: $(this).serialize(),
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    if (data.success) {
+                        showToast(data.message);
+                    } else {
+                        showToast(data.message, icon = 'warning');
+                    }
+                    $('#modal-tambah-pesanan').modal('hide');
+                },
+                error: function(error) {
+                    showToast('Gagal melakukan pembelian', icon = 'error', reload = false);
+                }
+            });
+        });
+
+        $('.btn-tambah-pesanan').click(function() {
+
+            let modalTambahPesanan = $('#modal-tambah-pesanan');
+            let idProduk = $(this).data('id-produk');
+            let gambarProduk = $(this).data('gambar-produk');
+
+            const baseUrl = "{{ asset('storage') }}";
+            $('#img-gambar-produk').attr('src', `${baseUrl}/${gambarProduk}`);
+
+            // Reset quantity to 1 when modal is opened for a new product
+            $('#jumlah').val(1);
+
+            $.ajax({
+                url: `{{ route('produk.show', '') }}/${idProduk}`,
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    let produk = data.data;
+
+                    selectedProduk = produk; // Store fetched product data globally
+
+                    modalTambahPesanan.find('#id-produk').val(produk.id);
+                    modalTambahPesanan.find('#nama-produk').text(produk.nama_produk);
+                    modalTambahPesanan.find('#deskripsi-produk').text(produk.deskripsi);
+
+                    // Set initial options and selected unit
+                    modalTambahPesanan.find('#unit-besar').attr('value', produk.unit_besar).text(produk.unit_besar);
+                    modalTambahPesanan.find('#unit-kecil').attr('value', produk.unit_kecil).text(produk.unit_kecil);
+                    $('#satuan').val(produk.unit_besar); // Default to large unit
+                    $('#satuan-text').text(produk.unit_besar); // Update text display
+
+                    // Call updateTotalPrice to set the initial price when product data is loaded
+                    updateTotalPrice();
+
+                },
+                error: function(error) {
+                    Swal.fire({
+                        title: 'Gagal mengambil data produk', // Updated error message
+                        icon: "error",
+                    }).then(() => window.location.reload());
+                }
+            });
+
+        });
+
+        $('#btn-tambah-jumlah').click(function() {
+            let jumlah = parseInt($('#jumlah').val());
+            $('#jumlah').val(jumlah + 1);
+            updateTotalPrice(); // Recalculate price on quantity change
+        });
+
+        $('#btn-kurang-jumlah').click(function() {
+            let jumlah = parseInt($('#jumlah').val());
+            if (jumlah > 1) {
+                $('#jumlah').val(jumlah - 1);
+                updateTotalPrice(); // Recalculate price on quantity change
+            }
+        });
+
     });
-
-});
-
-
 </script>
 @endsection

@@ -89,61 +89,57 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Pemesanan</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h4 class="modal-title">Edit Pesanan</h4> <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
             <form id="form-update-pesanan">
-
-                <input type="hidden" id="id-pesanan" name="id_pesanan" disabled>
-
-                <div class="modal-body">
+                @csrf @method('PUT') <input type="hidden" id="id-pesanan" name="id_pesanan">
+                <input type="hidden" id="id-produk" name="id_produk"> <input type="hidden" id="hidden-satuan-value" name="satuan" value="0"> <div class="modal-body">
                     <div class="row">
-                        <div class="col-12 col-sm-6 text-center">
-                            <img class="img-fluid" width="200" height="10" id="img-gambar-produk">
+                        <div class="col-12 col-sm-6 text-center mb-3 mb-sm-0">
+                            <img id="img-gambar-produk" class="img-fluid rounded border p-2" width="200" alt="Gambar Produk">
                         </div>
                         <div class="col-12 col-sm-6">
-                            <div class="row">
-                                <div class="col-12">
-                                    <p id="nama-produk"></p>
-                                    <p><small id="deskripsi-produk"></small></p>
-                                    <p id="harga-jual"></p>
-
-                                </div>
-                                <div class="col-12">
-                                    <div class="input-group" style="width: 200px;">
-                                        <div class="input-group-prepend">
-                                            <button type="button" class="btn btn-default" id="btn-kurang-jumlah">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-
-                                        </div>
-                                        <input type="number" name="jumlah" id="jumlah" class="form-control" value="1">
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-default" id="btn-tambah-jumlah">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="mb-2">
+                                <h5 class="mb-1" id="nama-produk"></h5>
+                                <p class="text-muted mb-1"><small id="deskripsi-produk"></small></p>
+                                <p class="text-primary font-weight-bold mb-1" id="total-harga-display"></p> <p class="text-info mb-2"><small><i class="fas fa-info-circle"></i> Pemesanan dalam satuan <strong id="satuan-text">bal</strong></small></p>
                             </div>
 
+                            <div class="form-group">
+                                <label for="select-satuan">Satuan</label>
+                                <select name="selected_unit_display" id="satuan" class="form-control form-control-sm" style="width: 140px;">
+                                    <option id="unit-besar" value="unit_besar_placeholder"></option>
+                                    <option id="unit-kecil" value="unit_kecil_placeholder"></option>
+                                </select>
+                            </div>
 
+                            <div class="input-group input-group-sm" style="width: 140px;">
+                                <div class="input-group-prepend">
+                                    <button type="button" class="btn btn-outline-secondary" id="btn-kurang-jumlah">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" name="jumlah" id="jumlah" class="form-control text-center" value="1">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-outline-secondary" id="btn-tambah-jumlah">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary"> <i class="nav-icon fas fa-save"></i> Simpan</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="nav-icon fas fa-save"></i> Simpan Perubahan </button>
                 </div>
             </form>
         </div>
-        <!-- /.modal-content -->
+        </div>
     </div>
-    <!-- /.modal-dialog -->
-</div>
 
 <div class="modal fade show" id="modal-metode-pembayaran" style="display: none;" aria-modal="true" role="dialog">
     <div class="modal-dialog">
@@ -201,6 +197,7 @@
 <script>
 
 
+
     function getSelectedItem() {
 
         let idPesananDipilih = [];
@@ -215,6 +212,9 @@
     }
 
     $(document).ready(() => {
+
+        let selectedProduk; // This will hold the product data fetched via AJAX
+
           $('.payment-method').on('click', function () {
             // Reset semua box ke style awal
             $('.payment-method').css({
@@ -289,6 +289,39 @@
 
         });
 
+        const updateTotalPrice = () => {
+            if (!selectedProduk) return; // Ensure product data is loaded
+
+            let quantity = parseInt($('#jumlah').val());
+            let selectedUnit = $('#satuan').val();
+            let unitPrice = 0;
+
+            if (selectedUnit === selectedProduk.unit_besar) {
+                unitPrice = selectedProduk.harga_jual;
+            } else if (selectedUnit === selectedProduk.unit_kecil) {
+                unitPrice = selectedProduk.harga_jual_unit_kecil;
+            }
+
+            let totalPrice = quantity * unitPrice;
+            $('#total-harga-display').text(formatRupiah(totalPrice));
+        };
+
+        // Update the satuan text and recalculate total price dynamically when the unit changes
+        $('#satuan').on('change', function() {
+            $('#satuan-text').text($(this).val());
+            updateTotalPrice(); // Recalculate price on unit change
+        });
+
+        // Listen for changes in the quantity input field
+        $('#jumlah').on('change keyup', function() {
+            // Ensure quantity is a valid number, default to 1 if not
+            let quantity = parseInt($(this).val());
+            if (isNaN(quantity) || quantity < 1) {
+                $(this).val(1);
+            }
+            updateTotalPrice(); // Recalculate price on quantity change
+        });
+
         $('.btn-tambah-pesanan').click(function() {
 
             const idPesanan = $(this).data('id-pesanan');
@@ -306,13 +339,23 @@
                     if(data.success) {
 
                         let pesanan = data.data;
-                        const baseUrl = "{{ asset('storage') }}";
+                        selectedProduk = pesanan.produk;
+                        const baseUrl = "{{ asset('storage/') }}";
                         $('#img-gambar-produk').attr('src', `${baseUrl}/${pesanan.produk.gambar}`);
                         modalUpdatePesanan.find('#id-pesanan').val(pesanan.id);
                         modalUpdatePesanan.find('#nama-produk').text(pesanan.produk.nama_produk);
                         modalUpdatePesanan.find('#harga-jual').text(formatRupiah(pesanan.produk.harga_jual));
                         modalUpdatePesanan.find('#deskripsi-produk').text(pesanan.produk.deskripsi);
                         modalUpdatePesanan.find('#jumlah').val(pesanan.jumlah);
+
+                    // Set initial options and selected unit
+                    modalUpdatePesanan.find('#unit-besar').attr('value', pesanan.produk.unit_besar).text(pesanan.produk.unit_besar);
+                    modalUpdatePesanan.find('#unit-kecil').attr('value', pesanan.produk.unit_kecil).text(pesanan.produk.unit_kecil);
+                    $('#satuan').val(pesanan.satuan ? pesanan.produk.unit_kecil : pesanan.produk.unit_besar); // Default to large unit
+                    $('#satuan-text').text(pesanan.produk.unit_besar); // Update text display
+
+                    updateTotalPrice();
+
                     }
                 },
                 error: function (error) {
@@ -327,12 +370,16 @@
     $('#btn-tambah-jumlah').click(function () {
         let jumlah = parseInt($('#jumlah').val())
         $('#jumlah').val(jumlah + 1);
+
+            updateTotalPrice(); // Recalculate price on quantity change
     });
 
     $('#btn-kurang-jumlah').click(function () {
         let jumlah = parseInt($('#jumlah').val())
         if (jumlah > 1) {
             $('#jumlah').val(jumlah - 1);
+
+            updateTotalPrice(); // Recalculate price on quantity change
         }
     });
 
@@ -393,7 +440,11 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(data) {
-                    showToast(data.message);
+                    if(data.success) {
+                        showToast(data.message);
+                    } else {
+                        showToast(data.message, icon="warning", reload=false);
+                    }
                 },
                 error: function (error) {
                     showToast( 'Gagal melakukan transaksi', icon='error', reload=false);

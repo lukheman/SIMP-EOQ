@@ -12,9 +12,6 @@ class PesananController extends Controller
 {
     public function store(Request $request)
     {
-
-        // TODO:refactoring
-
         $data = $request->validate([
             'id_produk' => 'required|exists:produk,id',
             'jumlah' => 'required|numeric|min:1',
@@ -22,54 +19,54 @@ class PesananController extends Controller
 
         $id_reseller = Auth::guard('reseller')->id();
 
-        // cari Keranjang reseller/user
-        if (! Keranjang::where('id_reseller', $id_reseller)->first()) {
-            $keranjang = Keranjang::create([
+        // Cek apakah reseller punya keranjang, kalau belum bikin baru
+        if (!Keranjang::where('id_reseller', $id_reseller)->first()) {
+            Keranjang::create([
                 'id_reseller' => $id_reseller,
             ]);
         }
 
         $keranjang = Keranjang::where('id_reseller', $id_reseller)->first();
-
         $produk = Produk::find($request->id_produk);
 
-        // konversi dari bal ke pcs
+        // Konversi dari bal ke pcs
         $jumlah_pcs = $request->jumlah * $produk->tingkat_konversi;
 
-        // cek persediaan produk
-        if (! $produk->isPersediaanMencukupi($jumlah_pcs)) {
+        // Cek stok produk
+        if (!$produk->isPersediaanMencukupi($jumlah_pcs)) {
             return response()->json([
                 'success' => false,
-                'message' => $produk->nama_produk.' tidak cukup di persediaan',
+                'message' => "Maaf, stok {$produk->nama_produk} tidak cukup saat ini.",
             ], 200);
         }
 
-        // kalkulasi total harga barang yang dipesan
+        // Hitung total harga
         $total_harga = $produk->harga_jual * $request->jumlah;
 
-        // buat pesanan
+        $unit = $request->satuan === $produk->unit_kecil;
+
+        // Buat pesanan
         $pesanan = Pesanan::create([
             'id_reseller' => $id_reseller,
             'id_produk' => $request->id_produk,
             'id_keranjang_belanja' => $keranjang->id,
             'jumlah' => $request->jumlah,
             'total_harga' => $total_harga,
+            'satuan' => $unit
         ]);
 
         if ($pesanan) {
-
             return response()->json([
                 'success' => true,
-                'message' => $produk->nama_produk.' disimpan ke keranjang',
+                'message' => "{$produk->nama_produk} berhasil ditambahkan ke keranjang!",
                 'data' => $produk,
             ], 201);
         }
 
         return response()->json([
             'success' => false,
-            'message' => $produk->nama_produk.' gagal disimpan ke keranjang',
+            'message' => "Gagal menambahkan {$produk->nama_produk} ke keranjang. Coba lagi ya!",
         ], 500);
-
     }
 
     public function destroy($id)

@@ -36,6 +36,10 @@ class Pesanan extends Model
         return $this->jumlah * $this->produk->tingkat_konversi;
     }
 
+    public function getTotalHargaAttribute() {
+        return ($this->satuan ? $this->produk->harga_jual_unit_kecil : $this->produk->harga_jual) * ($this->jumlah ?? 0);
+    }
+
     public function getLabelTotalHargaJualAttribute()
     {
         $totalHarga = ($this->satuan ? $this->produk->harga_jual_unit_kecil : $this->produk->harga_jual) * ($this->jumlah ?? 0);
@@ -43,11 +47,11 @@ class Pesanan extends Model
     }
 
 
-    public function getLabelJumlahUnitDipesanAttribute() {
-
+    public function getLabelJumlahUnitDipesanAttribute()
+    {
         $unit = $this->satuan ? $this->produk->unit_kecil : $this->produk->unit_besar;
 
-        $jumlahUnit = $this->satuan ? $this->jumlah / $this->produk->tingkat_konversi : $this->jumlah ;
+        $jumlahUnit = $this->jumlah;
 
         return "{$jumlahUnit} {$unit}";
     }

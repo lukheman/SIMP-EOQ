@@ -31,6 +31,23 @@ class TransaksiController extends Controller
 
         $keranjang = Keranjang::where('id_reseller', Auth::guard('reseller')->id())->first();
 
+        $pesanan = Pesanan::whereIn('id', $pesanan_dipilih)->with('produk')->get();
+
+        $totalHarga = 0;
+
+        foreach ($pesanan as $item) {
+            $totalHarga += $item->total_harga;
+        }
+
+        // cek apakah harga >= 200.000
+        if($totalHarga < 200000) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Total harga pesanan Anda belum mencapai batas minimum sebesar Rp200.000.',
+            ], 200);
+        }
+
+
         $transaksi = Transaksi::create([
             'id_reseller' => Auth::guard('reseller')->id(),
             'metode_pembayaran' => $request->metode_pembayaran,
