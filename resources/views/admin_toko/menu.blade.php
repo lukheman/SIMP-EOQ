@@ -40,7 +40,7 @@ Kasir
 
 <x-nav-link
     :href="route('admintoko.laporan-pesanan')"
-    icon="fas fa-chart-bar"
+    icon="fas fa-receipt"
     :active="$page === 'Laporan Pesanan'">
     Pesanan
 </x-nav-link>
