@@ -204,5 +204,20 @@ class Produk extends Model
 
     }
 
+    public function jumlahPersediaanUnitBesar() {
+        return floor($this->persediaan->jumlah / $this->tingkat_konversi);
+    }
+
+    // init akan mengembalikan ukuran fix dalam bal, misalkan 10 pcs (2 bal)
+    public function getLabelPersediaanFixUnitAttribute() {
+
+        $persediaanBesar = $this->jumlahPersediaanUnitBesar();
+        $persediaanKecil = $persediaanBesar * $this->tingkat_konversi;
+        $unitBesar = $this->unit_besar ?? 'unit';
+        $unitKecil= $this->unit_kecil?? 'unit';
+        return "{$persediaanKecil} {$unitKecil} ({$persediaanBesar}/{$unitBesar})";
+
+    }
+
 
 }
