@@ -35,3 +35,10 @@
     :active="$page === 'Laporan EOQ'">
     Laporan EOQ
 </x-nav-link>
+
+<x-nav-link
+    :href="route('pemiliktoko.laporan-pesanan')"
+    icon="fas fa-receipt"
+    :active="$page === 'Laporan Pesanan'">
+    Pesanan
+</x-nav-link>

@@ -65,4 +65,10 @@ class PemilikTokoController extends Controller
             'page' => 'Laporan Barang Masuk',
         ]);
     }
+
+    public function laporanPesanan() {
+        return view('pemilik_toko.laporan-pesanan', [
+            'page' => 'Laporan Pesanan'
+        ]);
+    }
 }

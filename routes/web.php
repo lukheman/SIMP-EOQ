@@ -90,6 +90,7 @@ Route::middleware(['auth:web', 'role:web,pemiliktoko'])->prefix('pemiliktoko')->
         Route::get('/laporan-persediaan-produk', 'laporanPersediaanProduk')->name('laporan-persediaan-produk');
         Route::get('/laporan-barang-masuk', 'laporanBarangMasuk')->name('laporan-barang-masuk');
         Route::get('/laporan-eoq', 'laporanEOQ')->name('laporan-eoq');
+        Route::get('/laporan-pesanan', 'laporanPesanan')->name('laporan-pesanan');
     });
 });
 
