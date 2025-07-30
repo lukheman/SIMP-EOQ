@@ -173,4 +173,10 @@ public function transaksi(Request $request)
             'page' => 'Laporan Penjualan',
         ]);
     }
+
+    public function laporanPesanan() {
+        return view('admin_toko.laporan-pesanan', [
+            'page' => 'Laporan Pesanan'
+        ]);
+    }
 }

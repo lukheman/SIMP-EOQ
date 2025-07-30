@@ -48,7 +48,7 @@
                 <div class="mt-3">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <strong class="text-truncate" style="max-width: 65%;">{{ $item->nama_produk }}</strong>
-                        <span class="badge badge-info">{{ $item->persediaan_bal }} bal</span>
+                        <span class="badge badge-info">{{ $item->label_persediaan}}</span>
                     </div>
 
                     <div class="d-flex justify-content-between mb-1">

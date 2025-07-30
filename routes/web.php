@@ -57,6 +57,7 @@ Route::middleware(['auth:web', 'role:web,admintoko'])->prefix('admintoko')->name
         Route::get('/persediaan', 'persediaan')->name('persediaan');
         Route::post('/nota', 'nota')->name('nota');
         Route::get('/laporan-penjualan', 'laporanPenjualan')->name('laporan-penjualan');
+        Route::get('/laporan-pesanan', 'laporanPesanan')->name('laporan-pesanan');
     });
 });
 
@@ -125,6 +126,7 @@ Route::resource('restock', RestockController::class)->only(['store', 'update', '
 Route::get('restock/exist/{barcode}', [RestockController::class, 'exist'])->name('restock.exist')->middleware('auth');
 
 Route::post('/laporan/laporan-penjualan', [LaporanController::class, 'laporanPenjualan'])->name('laporan.laporan-penjualan')->middleware('auth');
+Route::post('/laporan/laporan-pesanan', [LaporanController::class, 'laporanPesanan'])->name('laporan.laporan-pesanan')->middleware('auth');
 Route::post('/laporan/laporan-barang-masuk', [LaporanController::class, 'laporanBarangMasuk'])->name('laporan.laporan-barang-masuk')->middleware('auth');
 Route::get('/laporan/laporan-persediaan-produk', [LaporanController::class, 'laporanPersediaanProduk'])->name('laporan.laporan-persediaan-produk')->middleware('auth');
 Route::post('/laporan/laporan-eoq', [LaporanController::class, 'laporanEOQ'])->name('laporan.laporan-eoq')->middleware('auth');

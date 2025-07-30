@@ -173,14 +173,6 @@ class Produk extends Model
         return PerhitunganEOQServices::frekuensiPemesanan($this->id);
     }
 
-    public function getPersediaanBalAttribute() {
-        if($this->tingkat_konversi > 0) {
-
-            return intdiv($this->persediaan->jumlah, $this->tingkat_konversi);
-        }
-        return 0;
-    }
-
     public function getLabelHargaBeliAttribute() {
         $hargaBeli = $this->harga_beli ?? 0;
         $formattedHarga = number_format($hargaBeli, 0, ',', '.');

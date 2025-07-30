@@ -37,3 +37,10 @@ Kasir
     :active="$page === 'Laporan Penjualan'">
     Penjualan
 </x-nav-link>
+
+<x-nav-link
+    :href="route('admintoko.laporan-pesanan')"
+    icon="fas fa-chart-bar"
+    :active="$page === 'Laporan Pesanan'">
+    Pesanan
+</x-nav-link>
