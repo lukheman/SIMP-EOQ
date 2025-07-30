@@ -58,6 +58,7 @@
             color: #555;
         }
 
+
         #keterangan {
             margin-bottom: 20px;
         }
@@ -73,7 +74,7 @@
             border-collapse: collapse;
             margin-top: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); */ /* Dihilangkan */
         }
 
         #pesanan th,
@@ -91,7 +92,8 @@
         }
 
         #pesanan tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
+            /* background-color: #f9f9f9; */ /* Dihilangkan */
+            background-color: transparent; /* Pastikan tidak ada background */
         }
 
         .row {
@@ -214,9 +216,12 @@
             </tbody>
         </table>
 
+        <hr>
+        <h5 class="text-center"><u>Statistik Status Transaksi</u></h5>
         <div class="chart-container">
             <canvas id="transactionStatusChart"></canvas>
         </div>
+        <hr>
         <div class="row">
             <div class="col">
                 {{-- Left column can be used for notes or additional information if needed --}}
