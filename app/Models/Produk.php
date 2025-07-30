@@ -44,7 +44,7 @@ class Produk extends Model
 
     public function isPersediaanMencukupi(int $permintaan): bool
     {
-        return $this->persediaan->jumlah >= $permintaan;
+        return ($this->persediaan?->jumlah ?? 0) >= $permintaan;
     }
 
     public static function EOQSemuaProdukAllTime()
@@ -74,8 +74,8 @@ class Produk extends Model
                 // cek apakah data mencukupi
                 if (! PerhitunganEOQServices::hasSufficientSalesData($produk->id, $current)) {
                     // $result[] = [
-                    //     'nama_produk' => $produk->nama_produk,
-                    //     'periode' => $current->format('Y-m'),
+                    //      'nama_produk' => $produk->nama_produk,
+                    //      'periode' => $current->format('Y-m'),
                     // ];
 
                     continue;
@@ -117,7 +117,7 @@ class Produk extends Model
             // cek apakah data mencukupi
             if (! PerhitunganEOQServices::hasSufficientSalesData($produk->id, $periode)) {
                 // $result[] = [
-                //     'produk' => $produk,
+                //      'produk' => $produk,
                 // ];
 
                 continue;
@@ -143,7 +143,7 @@ class Produk extends Model
         $unitBesar = $this->unit_besar ?? 'unit';
         $unitKecil= $this->unit_kecil?? 'unit';
         $eoq = PerhitunganEOQServices::economicOrderQuantity($this->id);
-        $eoqBesar = $eoq / $this->tingkat_konversi;
+        $eoqBesar = $eoq / ($this->tingkat_konversi ?? 1);
         return "{$eoq} {$unitKecil} ({$eoqBesar} {$unitBesar})";
     }
 
@@ -153,7 +153,7 @@ class Produk extends Model
         $unitBesar = $this->unit_besar ?? 'unit';
         $unitKecil= $this->unit_kecil?? 'unit';
         $ss = PerhitunganEOQServices::safetyStock($this->id);
-        $ssBesar = $ss / $this->tingkat_konversi;
+        $ssBesar = $ss / ($this->tingkat_konversi ?? 1);
         return "{$ss} {$unitKecil} ({$ssBesar} {$unitBesar})";
     }
 
@@ -162,7 +162,7 @@ class Produk extends Model
         $unitBesar = $this->unit_besar ?? 'unit';
         $unitKecil= $this->unit_kecil?? 'unit';
         $rop = PerhitunganEOQServices::reorderPoint($this->id);;
-        $ropBesar = $rop / $this->tingkat_konversi;
+        $ropBesar = $rop / ($this->tingkat_konversi ?? 1);
 
         return "{$rop} {$unitKecil} ({$ropBesar} {$unitBesar})";
 
@@ -188,28 +188,35 @@ class Produk extends Model
     }
 
     public function getLabelPersediaanAttribute() {
-        $persediaanKecil = $this->persediaan->jumlah;
-        $persediaanBesar = round($this->persediaan->jumlah / $this->tingkat_konversi, 2);
+        $persediaanKecil = $this->persediaan?->jumlah ?? 0;
+
+        $tingkatKonversi = $this->tingkat_konversi ?? 1; // Default ke 1 jika null atau 0
+        $persediaanBesar = round($persediaanKecil / $tingkatKonversi, 2);
+
         $unitBesar = $this->unit_besar ?? 'unit';
         $unitKecil= $this->unit_kecil?? 'unit';
-        return "{$persediaanKecil} {$unitKecil} ({$persediaanBesar}/{$unitBesar})";
 
+        return "{$persediaanKecil} {$unitKecil} ({$persediaanBesar}/{$unitBesar})";
     }
 
     public function jumlahPersediaanUnitBesar() {
-        return floor($this->persediaan->jumlah / $this->tingkat_konversi);
+        $persediaanKecil = $this->persediaan?->jumlah ?? 0;
+
+        $tingkatKonversi = $this->tingkat_konversi ?? 1; // Default ke 1 jika null atau 0
+
+        return floor($persediaanKecil / $tingkatKonversi);
     }
 
     // init akan mengembalikan ukuran fix dalam bal, misalkan 10 pcs (2 bal)
     public function getLabelPersediaanFixUnitAttribute() {
-
         $persediaanBesar = $this->jumlahPersediaanUnitBesar();
-        $persediaanKecil = $persediaanBesar * $this->tingkat_konversi;
+
+        $tingkatKonversi = $this->tingkat_konversi ?? 1;
+        $persediaanKecil = $persediaanBesar * $tingkatKonversi;
+
         $unitBesar = $this->unit_besar ?? 'unit';
         $unitKecil= $this->unit_kecil?? 'unit';
         return "{$persediaanKecil} {$unitKecil} ({$persediaanBesar}/{$unitBesar})";
 
     }
-
-
 }
