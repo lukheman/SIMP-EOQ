@@ -40,10 +40,10 @@ class TransaksiController extends Controller
         }
 
         // cek apakah harga >= 200.000
-        if($totalHarga < 200000) {
+        if($totalHarga < 500000) {
             return response()->json([
                 'success' => false,
-                'message' => 'Total harga pesanan Anda belum mencapai batas minimum sebesar Rp200.000.',
+                'message' => 'Total harga pesanan Anda belum mencapai batas minimum sebesar Rp. 500.000.',
             ], 200);
         }
 
