@@ -31,7 +31,7 @@
             width: 150px;
         }
 
-        #pesanan,
+        .pesanan,
         #rata-rata {
             border-collapse: collapse;
             margin-top: 50px;
@@ -40,8 +40,8 @@
         }
 
 
-        #pesanan td,
-        #pesanan th,
+        .pesanan td,
+        .pesanan th,
         #rata-rata td,
         #rata-rata th {
             border: 1px solid black;
@@ -99,7 +99,7 @@
             </tr>
         </table>
 
-        <table id="pesanan">
+        <table class="pesanan">
 
             <thead>
 
@@ -143,6 +143,34 @@
         <div class="chart-container">
             <canvas id="averageSalesChart"></canvas>
         </div>
+
+        <h5 class="text-center">5 Produk Terlaris</h5>
+        <table class="pesanan">
+
+            <thead>
+
+                <tr>
+                    <th>Nama Produk</th>
+                    <th>Jumlah Terjual</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+                @foreach ($top5 as $group)
+                @foreach ($group['items'] as $index => $item)
+
+                <tr>
+                    <td>{{ $item->produk->nama_produk }}</td>
+                    <td class="text-right"> {{ $item->label_jumlah_unit_terjual}} </td>
+
+
+                </tr>
+                @endforeach
+                @endforeach
+            </tbody>
+
+        </table>
 
         <div class="row">
             <div class="col">

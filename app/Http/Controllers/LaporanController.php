@@ -90,11 +90,18 @@ class LaporanController extends Controller
         // Calculate total sales
         $total = $penjualan->sum('total_harga_jual');
 
+        // Ambil 5 produk dengan total penjualan tertinggi
+        $top5 = $groupedPenjualan
+            ->sortByDesc('total_penjualan')
+            ->take(5);
+
+
         return view('invoices.laporan-penjualan', [
             'groupedPenjualan' => $groupedPenjualan,
             'total' => $total,
             'periode' => $periode->format('Y-m'),
             'ttd' => $request->ttd,
+            'top5' => $top5
         ]);
     }
 
